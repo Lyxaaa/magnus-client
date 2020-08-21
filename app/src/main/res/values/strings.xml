@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DECO3801_App</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="message_fragment">Test message fragment\nNew Line</string>
+</resources>

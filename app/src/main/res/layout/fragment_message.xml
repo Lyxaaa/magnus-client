@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:orientation="vertical"
+    tools:context=".MessageFragment"
+    android:id="@+id/fragment_chat">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/chat_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:text="@string/message_fragment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_gravity="right"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right">
+
+        <RadioButton
+            android:id="@+id/radio_button_messages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B1" />
+
+    </RadioGroup>
+
+</LinearLayout>
