@@ -58,6 +58,13 @@ public class MessageFragment extends Fragment {
         return fragment;
     }
 
+    public static MessageFragment newInstance() {
+        MessageFragment fragment = new MessageFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

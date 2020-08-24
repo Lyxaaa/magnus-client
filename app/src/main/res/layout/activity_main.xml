@@ -75,16 +75,17 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="right">
+        <TextView
+            android:id="@+id/socket_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="placeholder for data"/>
 
-        <fragment
-            android:id="@+id/message_fragment_btn"
-            android:name="com.personal.deco3801_app.MessageFragment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout="@layout/fragment_message"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
     </LinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
