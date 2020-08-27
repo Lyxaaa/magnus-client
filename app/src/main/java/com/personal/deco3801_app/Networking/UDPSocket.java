@@ -3,7 +3,6 @@ package com.personal.deco3801_app.Networking;
 import com.google.common.collect.EvictingQueue;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -12,13 +11,16 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+import java.util.zip.CRC32;
 
 public class UDPSocket extends Socket {
 
     DatagramSocket client;
     boolean running = false;
+    CRC32 crc32 = new CRC32();
 
     public InetSocketAddress remoteEndPoint;
+    private boolean useCRC;
 
     public UDPSocket(String address, int port) {
         try {
@@ -73,89 +75,92 @@ public class UDPSocket extends Socket {
     public void End() {
         running = false;
     }
-/**
+
     void UDPRead() throws Exception {
         Byte[] headerBytes = new Byte[4];
         for (int i = 0; i < 4; i++) {
             headerBytes[i] = HEADER[i];
         }
 
-        byte[] packetBuffer = new byte[8 + Short.MAX_VALUE];
-        DatagramPacket datagramPacket = new DatagramPacket(packetBuffer, packetBuffer.length);
+        byte[] resultBuffer = new byte[8 + MAXPACKETSIZE];
+        DatagramPacket datagramPacket = new DatagramPacket(resultBuffer, resultBuffer.length);
+
         byte[] sizeBuffer = new byte[4];
         byte[] hashBuffer = new byte[4];
+
         byte[] data = null;
 
-        int hash = 0;
+        Integer hash = 0;
 
-        int msgPos = 0;
-        int msgRem = 0;
+        int msgPos = 0; // position in the data we're trying to form
+        int msgRem = 0; // data remaining (when we hit 0, our data is complete)
 
-        int bufPos = 0;
-        int bufMax = 0;
+        int bufPos = 0; // how much data remains in the packet we just received
+        int bufMax = 0; // how much data there is total in the packet that was just received
 
         EvictingQueue<Byte> headerBuffer = new EvictingQueue<>(4);
 
         while (running) {
-            packetBuffer = getBuffer(client, datagramPacket);
-            UdpReceiveResult result = await client.ReceiveAsync();
-            bufMax = result.Buffer.Length;
-            readSize = datagramPacket.getLength();
-            while (bufPos < bufMax) {
-                if (!Arrays.equals(headerBuffer.toArray(), headerBytes)) {
-                    headerBuffer.Enqueue(result.Buffer[bufPos]);
+            resultBuffer = getBuffer(client, datagramPacket);
+            bufMax = datagramPacket.getLength();
+
+            while (bufPos < bufMax) { // while there is still data to read
+                if (!Arrays.equals(headerBuffer.toArray(), headerBytes)) { // if we haven't found the header yet
+                    headerBuffer.add(resultBuffer[bufPos]);
                     bufPos++;
-                } else if (data == null) {
-                    if (msgPos < 4) {
-                        sizeBuffer[msgPos] = result.Buffer[bufPos];
+                } else if (data == null) { // we need to find the size
+                    if (msgPos < 4) { // if we haven't found the size yet
+                        sizeBuffer[msgPos] = resultBuffer[bufPos];
                         msgPos++;
                         bufPos++;
-                    } else {
-                        Int32 size = BitConverter.ToInt32(sizeBuffer, 0);
-                        if (size < 0 || size > ushort.MaxValue) {
+                    } else { // if we've finished finding the bytes that form the size
+                        int size = ByteBuffer.wrap(sizeBuffer).order(ByteOrder.LITTLE_ENDIAN).getInt(); // convert into an int
+                        if (size < 0 || size > MAXPACKETSIZE) { // sanity check
                             // throw some error, this is obviously wrong
                         } else {
-                            data = new byte[size];
+                            data = new byte[size]; // create the byte[] that will hold the data
                         }
-                        Array.Clear(sizeBuffer, 0, sizeBuffer.Length);
-                        msgPos = 0;
+                        Arrays.fill(sizeBuffer, (byte) 0); // wipe the buffer, we need this for next round
+                        msgPos = 0; // reset message pos
                     }
-                } else if (hash == null) {
-                    if (msgPos < 4) {
-                        hashBuffer[msgPos] = result.Buffer[bufPos];
+                } else if (hash == null) { // we need to find the hash
+                    if (msgPos < 4) { // haven't found the hash yet
+                        hashBuffer[msgPos] = resultBuffer[bufPos];
                         msgPos++;
                         bufPos++;
-                    } else {
-                        hash = BitConverter.ToUInt32(hashBuffer, 0);
-                        Array.Clear(hashBuffer, 0, hashBuffer.Length);
+                    } else { // we've found the bytes used to make the hash
+                        hash = ByteBuffer.wrap(hashBuffer).order(ByteOrder.LITTLE_ENDIAN).getInt(); // convert into an int
+                        Arrays.fill(hashBuffer, (byte) 0); // wipe the buffer, we need this for next round
                         msgPos = 0;
                     }
-                } else {
-                    if (bufMax <= bufPos + data.Length) {
-                        Array.Copy(result.Buffer, bufPos, data, msgPos, bufMax - bufPos);
-                        msgRem = data.Length - (bufMax - bufPos);
+                } else { // we have all 3 parts of the UDP header
+                    if (bufMax <= bufPos + data.length) { // if we can't form the whole of byte[] data using this packet's worth of data, copy all we can
+                        System.arraycopy(resultBuffer, bufPos, data, msgPos, bufMax - bufPos);
+                        msgRem = data.length - (bufMax - bufPos);
                         msgPos += bufMax - bufPos;
                         bufPos = bufMax;
-                    } else {
-                        Array.Copy(result.Buffer, bufPos, data, msgPos, msgRem);
+                    } else { // we can complete the data, we copy what we have left
+                        System.arraycopy(resultBuffer, bufPos, data, msgPos, msgRem);
                         bufPos += msgRem;
 
-                        if (Crc32.Compute(data) == hash) {
-                            OnReceiveListener.Invoke(data);
-                        } else {
-                            //probably throw an error
+                        crc32.reset();
+                        crc32.update(data);
+                        if (useCRC && crc32.getValue() == hash) {
+                            InvokeOnReceiveListeners(data);
+                        } else if (!useCRC) {
+                            InvokeOnReceiveListeners(data);
                         }
 
-                        msgPos = -1;
-                        msgRem = -1;
-                        headerBuffer.Clear();
+                        msgPos = 0;
+                        msgRem = 0;
+                        headerBuffer.clear();
                         hash = null;
                     }
                 }
             }
         }
     }
- */
+
 
     private byte[] getBuffer(DatagramSocket socket, DatagramPacket packet) {
         try {
@@ -170,5 +175,13 @@ public class UDPSocket extends Socket {
     @Override
     public void Send(byte[]... data) {
 
+    }
+
+    public boolean isUseCRC() {
+        return useCRC;
+    }
+
+    public void setUseCRC(boolean useCRC) {
+        this.useCRC = useCRC;
     }
 }
