@@ -7,6 +7,8 @@ import java.util.List;
 public abstract class Socket {
     public static byte[] HEADER = {(byte) 0x5a, (byte) 0xfe, (byte) 0xc0, (byte) 0xde };
     public static int MAXPACKETSIZE = 65535;
+    public static int INTSIZE = 4;
+
     public List<OnReceiveListener> OnReceiveListeners = new ArrayList<>();
     public List<OnDisconnectListener> OnDisconnectListeners = new ArrayList<>();
 

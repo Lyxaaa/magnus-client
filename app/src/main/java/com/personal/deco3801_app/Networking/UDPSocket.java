@@ -17,7 +17,8 @@ public class UDPSocket extends Socket {
 
     DatagramSocket client;
     boolean running = false;
-    CRC32 crc32 = new CRC32();
+    CRC32 readCRC = new CRC32();
+    CRC32 sendCRC = new CRC32();
 
     public InetSocketAddress remoteEndPoint;
     private boolean useCRC;
@@ -143,9 +144,9 @@ public class UDPSocket extends Socket {
                         System.arraycopy(resultBuffer, bufPos, data, msgPos, msgRem);
                         bufPos += msgRem;
 
-                        crc32.reset();
-                        crc32.update(data);
-                        if (useCRC && crc32.getValue() == hash) {
+                        readCRC.reset();
+                        readCRC.update(data);
+                        if (useCRC && readCRC.getValue() == hash) {
                             InvokeOnReceiveListeners(data);
                         } else if (!useCRC) {
                             InvokeOnReceiveListeners(data);
@@ -161,7 +162,6 @@ public class UDPSocket extends Socket {
         }
     }
 
-
     private byte[] getBuffer(DatagramSocket socket, DatagramPacket packet) {
         try {
             socket.receive(packet);
@@ -172,9 +172,53 @@ public class UDPSocket extends Socket {
         return packet.getData();
     }
 
+    ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+    // sizeof(header) + sizeof(data size) + sizeof(crc)
+    int headerOffset = HEADER.length + INTSIZE + INTSIZE;
+
     @Override
     public void Send(byte[]... data) {
 
+        // find size
+        int dataSize = 0;
+        for (byte[] segment : data)
+            dataSize += segment.length;
+
+        // total size
+        int size = headerOffset;
+        size += dataSize; // data size
+
+        // create new message byte array
+        byte[] message = new byte[size];
+
+        int offset = 0;
+        for (byte[] segment : data) { // copy all the data arrays into the message to be sent
+            System.arraycopy(segment, offset, message, 0, data.length);
+            offset += data.length;
+        }
+
+        int crc;
+        if (useCRC) { // calculate crc
+            sendCRC.update(message, headerOffset, dataSize);
+            crc = sendCRC.hashCode();
+            sendCRC.reset();
+        } else { // crc is zero
+            crc = 0;
+        }
+
+        offset = 0;
+        System.arraycopy(HEADER, 0, message, offset, HEADER.length);
+        offset += HEADER.length;
+        System.arraycopy(byteBuffer.putInt(dataSize).order(ByteOrder.BIG_ENDIAN).array(), 0, message, offset, INTSIZE);
+        offset += INTSIZE;
+        System.arraycopy(byteBuffer.putInt(crc).order(ByteOrder.BIG_ENDIAN).array(), 0, message, offset, INTSIZE);
+        
+        DatagramPacket packet = new DatagramPacket(message, 0, message.length, remoteEndPoint);
+        try {
+            client.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isUseCRC() {
