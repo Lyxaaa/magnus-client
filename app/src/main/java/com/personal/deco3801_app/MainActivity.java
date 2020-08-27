@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     String lastFragTag = "chatFrag";
     Activity activity = this;
     String logTag = "socketLogger";
+    String socketData = null;
 
 
 
@@ -89,11 +90,19 @@ public class MainActivity extends AppCompatActivity {
             public void onGlobalLayout() {
             }
         });
-        System.out.println("Reached try block");
+        getSocketData();
+        socket_test.setText(socketData);
+    }
 
+//    private void setFragment(Class fragmentClass, ) {
+//
+//    }
+
+
+    private void getSocketData() {
         try {
 
-            Log.d(logTag, "Reached try block");
+            Log.d(logTag, "Getting Socket Data");
 
             final DatagramSocket socket = new DatagramSocket(25566);
             Log.d(logTag, "Created Socket");
@@ -102,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     DatagramPacket packet = new DatagramPacket(new byte[65000], 0, 65000);
                     while (true) {
-                        System.out.println("Received Packet");
+                        Log.d(logTag, "Received Packet");
                         try {
                             socket.receive(packet);
                         } catch (Exception e) { }
@@ -110,11 +119,11 @@ public class MainActivity extends AppCompatActivity {
                         byte[] chars = new byte[packet.getLength()];
                         System.arraycopy(packet.getData(), 0, chars, 0, chars.length);
                         final String s = new String(chars);
-                        System.out.println("Received Packet with text: " + s);
+                        Log.d(logTag, "Received Packet with text: " + s);
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                socket_test.setText(s);
+                                socketData = s;
                             }
                         });
                     }
@@ -123,12 +132,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-
-//    private void setFragment(Class fragmentClass, ) {
-//
-//    }
-
 }
