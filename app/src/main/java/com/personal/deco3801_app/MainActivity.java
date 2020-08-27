@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void getSocketData() {
         try {
-
             Log.d(logTag, "Getting Socket Data");
 
             final DatagramSocket socket = new DatagramSocket(25566);
