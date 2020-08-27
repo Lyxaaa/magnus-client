@@ -94,11 +94,6 @@ public class MainActivity extends AppCompatActivity {
         socket_test.setText(socketData);
     }
 
-//    private void setFragment(Class fragmentClass, ) {
-//
-//    }
-
-
     private void getSocketData() {
         try {
 
