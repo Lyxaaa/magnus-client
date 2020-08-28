@@ -43,7 +43,7 @@ public class TCPSocket extends Socket {
     }
 
     @Override
-    public void Begin() {
+    public void begin() {
         running = true;
         new Thread(new Runnable() {
             @Override
@@ -58,7 +58,7 @@ public class TCPSocket extends Socket {
     }
 
     @Override
-    public void End() {
+    public void end() {
         running = false;
     }
 
@@ -111,8 +111,7 @@ public class TCPSocket extends Socket {
                     } else {
                         byte[] bytes = new byte[size];
                         stream.read(bytes, 0, size);
-                        for (OnReceiveListener listener : OnReceiveListeners)
-                            listener.onReceive(bytes);
+                        invokeOnReceiveListeners(bytes);
                     }
                 } else {
                     throw new Exception("No data found in stream");
@@ -123,7 +122,7 @@ public class TCPSocket extends Socket {
     }
 
     @Override
-    public void Send(byte[]... data) {
+    public void send(byte[]... data) {
 
         //if(!client.Connected)
 

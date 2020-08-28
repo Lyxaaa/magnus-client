@@ -3,7 +3,6 @@ package com.personal.deco3801_app.Networking;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.personal.deco3801_app.Networking.Client.OnReceiveListener;
 import com.personal.deco3801_app.Networking.Json.Message;
 
 import java.nio.ByteBuffer;
@@ -22,24 +21,23 @@ public abstract class Client {
         void OnReceive(SocketType socketType, DataType dataType, Object data);
     }
 
-    private UDPSocket broadcast;
-    private UDPSocket udp;
-    private TCPSocket tcp;
+    protected UDPSocket broadcast;
+    protected UDPSocket udp;
+    protected TCPSocket tcp;
 
     protected void OnTCP(byte[] data) {
-        Receive(SocketType.TCP, data);
+        receive(SocketType.TCP, data);
     }
-
     protected void OnUDP(byte[] data) {
-        Receive(SocketType.UDP, data);
+        receive(SocketType.UDP, data);
     }
 
-    public void End() {
+    public void end() {
         if (udp != null) {
-            udp.End();
+            udp.end();
         }
         if (tcp != null) {
-            tcp.End();
+            tcp.end();
         }
     }
 
@@ -48,7 +46,7 @@ public abstract class Client {
     Object sendLock2 = new Object();
     boolean sending = false;
 
-    public void Send(SocketType socketType, DataType dataType, byte[] data) {
+    public void send(SocketType socketType, DataType dataType, byte[] data) {
         if (!sending) {
             synchronized (sendLock1) {
                 if (!sending) {
@@ -56,14 +54,14 @@ public abstract class Client {
                         sending = true;
                         switch (socketType) {
                             case TCP:
-                                tcp.Send(
+                                tcp.send(
                                         sendByteBuffer.putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
                                         sendByteBuffer.putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
                                         data
                                 );
                                 break;
                             case UDP:
-                                udp.Send(
+                                udp.send(
                                         sendByteBuffer.putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
                                         sendByteBuffer.putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
                                         data
@@ -78,7 +76,7 @@ public abstract class Client {
     }
 
     Gson gson = new Gson();
-    protected void Receive(SocketType socketType, byte[] data) {
+    protected void receive(SocketType socketType, byte[] data) {
         // parse version
         int val = ByteBuffer.wrap(data, 0, 4).getInt();
         switch (val) {
@@ -109,24 +107,16 @@ public abstract class Client {
                     default:
                         Log.e(TAG, "Protocol " + dataType + " unsupported");
                 }
-                InvokeOnReceiveListeners(socketType, dataType, data);
+                invokeOnReceiveListeners(socketType, dataType, data);
                 break;
             default:
                 Log.e(TAG, "Version " + val + " unsupported");
         }
     }
 
-    private void InvokeOnReceiveListeners(SocketType socketType, DataType dataType, Object data) {
+    public void invokeOnReceiveListeners(SocketType socketType, DataType dataType, Object data) {
         for(OnReceiveListener listener: OnReceiveListeners) {
             listener.OnReceive(socketType,  dataType,  data);
         }
     }
 }
-
-//public class ClientError {
-//    public SocketType socketType; // socket type that caused the error
-//    public DataType protocol; // protocol that caused the error
-//    public String message; // custom message
-//    public Exception exception { get; set; } // the error
-//    public byte[] data { get; set; } // more error data
-//}

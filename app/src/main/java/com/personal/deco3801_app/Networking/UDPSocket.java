@@ -58,13 +58,13 @@ public class UDPSocket extends Socket {
     }
 
     @Override
-    public void Begin() {
+    public void begin() {
         running = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    //UDPRead();
+                    UDPRead();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,7 +73,7 @@ public class UDPSocket extends Socket {
     }
 
     @Override
-    public void End() {
+    public void end() {
         running = false;
     }
 
@@ -147,9 +147,9 @@ public class UDPSocket extends Socket {
                         readCRC.reset();
                         readCRC.update(data);
                         if (useCRC && readCRC.getValue() == hash) {
-                            InvokeOnReceiveListeners(data);
+                            invokeOnReceiveListeners(data);
                         } else if (!useCRC) {
-                            InvokeOnReceiveListeners(data);
+                            invokeOnReceiveListeners(data);
                         }
 
                         msgPos = 0;
@@ -177,8 +177,7 @@ public class UDPSocket extends Socket {
     int headerOffset = HEADER.length + INTSIZE + INTSIZE;
 
     @Override
-    public void Send(byte[]... data) {
-
+    public void send(byte[]... data) {
         // find size
         int dataSize = 0;
         for (byte[] segment : data)

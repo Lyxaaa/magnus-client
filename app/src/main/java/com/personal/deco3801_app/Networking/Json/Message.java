@@ -10,7 +10,7 @@ public class Message {
     public long timestamp;
     public String message;
 
-    public byte[] GetBytes() {
+    public byte[] getBytes() {
         timestamp = System.currentTimeMillis();
         try {
             return new Gson().toJson(this).getBytes("ASCII");
