@@ -4,11 +4,11 @@ public enum SocketType {
     TCP(0),
     UDP(1);
 
-    private int socketType;
+    private int value;
 
-    SocketType(int socketType) {this.socketType = socketType;}
+    SocketType(int value) {this.value = value;}
 
-    public int getType() {
-        return socketType;
+    public int getValue() {
+        return value;
     }
 }

@@ -1,5 +1,7 @@
 package com.personal.deco3801_app.Networking;
 
+import android.util.SparseArray;
+
 public enum DataType {
     Error (-1),
     Undefined (0),
@@ -7,11 +9,26 @@ public enum DataType {
     RawString (2),
     JSON (3);
 
-    private int dataType;
+    private int value;
 
-    DataType(int dataType) {this.dataType = dataType;}
+    private static final SparseArray<DataType> intToTypeMap = new SparseArray<>();
 
-    public int getType() {
-        return dataType;
+    static {
+        for (DataType type : DataType.values()) {
+            intToTypeMap.put(type.value, type);
+        }
+    }
+
+    public static DataType fromInt(int i) {
+        DataType type = intToTypeMap.get(i);
+        if (type == null)
+            return Undefined;
+        return type;
+    }
+
+    DataType(int value) {this.value = value;}
+
+    public int getValue() {
+        return value;
     }
 }

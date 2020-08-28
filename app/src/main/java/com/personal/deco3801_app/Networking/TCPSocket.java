@@ -123,7 +123,7 @@ public class TCPSocket extends Socket {
     }
 
     @Override
-    public void Send(byte[][] data) {
+    public void Send(byte[]... data) {
 
         //if(!client.Connected)
 

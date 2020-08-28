@@ -212,7 +212,7 @@ public class UDPSocket extends Socket {
         System.arraycopy(byteBuffer.putInt(dataSize).order(ByteOrder.BIG_ENDIAN).array(), 0, message, offset, INTSIZE);
         offset += INTSIZE;
         System.arraycopy(byteBuffer.putInt(crc).order(ByteOrder.BIG_ENDIAN).array(), 0, message, offset, INTSIZE);
-        
+
         DatagramPacket packet = new DatagramPacket(message, 0, message.length, remoteEndPoint);
         try {
             client.send(packet);
