@@ -1,16 +1,16 @@
-package com.personal.deco3801_app.ProjectNet;
+package com.deco.magnus.ProjectNet;
 
-import com.personal.deco3801_app.Networking.DataType;
-import com.personal.deco3801_app.Networking.Socket;
-import com.personal.deco3801_app.Networking.SocketType;
-import com.personal.deco3801_app.Networking.TCPSocket;
-import com.personal.deco3801_app.ProjectNet.Messages.Message;
-import com.personal.deco3801_app.ProjectNet.Messages.MsgInitialise;
-import com.personal.deco3801_app.ProjectNet.Messages.Type;
+import com.deco.magnus.Networking.DataType;
+import com.deco.magnus.Networking.Socket;
+import com.deco.magnus.Networking.SocketType;
+import com.deco.magnus.Networking.TCPSocket;
+import com.deco.magnus.ProjectNet.Messages.Message;
+import com.deco.magnus.ProjectNet.Messages.MsgInitialise;
+import com.deco.magnus.ProjectNet.Messages.Type;
 
 import java.nio.charset.StandardCharsets;
 
-public class Client extends com.personal.deco3801_app.Networking.Client {
+public class Client extends com.deco.magnus.Networking.Client {
     public String id;
 
     public Client() {

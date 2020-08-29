@@ -1,7 +1,7 @@
-package com.personal.deco3801_app.Networking.Json;
+package com.deco.magnus.Networking.Json;
 
 import com.google.gson.Gson;
-import com.personal.deco3801_app.Networking.DataType;
+import com.deco.magnus.Networking.DataType;
 
 import java.io.UnsupportedEncodingException;
 

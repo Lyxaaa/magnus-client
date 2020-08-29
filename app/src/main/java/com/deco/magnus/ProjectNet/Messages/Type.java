@@ -1,4 +1,4 @@
-package com.personal.deco3801_app.ProjectNet.Messages;
+package com.deco.magnus.ProjectNet.Messages;
 
 import android.util.SparseArray;
 

@@ -1,9 +1,9 @@
-package com.personal.deco3801_app.Networking;
+package com.deco.magnus.Networking;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.personal.deco3801_app.Networking.Json.Message;
+import com.deco.magnus.Networking.Json.Message;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

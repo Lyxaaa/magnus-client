@@ -1,6 +1,5 @@
-package com.personal.deco3801_app;
+package com.deco.magnus;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 

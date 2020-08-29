@@ -1,4 +1,4 @@
-package com.personal.deco3801_app;
+package com.deco.magnus;
 
 import org.junit.Test;
 
