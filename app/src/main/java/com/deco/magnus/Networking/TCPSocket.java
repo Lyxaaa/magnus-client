@@ -77,7 +77,7 @@ public class TCPSocket extends Socket {
         }
         if (stream == null) return;
 
-        EvictingQueue<Byte> headerBuffer = new EvictingQueue<>(4);
+        LimitedQueue<Byte> headerBuffer = new LimitedQueue<>(4);
         byte[] buffer = new byte[4];
         int size;
 

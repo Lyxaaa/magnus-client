@@ -1,8 +1,7 @@
 package com.deco.magnus.Networking;
 
-import com.google.common.collect.EvictingQueue;
-
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -10,6 +9,7 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.CRC32;
 
@@ -99,7 +99,7 @@ public class UDPSocket extends Socket {
         int bufPos = 0; // how much data remains in the packet we just received
         int bufMax = 0; // how much data there is total in the packet that was just received
 
-        EvictingQueue<Byte> headerBuffer = new EvictingQueue<>(4);
+        LimitedQueue<Byte> headerBuffer = new LimitedQueue<>(4);
 
         while (running) {
             resultBuffer = getBuffer(client, datagramPacket);
