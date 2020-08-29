@@ -1,6 +1,8 @@
 package com.deco.magnus.ProjectNet.Messages;
 
-public class Message extends com.deco.magnus.Networking.Json.Message {
+import com.deco.magnus.Netbase.JsonMsg;
+
+public class Message extends JsonMsg {
 
     public Message( ) {
         setType(Type.Unknown);

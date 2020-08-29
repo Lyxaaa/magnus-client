@@ -1,4 +1,4 @@
-package com.deco.magnus.Networking;
+package com.deco.magnus.Netbase;
 
 public enum SocketType {
     TCP(0),

@@ -1,9 +1,8 @@
-package com.deco.magnus.Networking;
+package com.deco.magnus.Netbase;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.deco.magnus.Networking.Json.Message;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -98,8 +97,8 @@ public abstract class Client {
                     case JSON:
                         String str = new String(dataSegment);
                         try {
-                            processedData = gson.fromJson(str, Message.class);
-                            ((Message) processedData).message = str;
+                            processedData = gson.fromJson(str, JsonMsg.class);
+                            ((JsonMsg) processedData).message = str;
                         } catch (Exception e) {
                             dataType = DataType.Error;
                         }

@@ -1,16 +1,16 @@
 package com.deco.magnus.ProjectNet;
 
-import com.deco.magnus.Networking.DataType;
-import com.deco.magnus.Networking.Socket;
-import com.deco.magnus.Networking.SocketType;
-import com.deco.magnus.Networking.TCPSocket;
+import com.deco.magnus.Netbase.DataType;
+import com.deco.magnus.Netbase.Socket;
+import com.deco.magnus.Netbase.SocketType;
+import com.deco.magnus.Netbase.TCPSocket;
 import com.deco.magnus.ProjectNet.Messages.Message;
 import com.deco.magnus.ProjectNet.Messages.MsgInitialise;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
 import java.nio.charset.StandardCharsets;
 
-public class Client extends com.deco.magnus.Networking.Client {
+public class Client extends com.deco.magnus.Netbase.Client {
     public String id;
 
     public Client() {

@@ -1,4 +1,4 @@
-package com.deco.magnus.Networking;
+package com.deco.magnus.Types;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

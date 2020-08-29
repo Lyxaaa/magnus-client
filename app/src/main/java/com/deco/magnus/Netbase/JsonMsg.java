@@ -1,11 +1,10 @@
-package com.deco.magnus.Networking.Json;
+package com.deco.magnus.Netbase;
 
 import com.google.gson.Gson;
-import com.deco.magnus.Networking.DataType;
 
 import java.io.UnsupportedEncodingException;
 
-public class Message {
+public class JsonMsg {
     public int type;
     public long timestamp;
     public String message;
@@ -22,7 +21,7 @@ public class Message {
 
     public static <T> T TryCast(DataType dataType, Object data, int msgType, Class<T> type) {
         if (dataType == DataType.JSON) {
-            Message cast = (Message)data;
+            JsonMsg cast = (JsonMsg)data;
             if (cast.type == msgType) {
                 try {
                     return new Gson().fromJson(cast.message, type);

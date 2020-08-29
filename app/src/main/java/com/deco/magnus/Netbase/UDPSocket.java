@@ -1,7 +1,8 @@
-package com.deco.magnus.Networking;
+package com.deco.magnus.Netbase;
+
+import com.deco.magnus.Types.LimitedQueue;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -9,7 +10,6 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.CRC32;
 

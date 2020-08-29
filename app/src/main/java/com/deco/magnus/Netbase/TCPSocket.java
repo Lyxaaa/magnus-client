@@ -1,4 +1,4 @@
-package com.deco.magnus.Networking;
+package com.deco.magnus.Netbase;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import com.google.common.collect.EvictingQueue;
+import com.deco.magnus.Types.LimitedQueue;
 
 public class TCPSocket extends Socket {
 

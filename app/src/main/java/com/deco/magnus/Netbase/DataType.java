@@ -1,4 +1,4 @@
-package com.deco.magnus.Networking;
+package com.deco.magnus.Netbase;
 
 import android.util.SparseArray;
 
