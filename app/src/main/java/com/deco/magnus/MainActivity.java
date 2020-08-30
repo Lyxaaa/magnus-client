@@ -7,10 +7,13 @@ import androidx.fragment.app.FragmentManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 import com.deco.magnus.UserData.User;
 
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final FragmentManager fragmentManager = this.getSupportFragmentManager();
+
+        final RelativeLayout rootLayout = findViewById(R.id.root_layout);
         final Button registerBtn = findViewById(R.id.register_btn);
         final Button loginBtn = findViewById(R.id.login_btn);
 
@@ -41,9 +47,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 LayoutInflater loginInflater = getLayoutInflater();
-                View view = loginInflater.inflate(R.layout.login_main, null);
-                username = view.findViewById(R.id.username_box);
-                pword = view.findViewById(R.id.password_box);
+
+                PopupWindow window = new PopupWindow(loginInflater.inflate(R.layout.login_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
+                //View view = loginInflater.inflate(R.layout.login_main, null);
+                window.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
+
+                /*
+                username = window.getContentView().findViewById(R.id.username_box);
+                pword = window.getContentView().findViewById(R.id.password_box);
 
                 final Button submitLogin = findViewById(R.id.submit_login_btn);
 
@@ -56,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                             loggedUser = null;
                         }
                     }
-                });
+                });*/
             }
         });
 
@@ -75,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
 //        btn_chat.setWidth(btn_chat.getHeight());
 //        btn_profile.setWidth(btn_profile.getHeight());
 
-        final LinearLayoutCompat second_layout = findViewById(R.id.linear_layout);
-        final FragmentManager fragmentManager = this.getSupportFragmentManager();
 
         getSupportFragmentManager().beginTransaction().add(MessageFragment.newInstance(), lastFragTag).commitAllowingStateLoss();
 
