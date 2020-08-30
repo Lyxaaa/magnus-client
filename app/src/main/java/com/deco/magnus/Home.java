@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginMain extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,6 @@ public class LoginMain extends AppCompatActivity {
         setContentView(R.layout.login_main);
 
         final Button backBtn = findViewById(R.id.back_btn);
-        final Text
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override

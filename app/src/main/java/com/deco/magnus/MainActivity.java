@@ -7,6 +7,12 @@ import androidx.fragment.app.FragmentManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.deco.magnus.UserData.User;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     String logTag = "socketLogger";
     String socketData = null;
 
+    EditText username, pword;
+
+    User loggedUser;
 
 
     @Override
@@ -24,6 +33,32 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final Button registerBtn = findViewById(R.id.register_btn);
+        final Button loginBtn = findViewById(R.id.login_btn);
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater loginInflater = getLayoutInflater();
+                View view = loginInflater.inflate(R.layout.login_main, null);
+                username = view.findViewById(R.id.username_box);
+                pword = view.findViewById(R.id.password_box);
+
+                final Button submitLogin = findViewById(R.id.submit_login_btn);
+
+                submitLogin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            loggedUser = new User(username.getText().toString(), pword.getText().toString());
+                        } catch (User.IncorrectCredentialsException ice) {
+                            loggedUser = null;
+                        }
+                    }
+                });
+            }
+        });
 
 //        final TextView socket_test = findViewById(R.id.socket_test);
         DataTransmission dataTransmission = new DataTransmission();
