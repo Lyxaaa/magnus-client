@@ -19,8 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.deco.magnus.SecondActivity"
+            android:screenOrientation="landscape"
+            />
+
+        <activity
+            android:name="com.deco.magnus.Home"
             android:screenOrientation="landscape"
             />
     </application>

@@ -5,15 +5,20 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.deco.magnus.UserData.User;
 
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     String socketData = null;
 
     EditText username, pword;
+    Button submitLogin;
 
     User loggedUser;
 
@@ -52,11 +58,24 @@ public class MainActivity extends AppCompatActivity {
                 //View view = loginInflater.inflate(R.layout.login_main, null);
                 window.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
 
-                /*
                 username = window.getContentView().findViewById(R.id.username_box);
                 pword = window.getContentView().findViewById(R.id.password_box);
+                username.setInputType(InputType.TYPE_CLASS_TEXT);
+                pword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                final Button submitLogin = findViewById(R.id.submit_login_btn);
+                submitLogin = window.getContentView().findViewById(R.id.submit_login_btn);
+                final TextView credentialInfo = window.getContentView().findViewById(R.id.login_view);
+
+                username.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                            credentialInfo.setText(R.string.login);
+                            credentialInfo.setTextColor(getResources().getColor(R.color.credentialsDefault));
+                        }
+                        return false;
+                    }
+                });
 
                 submitLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -66,10 +85,20 @@ public class MainActivity extends AppCompatActivity {
                         } catch (User.IncorrectCredentialsException ice) {
                             loggedUser = null;
                         }
+
+                        if (loggedUser != null) {
+                            createHome(v);
+                        } else {
+                            username.clearComposingText();
+                            pword.clearComposingText();
+                            credentialInfo.setText("Incorrect Login Credentials");
+                            credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
+                        }
                     }
-                });*/
+                });
             }
         });
+
 
 //        final TextView socket_test = findViewById(R.id.socket_test);
         DataTransmission dataTransmission = new DataTransmission();
@@ -122,6 +151,11 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //        getSocketData();
 //        socket_test.setText(socketData);
+    }
+
+    public void createHome(View view) {
+        Intent homeScreen = new Intent(this, Home.class);
+        startActivity(homeScreen);
     }
 
     private void getSocketData() {

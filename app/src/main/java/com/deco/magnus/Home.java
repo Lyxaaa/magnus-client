@@ -12,15 +12,18 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_main);
+        setContentView(R.layout.home_main);
 
-        final Button backBtn = findViewById(R.id.back_btn);
+        final Button gameBtn = findViewById(R.id.game_btn);
+        final Button chatBtn = findViewById(R.id.chat_btn);
+        final Button friendsBtn = findViewById(R.id.friends_btn);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        friendsBtn.setBackgroundResource(R.drawable.game_icon);
+
+        gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(backIntent, 0);
+
             }
         });
     }

@@ -3,9 +3,9 @@
     android:id="@+id/login_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80000000"
-
+    android:background="@color/backgroundUnFocus"
     android:gravity="center"
+    android:layout_gravity="center"
     android:orientation="vertical">
 
     <Button
@@ -23,30 +23,19 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
+        android:background="@android:color/white"
         android:gravity="center"
         android:minWidth="500dp"
         android:minHeight="300dp"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/submit_login_btn"
+        <TextView
+            android:id="@+id/login_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="#0099FF"
-            android:text="Log In"
-            android:textColor="#FFFFFF" />
-
-        <EditText
-            android:id="@+id/password_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="password"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:textColorHint="#777777"></EditText>
+            android:text="@string/login"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/credentialsDefault" />
 
         <EditText
             android:id="@+id/username_box"
@@ -58,12 +47,23 @@
             android:textColor="#000"
             android:textColorHint="#777777"></EditText>
 
-        <TextView
-            android:id="@+id/login_view"
+        <EditText
+            android:id="@+id/password_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#A4C639" />
+            android:ems="10"
+            android:hint="password"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textColorHint="#777777"></EditText>
+
+        <Button
+            android:id="@+id/submit_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#0099FF"
+            android:text="Log In"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </LinearLayout>

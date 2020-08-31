@@ -2,9 +2,7 @@ package com.deco.magnus.UserData;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.service.autofill.UserData;
-
-import com.deco.magnus.ResourceDirectory;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,7 +37,7 @@ public class User {
         this.username = userInfo.username;
         this.bio = userInfo.bio;
         this.byteImage = userInfo.profilePic;
-        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
+//        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
     }
 
     public User(String username) {
@@ -49,7 +47,7 @@ public class User {
         this.username = userInfo.username;
         this.bio = userInfo.bio;
         this.byteImage = userInfo.profilePic;
-        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
+//        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
     }
 
     /**
@@ -80,9 +78,10 @@ public class User {
         UserInfo userDataRequest = new UserInfo();
         userDataRequest.bio = "Some info about me";
         userDataRequest.id = 123456;
-        userDataRequest.username = username;
+        userDataRequest.username = "roger";
         userDataRequest.passwordCorrect = true;
-        userDataRequest.profilePic = imageToBytes("test");
+//        userDataRequest.profilePic = imageToBytes("test.jpg");
+        userDataRequest.profilePic = null;
         //Ask database for this object
         return userDataRequest;
     }
@@ -96,7 +95,8 @@ public class User {
     }
 
     private byte[] imageToBytes(String imageName) {
-        final File imageFile = new File(ResourceDirectory.IMAGES.getPath() + imageName);
+        final File imageFile = new File("drawable/test.jpg");
+        Log.d("UserLogger", imageFile.getAbsolutePath());
         Bitmap bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
         bitmapImage.compress(Bitmap.CompressFormat.JPEG, 0, blob);
@@ -112,7 +112,9 @@ public class User {
      */
     private UserInfo detailsCorrect(String name, String pword) {
         UserInfo userDataRequest = userExists(name);
-        if (userDataRequest != null && userDataRequest.passwordCorrect) {
+        if (userDataRequest != null &&
+                name.toLowerCase().equals(userDataRequest.username.toLowerCase()) &&
+                userDataRequest.passwordCorrect) {
             //Make a server request for all of this information
             return userDataRequest;
         }
