@@ -1,8 +1,7 @@
 package com.deco.magnus.UserData;
 
 public class UserInfo {
-    public String username;
-    public int id;
+    public String email;
     public String bio;
     public byte[] profilePic;
 

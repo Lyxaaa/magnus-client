@@ -4,18 +4,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.deco.magnus.ProjectNet.Messages.Message;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 
-public class User {
+public class User extends Message {
     public class IncorrectCredentialsException extends Exception {
         public IncorrectCredentialsException(String errorMessage) {
             super(errorMessage);
         }
     }
-    private final int id;
-    private final String username;
+    private final String email;
     private final boolean authorised;
     private String bio;
     private byte[] byteImage;
@@ -33,8 +34,7 @@ public class User {
     public User(String username, String password) throws IncorrectCredentialsException {
         UserInfo userInfo = login(username, password);
         this.authorised = true;
-        this.id = userInfo.id;
-        this.username = userInfo.username;
+        this.email = userInfo.email;
         this.bio = userInfo.bio;
         this.byteImage = userInfo.profilePic;
 //        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
@@ -43,8 +43,7 @@ public class User {
     public User(String username) {
         UserInfo userInfo = userExists(username);
         this.authorised = false;
-        this.id = userInfo.id;
-        this.username = userInfo.username;
+        this.email = userInfo.email;
         this.bio = userInfo.bio;
         this.byteImage = userInfo.profilePic;
 //        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
@@ -77,8 +76,7 @@ public class User {
         //Ask database for this object
         UserInfo userDataRequest = new UserInfo();
         userDataRequest.bio = "Some info about me";
-        userDataRequest.id = 123456;
-        userDataRequest.username = "roger";
+        userDataRequest.email = "roger";
         userDataRequest.passwordCorrect = true;
 //        userDataRequest.profilePic = imageToBytes("test.jpg");
         userDataRequest.profilePic = null;
@@ -113,7 +111,7 @@ public class User {
     private UserInfo detailsCorrect(String name, String pword) {
         UserInfo userDataRequest = userExists(name);
         if (userDataRequest != null &&
-                name.toLowerCase().equals(userDataRequest.username.toLowerCase()) &&
+                name.toLowerCase().equals(userDataRequest.email.toLowerCase()) &&
                 userDataRequest.passwordCorrect) {
             //Make a server request for all of this information
             return userDataRequest;
@@ -123,11 +121,8 @@ public class User {
     }
 
     public String getName() {
-        return username;
+        return this.email;
     }
 
-    public int getId() {
-        return id;
-    }
 }
 
