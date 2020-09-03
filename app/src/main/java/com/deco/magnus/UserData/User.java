@@ -49,16 +49,32 @@ public class User extends Message {
 //        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
     }
 
+    public UserInfo register(String email, String pword, File image)
+            throws IncorrectCredentialsException {
+        UserInfo userInfo = new UserInfo();
+        userInfo.passwordCorrect = true;
+        userInfo.email = email;
+//        userInfo.profilePic =
+        //Make request for addition to user info here, return null if user already exists
+        if (userInfo == null) {
+            throw new IncorrectCredentialsException("Email " + email + " is already in use. " +
+                    "Please log in with this email, or register with a different email");
+        }
+        return userInfo;
+    }
+
     /**
      * Used to create a User Object for the local User
-     * @param username
+     * @param email
      * @param pword
      * @throws IncorrectCredentialsException
      */
-    public UserInfo login(String username, String pword) throws IncorrectCredentialsException {
-        UserInfo userInfo = detailsCorrect(username, pword);
+    public UserInfo login(String email, String pword) throws IncorrectCredentialsException {
+        UserInfo userInfo = detailsCorrect(email, pword);
         if (userInfo == null) {
-            throw new IncorrectCredentialsException("User " + username + " does not exist");
+            throw new IncorrectCredentialsException("User " + email + " does not exist");
+        } else if (!userInfo.passwordCorrect) {
+            throw new IncorrectCredentialsException("Password for " + email + " is incorrect");
         }
         return userInfo;
     }
@@ -84,15 +100,15 @@ public class User extends Message {
         return userDataRequest;
     }
 
-    private Bitmap bytesToBitmap(byte[] bytes) {
+    public Bitmap bytesToBitmap(byte[] bytes) {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    private Bitmap imageToBitmap(String imageName) {
+    public Bitmap imageToBitmap(String imageName) {
         return bytesToBitmap(imageToBytes(imageName));
     }
 
-    private byte[] imageToBytes(String imageName) {
+    public byte[] imageToBytes(String imageName) {
         final File imageFile = new File("drawable/test.jpg");
         Log.d("UserLogger", imageFile.getAbsolutePath());
         Bitmap bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());

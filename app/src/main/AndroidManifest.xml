@@ -29,6 +29,11 @@
             android:name="com.deco.magnus.Home"
             android:screenOrientation="landscape"
             />
+
+        <activity
+            android:name="com.deco.magnus.GameScreen"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.deco.magnus.UserData.User;
+import com.deco.magnus.UserData.UserInfo;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -31,11 +32,20 @@ public class MainActivity extends AppCompatActivity {
     String logTag = "socketLogger";
     String socketData = null;
 
-    EditText username, pword;
-    Button submitLogin;
+    EditText email, pword, cfrmPword;
+    Button submitLogin, submitRegister;
 
-    User loggedUser;
+    private static User loggedUser;
 
+    public static void setLoggedUser(User user) {
+        if (user != null) {
+            loggedUser = user;
+        }
+    }
+
+    public static User getLoggedUser() {
+        return loggedUser;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +64,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LayoutInflater loginInflater = getLayoutInflater();
 
-                PopupWindow window = new PopupWindow(loginInflater.inflate(R.layout.login_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
+                PopupWindow loginWindow = new PopupWindow(loginInflater.inflate(R.layout.login_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
                 //View view = loginInflater.inflate(R.layout.login_main, null);
-                window.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
+                loginWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
 
-                username = window.getContentView().findViewById(R.id.username_box);
-                pword = window.getContentView().findViewById(R.id.password_box);
-                username.setInputType(InputType.TYPE_CLASS_TEXT);
+                email = loginWindow.getContentView().findViewById(R.id.login_email_edit_text);
+                pword = loginWindow.getContentView().findViewById(R.id.login_password_edit_text);
+                email.setInputType(InputType.TYPE_CLASS_TEXT);
                 pword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                submitLogin = window.getContentView().findViewById(R.id.submit_login_btn);
-                final TextView credentialInfo = window.getContentView().findViewById(R.id.login_view);
+                submitLogin = loginWindow.getContentView().findViewById(R.id.submit_login_btn);
+                final TextView credentialInfo = loginWindow.getContentView().findViewById(R.id.login_view);
 
-                username.setOnTouchListener(new View.OnTouchListener() {
+                email.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -81,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         try {
-                            loggedUser = new User(username.getText().toString(), pword.getText().toString());
+                            loggedUser = new User(email.getText().toString(), pword.getText().toString());
                         } catch (User.IncorrectCredentialsException ice) {
                             loggedUser = null;
                         }
@@ -89,9 +99,79 @@ public class MainActivity extends AppCompatActivity {
                         if (loggedUser != null) {
                             createHome(v);
                         } else {
-                            username.clearComposingText();
+                            email.clearComposingText();
                             pword.clearComposingText();
-                            credentialInfo.setText("Incorrect Login Credentials");
+                            credentialInfo.setText(R.string.bad_login);
+                            credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
+                        }
+                    }
+                });
+            }
+        });
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater registerInflater = getLayoutInflater();
+                PopupWindow registerWindow = new PopupWindow(registerInflater.inflate(R.layout.register_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
+                registerWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
+
+                email = registerWindow.getContentView().findViewById(R.id.register_email_edit_text);
+                pword = registerWindow.getContentView().findViewById(R.id.register_password_edit_text);
+                cfrmPword = registerWindow.getContentView().findViewById(R.id.register_confirm_password_edit_text);
+
+                email.setInputType(InputType.TYPE_CLASS_TEXT);
+                pword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                cfrmPword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                submitRegister = registerWindow.getContentView().findViewById(R.id.submit_register_btn);
+                final TextView credentialInfo = registerWindow.getContentView().findViewById(R.id.register_view);
+
+                email.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                            credentialInfo.setText(R.string.register);
+                            credentialInfo.setTextColor(getResources().getColor(R.color.credentialsDefault));
+                        }
+                        return false;
+                    }
+                });
+
+                pword.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                            credentialInfo.setText(R.string.register);
+                            credentialInfo.setTextColor(getResources().getColor(R.color.credentialsDefault));
+                        }
+                        return false;
+                    }
+                });
+
+                submitRegister.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (pword.getText().toString().equals(cfrmPword.getText().toString())) {
+                            try {
+                                loggedUser = new User(email.getText().toString(), pword.getText().toString());
+                            } catch (User.IncorrectCredentialsException ice) {
+                                loggedUser = null;
+                            }
+
+                            if (loggedUser != null) {
+                                createHome(v);
+                            } else {
+                                email.setText("");
+                                pword.setText("");
+                                cfrmPword.setText("");
+                                credentialInfo.setText(R.string.bad_register_email);
+                                credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
+                            }
+                        } else {
+                            pword.setText("");
+                            cfrmPword.setText("");
+                            credentialInfo.setText(R.string.bad_register_pword);
                             credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
                         }
                     }

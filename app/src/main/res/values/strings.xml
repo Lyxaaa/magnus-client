@@ -5,5 +5,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="message_fragment">Test message fragment\nNew Line</string>
     <string name="login">Enter Credentials</string>
+    <string name="bad_login">Incorrect Login Credentials</string>
+    <string name="register">Register Account</string>
+    <string name="bad_register_email">Email already in use</string>
+    <string name="bad_register_pword">Passwords do not Match</string>
 
 </resources>

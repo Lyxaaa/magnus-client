@@ -30,15 +30,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/login_view"
+            android:id="@+id/register_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
+            android:text="@string/register"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/credentialsDefault" />
 
         <EditText
-            android:id="@+id/login_email_edit_text"
+            android:id="@+id/register_email_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -48,7 +48,7 @@
             android:textColorHint="#777777"></EditText>
 
         <EditText
-            android:id="@+id/login_password_edit_text"
+            android:id="@+id/register_password_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -57,13 +57,23 @@
             android:textColor="#000"
             android:textColorHint="#777777"></EditText>
 
+        <EditText
+            android:id="@+id/register_confirm_password_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="confirm password"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textColorHint="#777777"></EditText>
+
         <Button
-            android:id="@+id/submit_login_btn"
+            android:id="@+id/submit_register_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="#0099FF"
-            android:text="Log In"
+            android:text="Register"
             android:textColor="#FFFFFF"
             android:textSize="16sp"/>
     </LinearLayout>

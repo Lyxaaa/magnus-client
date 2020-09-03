@@ -7,12 +7,15 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.deco.magnus.UserData.User;
+
 public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
+        User user = MainActivity.getLoggedUser();
 
         final Button gameBtn = findViewById(R.id.game_btn);
         final Button chatBtn = findViewById(R.id.chat_btn);
@@ -23,8 +26,13 @@ public class Home extends AppCompatActivity {
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                createGame(v);
             }
         });
+    }
+
+    public void createGame(View view) {
+        Intent gameScreen = new Intent(this, GameScreen.class);
+        startActivity(gameScreen);
     }
 }
