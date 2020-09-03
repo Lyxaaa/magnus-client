@@ -1,4 +1,4 @@
-package com.deco.magnus;
+package com.deco.magnus.ActivityScreens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
 public class Home extends AppCompatActivity {

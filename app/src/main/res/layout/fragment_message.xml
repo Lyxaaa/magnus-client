@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
     android:orientation="vertical"
-    tools:context=".MessageFragment"
+    tools:context=".ActivityScreens.MessageFragment"
     android:id="@+id/fragment_chat">
 
     <!-- TODO: Update blank fragment layout -->

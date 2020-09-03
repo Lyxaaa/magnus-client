@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="horizontal"
-    tools:context=".MainActivity"
+    tools:context=".ActivityScreens.MainActivity"
     android:id="@+id/home_main"
     android:background="@color/backgroundFocus">
 

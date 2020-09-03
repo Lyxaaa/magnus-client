@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.deco.magnus.MainActivity"
+            android:name="com.deco.magnus.ActivityScreens.MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,17 +21,17 @@
         </activity>
 
         <activity
-            android:name="com.deco.magnus.SecondActivity"
+            android:name="com.deco.magnus.ActivityScreens.SecondActivity"
             android:screenOrientation="landscape"
             />
 
         <activity
-            android:name="com.deco.magnus.Home"
+            android:name="com.deco.magnus.ActivityScreens.Home"
             android:screenOrientation="landscape"
             />
 
         <activity
-            android:name="com.deco.magnus.GameScreen"
+            android:name="com.deco.magnus.ActivityScreens.GameScreen"
             android:screenOrientation="landscape"
             />
     </application>

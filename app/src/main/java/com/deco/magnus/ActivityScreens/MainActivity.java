@@ -1,12 +1,10 @@
-package com.deco.magnus;
+package com.deco.magnus.ActivityScreens;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -20,8 +18,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.deco.magnus.DataTransmission;
+import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
-import com.deco.magnus.UserData.UserInfo;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -152,7 +151,9 @@ public class MainActivity extends AppCompatActivity {
                 submitRegister.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (pword.getText().toString().equals(cfrmPword.getText().toString())) {
+                        if (pword.getText().toString().equals("") ||
+                                cfrmPword.getText().toString().equals("")||
+                                pword.getText().toString().equals(cfrmPword.getText().toString())) {
                             try {
                                 loggedUser = new User(email.getText().toString(), pword.getText().toString());
                             } catch (User.IncorrectCredentialsException ice) {

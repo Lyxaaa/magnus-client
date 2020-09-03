@@ -1,4 +1,4 @@
-package com.deco.magnus;
+package com.deco.magnus.ActivityScreens;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.deco.magnus.R;
 
 
 /**
