@@ -9,5 +9,4 @@
     <string name="register">Register Account</string>
     <string name="bad_register_email">Email already in use</string>
     <string name="bad_register_pword">Passwords do not Match</string>
-
 </resources>

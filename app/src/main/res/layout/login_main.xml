@@ -15,7 +15,7 @@
         android:layout_gravity="top"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:background="#0099FF"
+        android:background="@color/dark"
         android:text="back"
         android:textColor="#FFFFFF"
         android:visibility="gone" />

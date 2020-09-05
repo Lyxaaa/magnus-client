@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="credentialsDefault">#A4C639</color>
-    <color name="credentialsError">#FF0033</color>
-    <color name="backgroundFocus">#121212</color>
-    <color name="backgroundUnFocus">#110144</color>
+    <color name="colorPrimary">@color/blue</color>
+    <color name="colorPrimaryDark">@color/blue</color>
+    <color name="colorAccent">@color/red</color>
+    <color name="credentialsDefault">@color/green</color>
+    <color name="credentialsError">@color/red</color>
+    <color name="backgroundFocus">@color/dark</color>
+    <color name="backgroundUnFocus">@color/darker</color>
+
+    <color name="white">#ffffff</color>
+    <color name="dark">#35363a</color>
+    <color name="darker">#202124</color>
+    <color name="black">#000000</color>
+
+    <color name="blue">#4285F4</color>
+    <color name="bwu">#a0c3ff</color>
+    <color name="yellow">#F4B400</color>
+    <color name="yewwo">#fbcb43</color>
+    <color name="green">#0F9D58</color>
+    <color name="gween">#7bcfa9</color>
+    <color name="red">#DB4437</color>
+    <color name="wed">#ed9097</color>
+
     <color name="gameBtn">#486406</color>
     <color name="chatBtn">#300CEE</color>
     <color name="friendsBtn">#F00C4A</color>
