@@ -5,6 +5,10 @@
     <color name="colorAccent">#D81B60</color>
     <color name="credentialsDefault">#A4C639</color>
     <color name="credentialsError">#FF0033</color>
-    <color name="backgroundFocus">#CCCCCC</color>
-    <color name="backgroundUnFocus">#777777</color>
+    <color name="backgroundFocus">#121212</color>
+    <color name="backgroundUnFocus">#110144</color>
+    <color name="gameBtn">#486406</color>
+    <color name="chatBtn">#300CEE</color>
+    <color name="friendsBtn">#F00C4A</color>
+    <color name="whiteText">#FFFFFF</color>
 </resources>

@@ -4,7 +4,8 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityScreens.MainActivity">
+    tools:context=".ActivityScreens.MainActivity"
+    android:background="@color/backgroundFocus">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,16 +13,44 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/register_btn"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:text="Register" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:background="@drawable/baseline_create_black_48"/>
 
-        <Button
-            android:id="@+id/login_btn"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:text="Login" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:background="@color/whiteText"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:background="@drawable/baseline_login_black_48"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:background="@color/whiteText"/>
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </RelativeLayout>

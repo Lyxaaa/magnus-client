@@ -22,7 +22,12 @@ public class Home extends AppCompatActivity {
         final Button chatBtn = findViewById(R.id.chat_btn);
         final Button friendsBtn = findViewById(R.id.friends_btn);
 
-        friendsBtn.setBackgroundResource(R.drawable.game_icon);
+        gameBtn.setBackground(getResources().getDrawable(R.drawable.game_icon));
+        chatBtn.setBackground(getResources().getDrawable(R.drawable.chat_icon));
+        friendsBtn.setBackground(getResources().getDrawable(R.drawable.friends_icon));
+
+        friendsBtn.setMaxWidth(20);
+        friendsBtn.setMaxHeight(20);
 
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override

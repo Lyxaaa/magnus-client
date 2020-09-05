@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 submitRegister.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (pword.getText().toString().equals("") ||
-                                cfrmPword.getText().toString().equals("")||
+                        if (!pword.getText().toString().equals("") &&
+                                !cfrmPword.getText().toString().equals("") &&
                                 pword.getText().toString().equals(cfrmPword.getText().toString())) {
                             try {
                                 loggedUser = new User(email.getText().toString(), pword.getText().toString());
