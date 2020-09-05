@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">@color/blue</color>
     <color name="colorPrimaryDark">@color/blue</color>
-    <color name="colorAccent">@color/red</color>
+    <color name="colorAccent">@color/blue</color>
     <color name="credentialsDefault">@color/green</color>
     <color name="credentialsError">@color/red</color>
     <color name="backgroundFocus">@color/dark</color>
@@ -22,8 +22,7 @@
     <color name="red">#DB4437</color>
     <color name="wed">#ed9097</color>
 
-    <color name="gameBtn">#486406</color>
-    <color name="chatBtn">#300CEE</color>
-    <color name="friendsBtn">#F00C4A</color>
-    <color name="whiteText">#FFFFFF</color>
+    <color name="gameBtn">@color/green</color>
+    <color name="chatBtn">@color/blue</color>
+    <color name="friendsBtn">@color/yellow</color>
 </resources>
