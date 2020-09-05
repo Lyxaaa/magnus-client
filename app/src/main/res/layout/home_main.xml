@@ -17,6 +17,7 @@
         android:gravity="center">
     </LinearLayout>
 
+
     <!--  Holds the 3 main buttons [Game, Chat, Friends]  -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,28 +32,38 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <Button
-                android:id="@+id/game_btn"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_border_game">
+            <Button
+                android:id="@+id/home_game_btn"
+                android:layout_width="@dimen/largeIcon"
+                android:layout_height="@dimen/largeIcon"
                 android:maxHeight="100px"
                 android:maxWidth="100px"
                 android:layout_marginTop="20dp"
-                android:background="#0099FF"
-                android:textColor="#FFFFFF" />
+                android:background="@drawable/pawn"
+                android:backgroundTint="@color/white"
+                android:textColor="#FFFFFF"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                app:cornerRadius="8dp"
+                app:rippleColor="#33AAAAAA"
+                app:strokeColor="@color/gameBtn"
+                app:strokeWidth="2dp"/>
+
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/game_txt"
-                android:layout_width="wrap_content"
+                android:id="@+id/home_game_txt"
+                android:layout_width="@dimen/largeIcon"
                 android:layout_height="wrap_content"
                 android:text="Game"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/whiteText"
-                android:background="@color/gameBtn"
-                android:fontFamily=""/>
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_text"
+                android:backgroundTint="@color/gameBtn"
+                android:gravity="center"
+                />
 
         </LinearLayout>
 
@@ -63,24 +74,31 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <Button
-                android:id="@+id/chat_btn"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxHeight="100px"
-                android:maxWidth="100px"
-                android:layout_marginTop="20dp"
-                android:background="#0099FF"
-                android:textColor="#FFFFFF" />
+                android:background="@drawable/button_border_chat">
+                <Button
+                    android:id="@+id/home_chat_btn"
+                    android:layout_width="@dimen/largeIcon"
+                    android:layout_height="@dimen/largeIcon"
+                    android:maxHeight="100px"
+                    android:maxWidth="100px"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/chat"
+                    android:backgroundTint="@color/white"
+                    android:textColor="#FFFFFF" />
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/chat_txt"
-                android:layout_width="wrap_content"
+                android:id="@+id/home_chat_txt"
+                android:layout_width="@dimen/largeIcon"
                 android:layout_height="wrap_content"
                 android:text="Chat"
-                android:textColor="@color/whiteText"
-                android:background="@color/chatBtn"/>
-
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_text"
+                android:backgroundTint="@color/chatBtn"
+                android:gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -90,28 +108,31 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <Button
-                android:id="@+id/friends_btn"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxHeight="100px"
-                android:maxWidth="100px"
-                android:layout_marginTop="20dp"
-                android:background="#0099FF"
-                android:textColor="#FFFFFF" />
+                android:background="@drawable/button_border_friends">
+                <Button
+                    android:id="@+id/home_friends_btn"
+                    android:layout_width="@dimen/largeIcon"
+                    android:layout_height="@dimen/largeIcon"
+                    android:maxHeight="100px"
+                    android:maxWidth="100px"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/search"
+                    android:backgroundTint="@color/white"
+                    android:textColor="#FFFFFF" />
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/friends_txt"
-                android:layout_width="match_parent"
+                android:id="@+id/home_friends_txt"
+                android:layout_width="@dimen/largeIcon"
                 android:layout_height="wrap_content"
                 android:text="Friends"
                 android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/whiteText"
-                android:background="@color/friendsBtn"/>
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_text"
+                android:backgroundTint="@color/friendsBtn"/>
 
         </LinearLayout>
     </LinearLayout>

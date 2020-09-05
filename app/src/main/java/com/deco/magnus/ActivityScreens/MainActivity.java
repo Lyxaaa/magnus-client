@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = this.getSupportFragmentManager();
 
         final RelativeLayout rootLayout = findViewById(R.id.root_layout);
-        final Button registerBtn = findViewById(R.id.register_btn);
-        final Button loginBtn = findViewById(R.id.login_btn);
+        final Button registerBtn = findViewById(R.id.main_register_btn);
+        final Button loginBtn = findViewById(R.id.main_login_btn);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
