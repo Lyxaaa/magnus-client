@@ -9,6 +9,7 @@
     <color name="backgroundUnFocus">@color/darker</color>
 
     <color name="white">#ffffff</color>
+    <color name="lighter">#45464a</color>
     <color name="dark">#35363a</color>
     <color name="darker">#202124</color>
     <color name="black">#000000</color>

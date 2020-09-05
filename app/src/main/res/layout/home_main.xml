@@ -10,13 +10,6 @@
     android:id="@+id/home_main"
     android:background="@color/backgroundFocus">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-    </LinearLayout>
-
 
     <!--  Holds the 3 main buttons [Game, Chat, Friends]  -->
     <LinearLayout
@@ -25,115 +18,167 @@
         android:orientation="horizontal"
         android:gravity="center">
 
+        <!--    Game Button    -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_weight="1">
 
             <FrameLayout
+                android:id="@+id/home_game_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_border_game">
-            <Button
-                android:id="@+id/home_game_btn"
-                android:layout_width="@dimen/largeIcon"
-                android:layout_height="@dimen/largeIcon"
-                android:maxHeight="100px"
-                android:maxWidth="100px"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/pawn"
-                android:backgroundTint="@color/white"
-                android:textColor="#FFFFFF"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                app:cornerRadius="8dp"
-                app:rippleColor="#33AAAAAA"
-                app:strokeColor="@color/gameBtn"
-                app:strokeWidth="2dp"/>
+                android:background="@drawable/large_button_border"
+                android:backgroundTint="@color/gameBtn">
 
-            </FrameLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/home_game_txt"
-                android:layout_width="@dimen/largeIcon"
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/home_game_onclick_frame"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/lighter">
+
+                        <Button
+                            android:id="@+id/home_game_btn"
+                            android:layout_width="@dimen/largeButtonImage"
+                            android:layout_height="@dimen/largeButtonImage"
+                            android:layout_margin="@dimen/largeButtonMargin"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/pawn"
+                            android:backgroundTint="@color/white"
+                            android:textColor="#FFFFFF"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/home_game_txt"
+                        android:layout_width="@dimen/largeButtonImage"
+                        android:layout_height="@dimen/largeButtonBox"
+                        android:text="Game"
+                        android:textSize="@dimen/largeButtonString"
+                        android:textColor="@color/white"
+                        android:background="@drawable/rounded_text"
+                        android:backgroundTint="@color/gameBtn"
+                        android:gravity="center"
+                        />
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+        <!--    Chat Button    -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:id="@+id/home_chat_frame"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Game"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_text"
-                android:backgroundTint="@color/gameBtn"
-                android:gravity="center"
-                />
+                android:background="@drawable/large_button_border"
+                android:backgroundTint="@color/chatBtn">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/home_chat_onclick_frame"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/lighter">
+
+                        <Button
+                            android:id="@+id/home_chat_btn"
+                            android:layout_width="@dimen/largeButtonImage"
+                            android:layout_height="@dimen/largeButtonImage"
+                            android:layout_margin="@dimen/largeButtonMargin"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/chat"
+                            android:backgroundTint="@color/white"
+                            android:textColor="#FFFFFF" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/home_chat_txt"
+                        android:layout_width="@dimen/largeButtonImage"
+                        android:layout_height="@dimen/largeButtonBox"
+                        android:text="Chat"
+                        android:textSize="@dimen/largeButtonString"
+                        android:textColor="@color/white"
+                        android:gravity="center"/>
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
+        <!--    Friends Button    -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_weight="1">
 
             <FrameLayout
+                android:id="@+id/home_friends_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_border_chat">
-                <Button
-                    android:id="@+id/home_chat_btn"
-                    android:layout_width="@dimen/largeIcon"
-                    android:layout_height="@dimen/largeIcon"
-                    android:maxHeight="100px"
-                    android:maxWidth="100px"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/chat"
-                    android:backgroundTint="@color/white"
-                    android:textColor="#FFFFFF" />
+                android:background="@drawable/large_button_border"
+                android:backgroundTint="@color/friendsBtn">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/home_friends_onclick_frame"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/lighter">
+
+                        <Button
+                            android:id="@+id/home_friends_btn"
+                            android:layout_width="@dimen/largeButtonImage"
+                            android:layout_height="@dimen/largeButtonImage"
+                            android:layout_margin="@dimen/largeButtonMargin"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/search"
+                            android:backgroundTint="@color/white"
+                            android:textColor="#FFFFFF" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/home_friends_txt"
+                        android:layout_width="@dimen/largeButtonImage"
+                        android:layout_height="@dimen/largeButtonBox"
+                        android:text="Friends"
+                        android:textSize="@dimen/largeButtonString"
+                        android:gravity="center"
+                        android:textColor="@color/white" />
+                </LinearLayout>
             </FrameLayout>
-
-            <TextView
-                android:id="@+id/home_chat_txt"
-                android:layout_width="@dimen/largeIcon"
-                android:layout_height="wrap_content"
-                android:text="Chat"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_text"
-                android:backgroundTint="@color/chatBtn"
-                android:gravity="center"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_border_friends">
-                <Button
-                    android:id="@+id/home_friends_btn"
-                    android:layout_width="@dimen/largeIcon"
-                    android:layout_height="@dimen/largeIcon"
-                    android:maxHeight="100px"
-                    android:maxWidth="100px"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/search"
-                    android:backgroundTint="@color/white"
-                    android:textColor="#FFFFFF" />
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/home_friends_txt"
-                android:layout_width="@dimen/largeIcon"
-                android:layout_height="wrap_content"
-                android:text="Friends"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_text"
-                android:backgroundTint="@color/friendsBtn"/>
-
         </LinearLayout>
     </LinearLayout>
 

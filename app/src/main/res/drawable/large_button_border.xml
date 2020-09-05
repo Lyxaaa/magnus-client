@@ -6,9 +6,10 @@
 <!--            <gradient android:startColor="#FFFFFF"-->
 <!--                android:endColor="@color/gameBtn"-->
 <!--                android:angle="270" />-->
-            <corners android:topLeftRadius="15dp"
-                android:topRightRadius="15dp"/>
-            <stroke android:width="5px" android:color="@color/chatBtn" />
+            <corners android:radius="20dp"/>
+            <padding android:left="5dp" android:right="5dp" android:top="5dp"/>
+
+            <stroke android:width="5px" android:color="@color/white" />
         </shape>
     </item>
 </selector>

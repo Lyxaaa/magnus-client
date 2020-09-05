@@ -6,9 +6,7 @@
 <!--            <gradient android:startColor="#FFFFFF"-->
 <!--                android:endColor="@color/gameBtn"-->
 <!--                android:angle="270" />-->
-            <corners android:topLeftRadius="15dp"
-                android:topRightRadius="15dp"/>
-            <stroke android:width="5px" android:color="@color/white" />
+            <corners android:radius="20dp"/>
         </shape>
     </item>
 </selector>

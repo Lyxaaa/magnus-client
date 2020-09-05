@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="largeIcon">180dp</dimen>
+    <dimen name="largeButtonImage">160dp</dimen>
+    <dimen name="largeButtonMargin">20dp</dimen>
+    <dimen name="largeButtonString">10pt</dimen>
+    <dimen name="largeButtonBox">40dp</dimen>
 </resources>
