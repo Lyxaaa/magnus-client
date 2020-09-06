@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark">
+    android:background="@color/darker">
 
     <!--  Friend icons  -->
     <LinearLayout
@@ -34,20 +35,43 @@
             android:gravity="center">
             <!--      Hint Button      -->
             <LinearLayout
+                android:id="@+id/chat_hint_button_tab"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center">
-                <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/actionTrayMargin"
+                android:paddingRight="@dimen/actionTrayMargin">
+
+                <FrameLayout
+                    android:id="@+id/chat_hint_border"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hint"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:background="@drawable/large_button_internal"
-                    android:backgroundTint="@color/darker">
+                    android:background="@drawable/small_button_border_round"
+                    android:backgroundTint="@color/lighter">
 
-                </TextView>
+                    <FrameLayout
+                        android:id="@+id/chat_hint_frame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/yellow"
+                        android:clickable="true">
 
+                        <LinearLayout
+                            android:id="@+id/chat_hint_frame_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/chat_hint_frame_image"
+                                android:layout_width="@dimen/chatActionImage"
+                                android:layout_height="@dimen/chatActionImage"
+                                android:background="@drawable/baseline_help_outline_black_48dp1"
+                                android:backgroundTint="@color/white">
+
+                            </ImageView>
+                        </LinearLayout>
+                    </FrameLayout>
+                </FrameLayout>
             </LinearLayout>
             <!--      Chat EditText Input      -->
             <LinearLayout
@@ -55,25 +79,65 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center">
-                <EditText
+                <FrameLayout
+                    android:id="@+id/chat_edit_text_border"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Tap here to type">
+                    android:background="@drawable/small_button_border_round"
+                    android:backgroundTint="@color/lighter">
+                <EditText
+                    android:id="@+id/chat_edit_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textFontWeight="500"
+                    android:paddingLeft="@dimen/actionTrayMargin"
+                    android:hint="Tap here to type"
+                    android:background="@drawable/small_button_internal_round"
+                    android:backgroundTint="@color/dark">
 
                 </EditText>
-
+                </FrameLayout>
             </LinearLayout>
             <!--      Send Message Button      -->
             <LinearLayout
+                android:id="@+id/chat_send_button_tab"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/actionTrayMargin"
+                android:paddingRight="@dimen/actionTrayMargin">
 
-                <TextView
+                <FrameLayout
+                    android:id="@+id/chat_send_border"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Send it">
-                </TextView>
+                    android:background="@drawable/small_button_border_round"
+                    android:backgroundTint="@color/lighter">
+
+                    <FrameLayout
+                        android:id="@+id/chat_send_frame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/blue"
+                        android:clickable="true">
+
+                        <LinearLayout
+                            android:id="@+id/chat_send_frame_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/chat_send_frame_image"
+                                android:layout_width="@dimen/sendActionImage"
+                                android:layout_height="@dimen/sendActionImage"
+                                android:background="@drawable/baseline_send_black_48dp"
+                                android:layout_margin="5dp"
+                                android:backgroundTint="@color/white">
+
+                            </ImageView>
+                        </LinearLayout>
+                    </FrameLayout>
+                </FrameLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -83,48 +147,207 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/chatActionTray"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingVertical="@dimen/actionTrayMargin">
             <!--      Game Invite Tab      -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/chat_game_invite_button_tab"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:paddingLeft="@dimen/actionTrayMargin"
+                android:paddingRight="@dimen/actionTrayMargin">
 
                 <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/large_button_internal"
+                    android:id="@+id/chat_game_button_border"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/small_button_border_round"
                     android:backgroundTint="@color/gameBtn">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    <FrameLayout
+                        android:id="@+id/chat_game_invite_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/dark"
+                        android:clickable="true">
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/chat_game_invite_frame_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/chat_game_invite_frame_image"
+                                android:layout_width="@dimen/chatActionImage"
+                                android:layout_height="@dimen/chatActionImage"
+                                android:background="@drawable/pawn"
+                                android:layout_marginLeft="@dimen/actionTrayMargin">
+
+                            </ImageView>
+
+                            <TextView
+                                android:id="@+id/chat_game_invite_frame_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Invite"
+                                android:textSize="@dimen/actionTrayString"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/actionTrayMargin">
+
+                            </TextView>
+                        </LinearLayout>
+                    </FrameLayout>
                 </FrameLayout>
             </LinearLayout>
             <!--      Message Tab      -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/chat_message_button_tab"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1">-->
 
-            </LinearLayout>
+<!--                <FrameLayout-->
+<!--                    android:id="@+id/chat_message_frame"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/large_button_internal"-->
+<!--                    android:backgroundTint="@color/chatBtn"-->
+<!--                    android:clickable="true">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/chat_message_frame_layout"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:gravity="left">-->
+<!--                        <ImageView-->
+<!--                            android:id="@+id/chat_message_frame_image"-->
+<!--                            android:layout_width="@dimen/chatActionImage"-->
+<!--                            android:layout_height="@dimen/chatActionImage"-->
+<!--                            android:background="@drawable/chat"-->
+<!--                            android:layout_marginLeft="@dimen/actionTrayMargin">-->
+
+<!--                        </ImageView>-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/chat_message_frame_txt"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Message"-->
+<!--                            android:textSize="@dimen/actionTrayString"-->
+<!--                            android:gravity="center"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginRight="@dimen/actionTrayMargin">-->
+
+<!--                        </TextView>-->
+<!--                    </LinearLayout>-->
+<!--                </FrameLayout>-->
+<!--            </LinearLayout>-->
             <!--      Voice Chat Tab      -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/chat_voice_button_tab"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:paddingLeft="@dimen/actionTrayMargin"
+                android:paddingRight="@dimen/actionTrayMargin">
 
+                <FrameLayout
+                    android:id="@+id/chat_voice_border"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/small_button_border_round"
+                    android:backgroundTint="@color/yewwo">
+
+                    <FrameLayout
+                        android:id="@+id/chat_voice_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/dark"
+                        android:clickable="true">
+
+                        <LinearLayout
+                            android:id="@+id/chat_voice_frame_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/chat_voice_frame_image"
+                                android:layout_width="@dimen/chatActionImage"
+                                android:layout_height="@dimen/chatActionImage"
+                                android:background="@drawable/baseline_call_black_48dp"
+                                android:layout_marginLeft="@dimen/actionTrayMargin">
+
+                            </ImageView>
+
+                            <TextView
+                                android:id="@+id/chat_voice_frame_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Voice"
+                                android:textSize="@dimen/actionTrayString"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/actionTrayMargin">
+
+                            </TextView>
+                        </LinearLayout>
+                    </FrameLayout>
+                </FrameLayout>
             </LinearLayout>
-
             <!--      Video Chat Tab      -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/chat_video_button_tab"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:paddingLeft="@dimen/actionTrayMargin"
+                android:paddingRight="@dimen/largeButtonMargin">
 
+                <FrameLayout
+                    android:id="@+id/chat_video_border"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/small_button_border_round"
+                    android:backgroundTint="@color/wed">
+
+                    <FrameLayout
+                        android:id="@+id/chat_video_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/large_button_internal"
+                        android:backgroundTint="@color/dark"
+                        android:clickable="true">
+
+                        <LinearLayout
+                            android:id="@+id/chat_video_frame_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/chat_video_frame_image"
+                                android:layout_width="@dimen/chatActionImage"
+                                android:layout_height="@dimen/chatActionImage"
+                                android:background="@drawable/baseline_videocam_black_48dp"
+                                android:layout_marginLeft="@dimen/actionTrayMargin">
+
+                            </ImageView>
+
+                            <TextView
+                                android:id="@+id/chat_video_frame_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Video"
+                                android:textSize="@dimen/actionTrayString"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/actionTrayMargin">
+
+                            </TextView>
+                        </LinearLayout>
+                    </FrameLayout>
+                </FrameLayout>
             </LinearLayout>
 
         </LinearLayout>

@@ -75,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        setSupportActionBar(findViewById(R.id.my_toolbar));
 
         final FragmentManager fragmentManager = this.getSupportFragmentManager();
 

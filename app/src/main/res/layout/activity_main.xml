@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ActivityScreens.MainActivity"
-    android:background="@color/dark">
+    android:background="@color/darker">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/main_register_onclick_frame"
                         android:background="@drawable/large_button_internal"
-                        android:backgroundTint="@color/lighter">
+                        android:backgroundTint="@color/dark">
 
                         <ImageView
                             android:id="@+id/main_register_image_view"
@@ -103,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/main_login_onclick_frame"
                         android:background="@drawable/large_button_internal"
-                        android:backgroundTint="@color/lighter">
+                        android:backgroundTint="@color/dark">
 
                         <ImageView
                             android:id="@+id/main_login_image_view"

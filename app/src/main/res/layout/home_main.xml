@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".ActivityScreens.MainActivity"
     android:id="@+id/home_main"
-    android:background="@color/backgroundFocus">
+    android:background="@color/darker">
 
 
     <!--  Holds the 3 main buttons [Game, Chat, Friends]  -->
@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/home_game_onclick_frame"
                         android:background="@drawable/large_button_internal"
-                        android:backgroundTint="@color/lighter">
+                        android:backgroundTint="@color/dark">
 
                         <ImageView
                             android:id="@+id/home_game_image_view"
@@ -115,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/home_chat_onclick_frame"
                         android:background="@drawable/large_button_internal"
-                        android:backgroundTint="@color/lighter">
+                        android:backgroundTint="@color/dark">
 
                         <ImageView
                             android:id="@+id/home_game_chat_view"
@@ -180,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/home_friends_onclick_frame"
                         android:background="@drawable/large_button_internal"
-                        android:backgroundTint="@color/lighter">
+                        android:backgroundTint="@color/dark">
 
                         <ImageView
                             android:id="@+id/home_game_friends_view"

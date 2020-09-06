@@ -27,6 +27,7 @@ public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        setSupportActionBar(findViewById(R.id.my_toolbar));
         support.setSupportBarActive(getSupportActionBar(), true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
@@ -76,6 +77,13 @@ public class Home extends AppCompatActivity {
                 createGame(v);
             }
         });
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createChat(v);
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -90,5 +98,10 @@ public class Home extends AppCompatActivity {
     public void createGame(View view) {
         Intent gameScreen = new Intent(this, GameScreen.class);
         startActivity(gameScreen);
+    }
+
+    public void createChat(View view) {
+        Intent chatScreen = new Intent(this, Chat.class);
+        startActivity(chatScreen);
     }
 }

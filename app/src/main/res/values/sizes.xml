@@ -7,6 +7,11 @@
     <dimen name="credentialsViewHeight">270dp</dimen>
     <dimen name="credentialsViewWidth">500dp</dimen>
     <dimen name="chatFriendTray">100dp</dimen>
-    <dimen name="chatFlowTray">100dp</dimen>
-    <dimen name="chatActionTray">100dp</dimen>
+    <dimen name="chatFlowTray">130dp</dimen>
+    <dimen name="chatActionTray">150dp</dimen>
+    <dimen name="chatActionImage">35dp</dimen>
+    <dimen name="sendActionImage">25dp</dimen>
+    <dimen name="actionTrayString">8pt</dimen>
+    <dimen name="actionTrayMargin">10dp</dimen>
+    <dimen name="flowTrayImage">25dp</dimen>
 </resources>

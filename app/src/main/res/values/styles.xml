@@ -1,8 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="AppTheme" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:actionBarTheme" tools:targetApi="lollipop">@layout/toolbar</item>-->
+        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/lighter</item>
         <item name="android:colorBackground">@color/darker</item>
         <item name="android:colorForeground">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
