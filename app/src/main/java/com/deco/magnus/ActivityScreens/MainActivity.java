@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 //TODO For some reason the support bar back button only goes away on pressing it a 2nd time, fix this l8r
     @Override
     public boolean onSupportNavigateUp() {
-        support.setSupportBarActive(getSupportActionBar(), false);
+//        support.setSupportBarActive(getSupportActionBar(), false);
         if (support.active) {
             finish();
         }
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        support.setSupportBarActive(getSupportActionBar(), true);
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
