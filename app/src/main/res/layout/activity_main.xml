@@ -26,7 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/large_button_border"
-                android:backgroundTint="@color/gameBtn">
+                android:backgroundTint="@color/gameBtn"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -41,13 +42,23 @@
                         android:background="@drawable/large_button_internal"
                         android:backgroundTint="@color/lighter">
 
-                        <Button
-                            android:id="@+id/main_register_btn"
+                        <ImageView
+                            android:id="@+id/main_register_image_view"
                             android:layout_width="@dimen/largeButtonImage"
                             android:layout_height="@dimen/largeButtonImage"
+                            android:layout_gravity="center"
                             android:layout_margin="@dimen/largeButtonMargin"
                             android:background="@drawable/baseline_create_black_48"
-                            android:backgroundTint="@color/white" />
+                            android:backgroundTint="@color/white">
+
+                        </ImageView>
+<!--                        <Button-->
+<!--                            android:id="@+id/main_register_btn"-->
+<!--                            android:layout_width="@dimen/largeButtonImage"-->
+<!--                            android:layout_height="@dimen/largeButtonImage"-->
+<!--                            android:layout_margin="@dimen/largeButtonMargin"-->
+<!--                            android:background="@drawable/baseline_create_black_48"-->
+<!--                            android:backgroundTint="@color/white" />-->
 
                     </FrameLayout>
 
@@ -77,7 +88,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/large_button_border"
-                android:backgroundTint="@color/chatBtn">
+                android:backgroundTint="@color/chatBtn"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -93,13 +105,24 @@
                         android:background="@drawable/large_button_internal"
                         android:backgroundTint="@color/lighter">
 
-                        <Button
-                            android:id="@+id/main_login_btn"
+                        <ImageView
+                            android:id="@+id/main_login_image_view"
                             android:layout_width="@dimen/largeButtonImage"
                             android:layout_height="@dimen/largeButtonImage"
+                            android:layout_gravity="center"
                             android:layout_margin="@dimen/largeButtonMargin"
                             android:background="@drawable/baseline_login_black_48"
-                            android:backgroundTint="@color/white" />
+                            android:backgroundTint="@color/white">
+
+                        </ImageView>
+
+<!--                        <Button-->
+<!--                            android:id="@+id/main_login_btn"-->
+<!--                            android:layout_width="@dimen/largeButtonImage"-->
+<!--                            android:layout_height="@dimen/largeButtonImage"-->
+<!--                            android:layout_margin="@dimen/largeButtonMargin"-->
+<!--                            android:background="@drawable/baseline_login_black_48"-->
+<!--                            android:backgroundTint="@color/white" />-->
 
                     </FrameLayout>
 

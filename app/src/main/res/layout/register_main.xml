@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundUnFocus"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/dark80"
     android:gravity="center"
     android:layout_gravity="center"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:background="#0099FF"
-        android:text="back"
-        android:textColor="#FFFFFF"
-        android:visibility="gone" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/credentialsViewWidth"
+        android:layout_height="@dimen/credentialsViewHeight"
         android:background="@android:color/white"
         android:gravity="center"
-        android:minWidth="500dp"
-        android:minHeight="300dp"
         android:orientation="vertical">
 
         <TextView

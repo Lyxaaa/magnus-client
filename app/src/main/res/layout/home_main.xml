@@ -31,8 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/large_button_border"
-                android:backgroundTint="@color/gameBtn">
-
+                android:backgroundTint="@color/gameBtn"
+                android:clickable="true">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,15 +47,27 @@
                         android:background="@drawable/large_button_internal"
                         android:backgroundTint="@color/lighter">
 
-                        <Button
-                            android:id="@+id/home_game_btn"
+                        <ImageView
+                            android:id="@+id/home_game_image_view"
                             android:layout_width="@dimen/largeButtonImage"
                             android:layout_height="@dimen/largeButtonImage"
+                            android:layout_gravity="center"
                             android:layout_margin="@dimen/largeButtonMargin"
-                            android:layout_marginTop="20dp"
                             android:background="@drawable/pawn"
-                            android:backgroundTint="@color/white"
-                            android:textColor="#FFFFFF"/>
+                            android:backgroundTint="@color/white">
+
+                        </ImageView>
+
+
+<!--                        <Button-->
+<!--                            android:id="@+id/home_game_btn"-->
+<!--                            android:layout_width="@dimen/largeButtonImage"-->
+<!--                            android:layout_height="@dimen/largeButtonImage"-->
+<!--                            android:layout_margin="@dimen/largeButtonMargin"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:background="@drawable/pawn"-->
+<!--                            android:backgroundTint="@color/white"-->
+<!--                            android:textColor="#FFFFFF"/>-->
 
                     </FrameLayout>
 
@@ -88,7 +100,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/large_button_border"
-                android:backgroundTint="@color/chatBtn">
+                android:backgroundTint="@color/chatBtn"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -104,15 +117,26 @@
                         android:background="@drawable/large_button_internal"
                         android:backgroundTint="@color/lighter">
 
-                        <Button
-                            android:id="@+id/home_chat_btn"
+                        <ImageView
+                            android:id="@+id/home_game_chat_view"
                             android:layout_width="@dimen/largeButtonImage"
                             android:layout_height="@dimen/largeButtonImage"
+                            android:layout_gravity="center"
                             android:layout_margin="@dimen/largeButtonMargin"
-                            android:layout_marginTop="20dp"
                             android:background="@drawable/chat"
-                            android:backgroundTint="@color/white"
-                            android:textColor="#FFFFFF" />
+                            android:backgroundTint="@color/white">
+
+                        </ImageView>
+
+<!--                        <Button-->
+<!--                            android:id="@+id/home_chat_btn"-->
+<!--                            android:layout_width="@dimen/largeButtonImage"-->
+<!--                            android:layout_height="@dimen/largeButtonImage"-->
+<!--                            android:layout_margin="@dimen/largeButtonMargin"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:background="@drawable/chat"-->
+<!--                            android:backgroundTint="@color/white"-->
+<!--                            android:textColor="#FFFFFF" />-->
 
                     </FrameLayout>
 
@@ -141,7 +165,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/large_button_border"
-                android:backgroundTint="@color/friendsBtn">
+                android:backgroundTint="@color/friendsBtn"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -157,15 +182,26 @@
                         android:background="@drawable/large_button_internal"
                         android:backgroundTint="@color/lighter">
 
-                        <Button
-                            android:id="@+id/home_friends_btn"
+                        <ImageView
+                            android:id="@+id/home_game_friends_view"
                             android:layout_width="@dimen/largeButtonImage"
                             android:layout_height="@dimen/largeButtonImage"
+                            android:layout_gravity="center"
                             android:layout_margin="@dimen/largeButtonMargin"
-                            android:layout_marginTop="20dp"
                             android:background="@drawable/search"
-                            android:backgroundTint="@color/white"
-                            android:textColor="#FFFFFF" />
+                            android:backgroundTint="@color/white">
+
+                        </ImageView>
+
+<!--                        <Button-->
+<!--                            android:id="@+id/home_friends_btn"-->
+<!--                            android:layout_width="@dimen/largeButtonImage"-->
+<!--                            android:layout_height="@dimen/largeButtonImage"-->
+<!--                            android:layout_margin="@dimen/largeButtonMargin"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:background="@drawable/search"-->
+<!--                            android:backgroundTint="@color/white"-->
+<!--                            android:textColor="#FFFFFF" />-->
 
                     </FrameLayout>
 

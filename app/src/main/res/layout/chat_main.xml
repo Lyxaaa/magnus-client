@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark">
+
+    <!--  Friend icons  -->
+    <LinearLayout
+        android:layout_width="@dimen/chatFriendTray"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
+
+    <!--  Chat dialogue and buttons  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--    Chat Dialogue    -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </LinearLayout>
+
+        <!--    First row of chat interactions    -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/chatFlowTray"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <!--      Hint Button      -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hint"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/large_button_internal"
+                    android:backgroundTint="@color/darker">
+
+                </TextView>
+
+            </LinearLayout>
+            <!--      Chat EditText Input      -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Tap here to type">
+
+                </EditText>
+
+            </LinearLayout>
+            <!--      Send Message Button      -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send it">
+                </TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--    Second row of chat interactions    -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/chatActionTray"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <!--      Game Invite Tab      -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/large_button_internal"
+                    android:backgroundTint="@color/gameBtn">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+            <!--      Message Tab      -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </LinearLayout>
+            <!--      Voice Chat Tab      -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </LinearLayout>
+
+            <!--      Video Chat Tab      -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

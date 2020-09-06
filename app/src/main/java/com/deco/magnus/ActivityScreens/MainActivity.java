@@ -1,10 +1,14 @@
 package com.deco.magnus.ActivityScreens;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,10 +27,13 @@ import com.deco.magnus.DataTransmission;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
+import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class MainActivity extends AppCompatActivity {
+    GlobalSupport support = new GlobalSupport();
+
     String lastFragTag = "chatFrag";
     Activity activity = this;
     String logTag = "socketLogger";
@@ -46,8 +54,29 @@ public class MainActivity extends AppCompatActivity {
         return loggedUser;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void largeButtonPress(int frameId, MotionEvent event) {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker)));
+        } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.lighter)));
+        }
+    }
+
+//TODO For some reason the support bar back button only goes away on pressing it a 2nd time, fix this l8r
+    @Override
+    public boolean onSupportNavigateUp() {
+        support.setSupportBarActive(getSupportActionBar(), false);
+        if (support.active) {
+            finish();
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -55,18 +84,27 @@ public class MainActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = this.getSupportFragmentManager();
 
         final RelativeLayout rootLayout = findViewById(R.id.root_layout);
-        final Button registerBtn = findViewById(R.id.main_register_btn);
-        final Button loginBtn = findViewById(R.id.main_login_btn);
+        final FrameLayout registerBtn = findViewById(R.id.main_register_frame);
+        final FrameLayout loginBtn = findViewById(R.id.main_login_frame);
+//        final Button registerBtn = findViewById(R.id.main_register_btn);
+//        final Button loginBtn = findViewById(R.id.main_login_btn);
+
+        loginBtn.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                largeButtonPress(R.id.main_login_onclick_frame, event);
+                return false;
+            }
+        });
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LayoutInflater loginInflater = getLayoutInflater();
-
                 PopupWindow loginWindow = new PopupWindow(loginInflater.inflate(R.layout.login_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
-                //View view = loginInflater.inflate(R.layout.login_main, null);
-                loginWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
-
+                loginWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
+                support.setSupportBarActive(getSupportActionBar(), true);
                 email = loginWindow.getContentView().findViewById(R.id.login_email_edit_text);
                 pword = loginWindow.getContentView().findViewById(R.id.login_password_edit_text);
                 email.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -108,12 +146,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        registerBtn.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                largeButtonPress(R.id.main_register_onclick_frame, event);
+                return false;
+            }
+        });
+
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LayoutInflater registerInflater = getLayoutInflater();
                 PopupWindow registerWindow = new PopupWindow(registerInflater.inflate(R.layout.register_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
-                registerWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, 0);
+                registerWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
 
                 email = registerWindow.getContentView().findViewById(R.id.register_email_edit_text);
                 pword = registerWindow.getContentView().findViewById(R.id.register_password_edit_text);

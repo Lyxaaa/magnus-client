@@ -4,4 +4,9 @@
     <dimen name="largeButtonMargin">20dp</dimen>
     <dimen name="largeButtonString">10pt</dimen>
     <dimen name="largeButtonBox">40dp</dimen>
+    <dimen name="credentialsViewHeight">270dp</dimen>
+    <dimen name="credentialsViewWidth">500dp</dimen>
+    <dimen name="chatFriendTray">100dp</dimen>
+    <dimen name="chatFlowTray">100dp</dimen>
+    <dimen name="chatActionTray">100dp</dimen>
 </resources>
