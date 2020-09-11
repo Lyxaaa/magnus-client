@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class User extends Message {
@@ -24,9 +26,12 @@ public class User extends Message {
             super(errorMessage);
         }
     }
+    // Integer should be the ID of the receiving user (not the ID of this user)
+    private Map<Integer, List<ChatMessage>> chats = new ArrayMap<>();
     public Activity activity;
     public List<User> friends = new ArrayList<>();
     private final String email;
+    public final int id;
     private final boolean authorised;
     private String bio;
     private byte[] byteImage;
@@ -48,6 +53,7 @@ public class User extends Message {
         this.email = userInfo.email;
         this.bio = userInfo.bio;
         this.byteImage = userInfo.profilePic;
+        this.id = emailHash();
 //        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
     }
 
@@ -58,6 +64,7 @@ public class User extends Message {
         this.email = userInfo.email;
         this.bio = userInfo.bio;
         this.byteImage = userInfo.profilePic;
+        this.id = emailHash();
 //        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
     }
 
@@ -155,9 +162,60 @@ public class User extends Message {
         return null;
     }
 
-    public String getName() {
+    public String getEmail() {
         return this.email;
     }
 
+    /**
+     *
+     * @param id The ID of the user in the conversation that is NOT this user
+     * @param chat A List {@link ChatMessage} Objects to add to the chats Map
+     */
+    public void addChat(int id, List<ChatMessage> chat) {
+        if (chat != null && !chat.isEmpty()) {
+            if (chats.containsKey(id)) {
+                chats.get(id).addAll(chat);
+            } else {
+                chats.put(id, chat);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param id The ID of the user in the conversation that is NOT this user
+     * @param message A {@link ChatMessage} Object to add to the chats Map
+     */
+    public void addChatMessage(int id, ChatMessage message) {
+        if (message != null) {
+            if (chats.containsKey(id)) {
+                chats.get(id).add(message);
+            } else {
+                List<ChatMessage> msgList = new ArrayList<>();
+                msgList.add(message);
+                chats.put(id, msgList);
+            }
+        }
+    }
+
+    /**
+     * Gets the chat history between this user and the user with the given ID
+     * @param id The ID of the user in the conversation that is NOT this user
+     * @return null if the chat does not exist
+     */
+    public List<ChatMessage> getChat(int id) {
+        if (chats.containsKey(id)) {
+            return chats.get(id);
+        }
+        return null;
+    }
+
+    public int emailHash() {
+        int hash = 1;
+        for (Character character : email.toCharArray()) {
+            hash *= character;
+        }
+        return Math.abs(hash);
+    }
 }
 

@@ -81,6 +81,26 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <ScrollView
+                android:id="@+id/chat_dialogue_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/chat_dialogue_linear_layout_scroller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="message one"/>
+                </LinearLayout>
+
+            </ScrollView>
+
         </LinearLayout>
 
         <!--    First row of chat interactions    -->
