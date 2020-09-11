@@ -5,8 +5,10 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.deco.magnus.R;
+import com.deco.magnus.UserData.User;
 
 public class GameScreen extends AppCompatActivity {
+    User user = MainActivity.getLoggedUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,4 +14,7 @@
     <dimen name="actionTrayString">8pt</dimen>
     <dimen name="actionTrayMargin">10dp</dimen>
     <dimen name="flowTrayImage">25dp</dimen>
+    <dimen name="chatSidebarProfilePic">80dp</dimen>
+    <dimen name="profilePicRadius">250dp</dimen>
+    <dimen name="friendLayoutPadding">5dp</dimen>
 </resources>

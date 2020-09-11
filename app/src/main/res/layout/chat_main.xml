@@ -7,8 +7,65 @@
 
     <!--  Friend icons  -->
     <LinearLayout
+        android:id="@+id/chat_friends_linear_layout_holder"
         android:layout_width="@dimen/chatFriendTray"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ScrollView
+            android:id="@+id/chat_friends_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/chat_friends_linear_layout_scroller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/set_to_friends_id"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:clickable="true"-->
+<!--                android:paddingVertical="5dp"-->
+<!--                android:onClick="createChat"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="@dimen/chatSidebarProfilePic"-->
+<!--                    android:layout_height="@dimen/chatSidebarProfilePic"-->
+<!--                    app:cardCornerRadius="250dp"-->
+<!--                    android:id="@+id/profile_pic_card_view"-->
+<!--                    android:layout_gravity="center">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/test"-->
+<!--                        android:scaleType="centerCrop">-->
+
+<!--                    </ImageView>-->
+
+<!--                </androidx.cardview.widget.CardView>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="test0"-->
+<!--                    android:gravity="center">-->
+<!--                </TextView>-->
+<!--            </LinearLayout>-->
+
+
+
+
+
+        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

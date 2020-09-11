@@ -1,13 +1,21 @@
 package com.deco.magnus.UserData;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.deco.magnus.ProjectNet.Messages.Message;
+import com.deco.magnus.R;
+import com.deco.magnus.ResourceDirectory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class User extends Message {
@@ -16,12 +24,14 @@ public class User extends Message {
             super(errorMessage);
         }
     }
+    public Activity activity;
+    public List<User> friends = new ArrayList<>();
     private final String email;
     private final boolean authorised;
     private String bio;
     private byte[] byteImage;
     private Bitmap bitmapImage;
-//    private final String bio;
+    public int profilePicDrawable;
 
 //    private User(int id, String username, String bio, byte[] profilePic) {
 //        this.id = id;
@@ -31,7 +41,8 @@ public class User extends Message {
 //        this.bitmapImage = bytesToBitmap(profilePic);
 //    }
 
-    public User(String username, String password) throws IncorrectCredentialsException {
+    public User(String username, String password, Activity activity) throws IncorrectCredentialsException {
+        this.activity = activity;
         UserInfo userInfo = login(username, password);
         this.authorised = true;
         this.email = userInfo.email;
@@ -40,7 +51,8 @@ public class User extends Message {
 //        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
     }
 
-    public User(String username) {
+    public User(String username, Activity activity) {
+        this.activity = activity;
         UserInfo userInfo = userExists(username);
         this.authorised = false;
         this.email = userInfo.email;
@@ -92,7 +104,7 @@ public class User extends Message {
         //Ask database for this object
         UserInfo userDataRequest = new UserInfo();
         userDataRequest.bio = "Some info about me";
-        userDataRequest.email = "roger";
+        userDataRequest.email = username;
         userDataRequest.passwordCorrect = true;
 //        userDataRequest.profilePic = imageToBytes("test.jpg");
         userDataRequest.profilePic = null;
@@ -108,8 +120,15 @@ public class User extends Message {
         return bytesToBitmap(imageToBytes(imageName));
     }
 
+
+    /**
+     * FUNCTION DO NOT DO THE OPERATE OF PROPERLY YES
+     * @param imageName
+     * @return
+     */
     public byte[] imageToBytes(String imageName) {
-        final File imageFile = new File("drawable/test.jpg");
+//        final File imageFile = new File(activity.getResources().getDrawable(R.drawable.test));
+        final File imageFile = new File("borked");
         Log.d("UserLogger", imageFile.getAbsolutePath());
         Bitmap bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
         ByteArrayOutputStream blob = new ByteArrayOutputStream();

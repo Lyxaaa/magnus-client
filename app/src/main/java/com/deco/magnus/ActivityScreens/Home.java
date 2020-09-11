@@ -19,6 +19,7 @@ import com.deco.magnus.UserData.User;
 
 public class Home extends AppCompatActivity {
     GlobalSupport support = new GlobalSupport();
+    User user = MainActivity.getLoggedUser();
     @Override
     public boolean onSupportNavigateUp() {
         finish();

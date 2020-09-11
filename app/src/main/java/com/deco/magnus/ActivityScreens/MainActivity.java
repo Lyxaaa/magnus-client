@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         try {
-                            loggedUser = new User(email.getText().toString(), pword.getText().toString());
+                            loggedUser = new User(email.getText().toString(), pword.getText().toString(), activity);
                         } catch (User.IncorrectCredentialsException ice) {
                             loggedUser = null;
                         }
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                                 !cfrmPword.getText().toString().equals("") &&
                                 pword.getText().toString().equals(cfrmPword.getText().toString())) {
                             try {
-                                loggedUser = new User(email.getText().toString(), pword.getText().toString());
+                                loggedUser = new User(email.getText().toString(), pword.getText().toString(), activity);
                             } catch (User.IncorrectCredentialsException ice) {
                                 loggedUser = null;
                             }
