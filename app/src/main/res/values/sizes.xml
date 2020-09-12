@@ -17,4 +17,5 @@
     <dimen name="chatSidebarProfilePic">80dp</dimen>
     <dimen name="profilePicRadius">250dp</dimen>
     <dimen name="friendLayoutPadding">5dp</dimen>
+    <dimen name="chatMessageTextSize">3.5pt</dimen>
 </resources>

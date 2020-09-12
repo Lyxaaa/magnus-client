@@ -29,7 +29,9 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        setSupportActionBar(findViewById(R.id.my_toolbar));
-        support.setSupportBarActive(getSupportActionBar(), true);
+//        support.setSupportBarActive(getSupportActionBar(), true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
         User user = MainActivity.getLoggedUser();

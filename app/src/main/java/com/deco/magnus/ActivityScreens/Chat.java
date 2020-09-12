@@ -44,6 +44,8 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        support.setSupportBarActive(getSupportActionBar(), true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_main);
         user.activity = activity;
@@ -107,6 +109,7 @@ public class Chat extends AppCompatActivity {
 
             displayMessage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             displayMessage.setText(message.contents);
+            displayMessage.setTextSize(getResources().getDimension(R.dimen.chatMessageTextSize));
             displayMessage.setGravity(gravity);
 
             messageBubble.addView(displayMessage);
@@ -153,11 +156,12 @@ public class Chat extends AppCompatActivity {
             CardView imageContainer = new CardView(this);
             imageContainer.setLayoutParams(new CardView.LayoutParams(layoutSize, layoutSize));
             imageContainer.setRadius(250 * density);
+            imageContainer.setCardBackgroundColor(getResources().getColor(R.color.yewwo));
 
             // Initialise profile picture
             ImageView profilePic = new ImageView(this);
             profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            profilePic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
             profilePic.setImageResource(friend.profilePicDrawable);
 
             // Initialise profile name
