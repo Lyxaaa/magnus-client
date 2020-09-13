@@ -9,6 +9,8 @@ public abstract class Socket {
     public static int MAXPACKETSIZE = 65535;
     public static int INTSIZE = 4;
 
+    public boolean isConnected = false;
+
     private List<OnReceiveListener> OnReceiveListeners = new ArrayList<>();
     private List<OnDisconnectListener> OnDisconnectListeners = new ArrayList<>();
 

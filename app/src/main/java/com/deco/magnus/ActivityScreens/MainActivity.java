@@ -1,15 +1,8 @@
 package com.deco.magnus.ActivityScreens;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,12 +18,15 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import com.deco.magnus.DataTransmission;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
-import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -67,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//TODO For some reason the support bar back button only goes away on pressing it a 2nd time, fix this l8r
+    //TODO For some reason the support bar back button only goes away on pressing it a 2nd time, fix this l8r
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -82,7 +78,14 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
 
-        Client.getInstance().connect("49.3.201.65", 2457);
+        new Thread(() -> {
+            try {
+                Client.getInstance().connect(/*"49.3.201.65"*/ "192.168.1.42", 2457);
+            } catch (Exception e) {
+                Log.e(logTag, e.toString());
+            }
+        }).start();
+
 
         setContentView(R.layout.activity_main);
 //        setSupportActionBar(findViewById(R.id.my_toolbar));
@@ -306,7 +309,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(logTag, "Received Packet");
                         try {
                             socket.receive(packet);
-                        } catch (Exception e) { }
+                        } catch (Exception e) {
+                        }
 
                         byte[] chars = new byte[packet.getLength()];
                         System.arraycopy(packet.getData(), 0, chars, 0, chars.length);

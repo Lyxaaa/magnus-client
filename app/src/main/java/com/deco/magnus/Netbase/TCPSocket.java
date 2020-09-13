@@ -1,5 +1,7 @@
 package com.deco.magnus.Netbase;
 
+import com.deco.magnus.Types.LimitedQueue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -7,8 +9,6 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
-
-import com.deco.magnus.Types.LimitedQueue;
 
 public class TCPSocket extends Socket {
 
@@ -18,9 +18,10 @@ public class TCPSocket extends Socket {
 
     public TCPSocket(String address, int port) {
         client = new java.net.Socket();
-        SocketAddress socketAddress = InetSocketAddress.createUnresolved(address, port);
+        SocketAddress socketAddress = new InetSocketAddress(address, port);
         try {
             client.connect(socketAddress);
+            isConnected = true;
         } catch (IOException io) {
             io.printStackTrace();
         }
@@ -121,8 +122,6 @@ public class TCPSocket extends Socket {
     @Override
     public void send(byte[]... data) {
 
-        //if(!client.Connected)
-
         int dataLength = 0;
         for (byte[] byteData : data)
             dataLength += byteData.length;
@@ -137,18 +136,18 @@ public class TCPSocket extends Socket {
         System.arraycopy(HEADER, 0, packet, pos, HEADER.length);
         pos += HEADER.length;
 
-        System.arraycopy(ByteBuffer.allocate(4).putInt(dataLength).array(), 0, packet, pos, HEADER.length)
-        ;
+        System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(dataLength).array(), 0, packet, pos, HEADER.length);
         pos += 4; //sizeof(Int32);
 
-        for( byte[] byteData : data){
+        for (byte[] byteData : data) {
             System.arraycopy(byteData, 0, packet, pos, byteData.length);
             pos += byteData.length;
         }
         try {
             client.getOutputStream().write(packet, 0, packet.length);
+            client.getOutputStream().flush();
         } catch (IOException io) {
             io.printStackTrace();
+        }
     }
 }
-        }

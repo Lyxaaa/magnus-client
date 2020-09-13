@@ -1,5 +1,7 @@
 package com.deco.magnus.ProjectNet;
 
+import android.content.pm.PackageManager;
+
 import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.Socket;
 import com.deco.magnus.Netbase.SocketType;
@@ -71,12 +73,11 @@ public class Client extends com.deco.magnus.Netbase.Client {
         super.send(socketType, dataType, datata);
     }
 
-    public void connect(String address, int port) {
+    public boolean connect(String address, int port) {
         tcp = new TCPSocket(address, port);
         tcp.addOnReceiveListener(this::OnTCP);
         tcp.begin();
-
-
         send(new MsgInitialise(id));
+        return tcp.isConnected;
     }
 }

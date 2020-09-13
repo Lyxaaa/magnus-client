@@ -41,38 +41,28 @@ public abstract class Client {
         }
     }
 
-    Object sendLock1 = new Object();
-    Object sendLock2 = new Object();
-    boolean sending = false;
-
+    Object sendlock = new Object();
     public void send(SocketType socketType, DataType dataType, byte[] data) {
-        if (!sending) {
-            synchronized (sendLock1) {
-                if (!sending) {
-                    synchronized (sendLock2) {
-                        sending = true;
-                        switch (socketType) {
-                            case TCP:
-                                tcp.send(
-                                        ByteBuffer.allocate(4).putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
-                                        ByteBuffer.allocate(4).putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
-                                        data
-                                );
-                                break;
-                            case UDP:
-                                udp.send(
-                                        ByteBuffer.allocate(4).putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
-                                        ByteBuffer.allocate(4).putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
-                                        data
-                                );
-                                break;
-                        }
-                        sending = false;
-                    }
-                }
+        synchronized (sendlock) {
+            switch (socketType) {
+                case TCP:
+                    tcp.send(
+                            ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(VERSION).array(),
+                            ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(dataType.getValue()).array(),
+                            data
+                    );
+                    break;
+                case UDP:
+                    udp.send(
+                            ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(VERSION).array(),
+                            ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(dataType.getValue()).array(),
+                            data
+                    );
+                    break;
             }
         }
     }
+
 
     Gson gson = new Gson();
 
