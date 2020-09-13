@@ -41,7 +41,6 @@ public abstract class Client {
         }
     }
 
-    ByteBuffer sendByteBuffer = ByteBuffer.allocate(4);
     Object sendLock1 = new Object();
     Object sendLock2 = new Object();
     boolean sending = false;
@@ -55,15 +54,15 @@ public abstract class Client {
                         switch (socketType) {
                             case TCP:
                                 tcp.send(
-                                        sendByteBuffer.putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
-                                        sendByteBuffer.putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
+                                        ByteBuffer.allocate(4).putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
+                                        ByteBuffer.allocate(4).putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
                                         data
                                 );
                                 break;
                             case UDP:
                                 udp.send(
-                                        sendByteBuffer.putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
-                                        sendByteBuffer.putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
+                                        ByteBuffer.allocate(4).putInt(VERSION).order(ByteOrder.BIG_ENDIAN).array(),
+                                        ByteBuffer.allocate(4).putInt(dataType.getValue()).order(ByteOrder.BIG_ENDIAN).array(),
                                         data
                                 );
                                 break;
