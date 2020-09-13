@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.deco.magnus.DataTransmission;
+import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
@@ -33,6 +35,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class MainActivity extends AppCompatActivity {
+
     GlobalSupport support = new GlobalSupport();
 
     String lastFragTag = "chatFrag";
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
+
+        Client.getInstance().connect("49.3.201.65", 2457);
+
         setContentView(R.layout.activity_main);
 //        setSupportActionBar(findViewById(R.id.my_toolbar));
 

@@ -11,8 +11,27 @@ import com.deco.magnus.ProjectNet.Messages.Type;
 import java.nio.charset.StandardCharsets;
 
 public class Client extends com.deco.magnus.Netbase.Client {
-    public String id;
 
+    //region GetInstance
+    private static Client instance;
+    private static Object lock1 = new Object();
+    private static Object lock2 = new Object();
+
+    public static Client getInstance() {
+        if(instance == null) {
+            synchronized (lock1) {
+                if(instance == null) {
+                    synchronized (lock2) {
+                        instance = new Client();
+                    }
+                }
+            }
+        }
+        return instance;
+    }
+    //endregion
+
+    public String id;
     public Client() {
         id = java.util.UUID.randomUUID().toString();
     }
@@ -54,13 +73,9 @@ public class Client extends com.deco.magnus.Netbase.Client {
 
     public void connect(String address, int port) {
         tcp = new TCPSocket(address, port);
-        tcp.addOnReceiveListener(new Socket.OnReceiveListener() {
-            @Override
-            public void onReceive(byte[] data) {
-                OnTCP(data);
-            }
-        });
+        tcp.addOnReceiveListener(this::OnTCP);
         tcp.begin();
+
 
         send(new MsgInitialise(id));
     }

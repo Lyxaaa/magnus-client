@@ -45,14 +45,11 @@ public class TCPSocket extends Socket {
     @Override
     public void begin() {
         running = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TCPRead();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                TCPRead();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }

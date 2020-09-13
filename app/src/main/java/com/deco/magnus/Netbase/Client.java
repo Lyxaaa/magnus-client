@@ -27,6 +27,7 @@ public abstract class Client {
     protected void OnTCP(byte[] data) {
         receive(SocketType.TCP, data);
     }
+
     protected void OnUDP(byte[] data) {
         receive(SocketType.UDP, data);
     }
@@ -75,6 +76,7 @@ public abstract class Client {
     }
 
     Gson gson = new Gson();
+
     protected void receive(SocketType socketType, byte[] data) {
         // parse version
         int val = ByteBuffer.wrap(data, 0, 4).getInt();
@@ -114,8 +116,8 @@ public abstract class Client {
     }
 
     public void invokeOnReceiveListeners(SocketType socketType, DataType dataType, Object data) {
-        for(OnReceiveListener listener: OnReceiveListeners) {
-            listener.OnReceive(socketType,  dataType,  data);
+        for (OnReceiveListener listener : OnReceiveListeners) {
+            listener.OnReceive(socketType, dataType, data);
         }
     }
 }

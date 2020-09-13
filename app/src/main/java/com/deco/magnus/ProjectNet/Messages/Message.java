@@ -4,7 +4,7 @@ import com.deco.magnus.Netbase.JsonMsg;
 
 public class Message extends JsonMsg {
 
-    public Message( ) {
+    public Message() {
         setType(Type.Unknown);
     }
 
