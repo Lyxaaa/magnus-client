@@ -1,6 +1,9 @@
 package com.deco.magnus.ActivityScreens;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,5 +25,19 @@ public class GameScreen extends AppCompatActivity {
         setContentView(R.layout.game_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        final Button chessBtn = findViewById(R.id.chess_start_btn);
+
+        chessBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createChess(v);
+            }
+        });
+    }
+
+    private void createChess(View v) {
+        Intent chessScreen = new Intent(this, Chess.class);
+        startActivity(chessScreen);
     }
 }

@@ -41,6 +41,11 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan"
             />
+
+        <activity
+            android:name="com.deco.magnus.ActivityScreens.Chess"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

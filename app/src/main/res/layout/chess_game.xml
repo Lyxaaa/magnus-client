@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:context=".ActivityScreens.MainActivity"
+    android:id="@+id/home_main"
+    android:background="@color/backgroundFocus">
+
+    <TableLayout
+        android:id="@+id/chess_board"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:background="@android:color/holo_blue_bright"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/chess_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="reset"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="578dp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

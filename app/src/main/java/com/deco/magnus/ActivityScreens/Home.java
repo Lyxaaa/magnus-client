@@ -87,6 +87,13 @@ public class Home extends AppCompatActivity {
                 createChat(v);
             }
         });
+
+        friendsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createFriends(v);
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -106,5 +113,10 @@ public class Home extends AppCompatActivity {
     public void createChat(View view) {
         Intent chatScreen = new Intent(this, Chat.class);
         startActivity(chatScreen);
+    }
+
+    public void createFriends(View view) {
+//        Intent chatScreen = new Intent(this, Chat.class);
+//        startActivity(chatScreen);
     }
 }
