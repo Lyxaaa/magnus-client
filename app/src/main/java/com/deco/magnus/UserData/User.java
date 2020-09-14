@@ -9,9 +9,13 @@ import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.deco.magnus.Netbase.DataType;
+import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.Login;
+import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
+import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.ResourceDirectory;
 
@@ -153,6 +157,17 @@ public class User extends Message {
      * @return Users ID if correct, 0 otherwise
      */
     private UserInfo detailsCorrect(String name, String pword) {
+        Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
+            @Override
+            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+                LoginResult result = TryCast(dataType, data, Type.LoginResult.getValue(), LoginResult.class);
+                if (result != null) {
+                    Client.getInstance().removeOnReceiveListener(this);
+                    Log.d("Login Data", result.userName);
+                }
+            }
+        });
+
         new Thread(() -> {
             try {
                 Client.getInstance().send(new Login(name, pword));
@@ -160,7 +175,6 @@ public class User extends Message {
                 Log.e("Login", e.toString());
             }
         }).start();
-
 
         UserInfo userDataRequest = userExists(name);
         if (userDataRequest != null &&

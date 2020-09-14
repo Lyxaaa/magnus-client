@@ -119,11 +119,11 @@ public abstract class Client {
         OnDisconnectListeners.add(listener);
     }
 
-    public void removeOnReceiveListener(Socket.OnReceiveListener listener) {
+    public void removeOnReceiveListener(OnReceiveListener listener) {
         OnReceiveListeners.remove(listener);
     }
 
-    public void removeOnDisconnectListener(Socket.OnDisconnectListener listener) {
+    public void removeOnDisconnectListener(OnDisconnectListener listener) {
         OnDisconnectListeners.remove(listener);
     }
 
