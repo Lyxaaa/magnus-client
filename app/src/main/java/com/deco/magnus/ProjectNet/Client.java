@@ -1,9 +1,6 @@
 package com.deco.magnus.ProjectNet;
 
-import android.content.pm.PackageManager;
-
 import com.deco.magnus.Netbase.DataType;
-import com.deco.magnus.Netbase.Socket;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.Netbase.TCPSocket;
 import com.deco.magnus.ProjectNet.Messages.Message;
@@ -11,18 +8,19 @@ import com.deco.magnus.ProjectNet.Messages.MsgInitialise;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Client extends com.deco.magnus.Netbase.Client {
 
     //region GetInstance
     private static Client instance;
-    private static Object lock1 = new Object();
-    private static Object lock2 = new Object();
+    final private static Object lock1 = new Object();
+    final private static Object lock2 = new Object();
 
     public static Client getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             synchronized (lock1) {
-                if(instance == null) {
+                if (instance == null) {
                     synchronized (lock2) {
                         instance = new Client();
                     }
@@ -34,6 +32,7 @@ public class Client extends com.deco.magnus.Netbase.Client {
     //endregion
 
     public String id;
+
     public Client() {
         id = java.util.UUID.randomUUID().toString();
     }
@@ -47,6 +46,67 @@ public class Client extends com.deco.magnus.Netbase.Client {
         super.finalize();
         send(new Message(Type.Disconnect));
         end();
+    }
+
+    ConcurrentLinkedQueue<MessageObject> messageQueue = new ConcurrentLinkedQueue<>();
+    Thread sendThread;
+
+    private class MessageObject {
+        Object data;
+        SocketType socketType;
+        DataType dataType;
+
+        MessageObject(Object data, SocketType socketType, DataType dataType) {
+            this.data = data;
+            this.socketType = socketType;
+            this.dataType = dataType;
+        }
+    }
+
+    public void threadSafeSend(Object data) {
+        threadSafeSend(data, SocketType.TCP, DataType.JSON);
+    }
+
+    private final Object sendLock = new Object();
+    private final Object monitorObject = new Object();
+    private boolean sending = false;
+
+    public void threadSafeSend(Object data, SocketType socketType, DataType dataType) {
+        synchronized (sendLock) {
+            messageQueue.add(new MessageObject(data, socketType, dataType));
+            startSendThread();
+            monitorObject.notify();
+        }
+    }
+
+    private final Object sendThreadLock1 = new Object();
+    private final Object sendThreadLock2 = new Object();
+
+    private void startSendThread() {
+        if (sendThread == null) {
+            synchronized (sendThreadLock1) {
+                if (sendThread == null) {
+                    synchronized (sendThreadLock2) {
+                        sendThread = new Thread(() -> {
+                            sending = true;
+                            while (sending) {
+                                try {
+                                    monitorObject.wait();
+                                    while(messageQueue.size() > 0) {
+                                        MessageObject obj = messageQueue.poll();
+                                        send(obj.data, obj.socketType, obj.dataType);
+                                    }
+                                } catch (Exception e) {
+                                    sending = false;
+                                }
+                            }
+                            sending = false;
+                        });
+                        sendThread.start();
+                    }
+                }
+            }
+        }
     }
 
     public void send(Object data) {
