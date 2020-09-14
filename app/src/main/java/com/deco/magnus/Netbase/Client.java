@@ -14,11 +14,17 @@ public abstract class Client {
 
     public static String TAG = "Client";
 
-    public List<OnReceiveListener> OnReceiveListeners = new ArrayList<>();
+    private List<OnReceiveListener> OnReceiveListeners = new ArrayList<>();
+    private List<OnDisconnectListener> OnDisconnectListeners = new ArrayList<>();
 
     public interface OnReceiveListener {
         void OnReceive(SocketType socketType, DataType dataType, Object data);
     }
+
+    public interface OnDisconnectListener {
+        void OnDisconnect();
+    }
+
 
     protected UDPSocket broadcast;
     protected UDPSocket udp;
@@ -104,9 +110,32 @@ public abstract class Client {
         }
     }
 
+
+    public void addOnReceiveListener(OnReceiveListener listener) {
+        OnReceiveListeners.add(listener);
+    }
+
+    public void addOnDisconnectListener(OnDisconnectListener listener) {
+        OnDisconnectListeners.add(listener);
+    }
+
+    public void removeOnReceiveListener(Socket.OnReceiveListener listener) {
+        OnReceiveListeners.remove(listener);
+    }
+
+    public void removeOnDisconnectListener(Socket.OnDisconnectListener listener) {
+        OnDisconnectListeners.remove(listener);
+    }
+
     public void invokeOnReceiveListeners(SocketType socketType, DataType dataType, Object data) {
         for (OnReceiveListener listener : OnReceiveListeners) {
             listener.OnReceive(socketType, dataType, data);
+        }
+    }
+
+    public void invokeOnDisconnectListeners(SocketType socketType, DataType dataType, Object data) {
+        for (OnDisconnectListener listener : OnDisconnectListeners) {
+            listener.OnDisconnect();
         }
     }
 }
