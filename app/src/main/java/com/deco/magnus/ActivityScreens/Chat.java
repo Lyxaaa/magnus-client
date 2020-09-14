@@ -1,17 +1,13 @@
 package com.deco.magnus.ActivityScreens;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.PrecomputedText;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,11 +17,6 @@ import com.deco.magnus.R;
 import com.deco.magnus.UserData.ChatMessage;
 import com.deco.magnus.UserData.User;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 
 public class Chat extends AppCompatActivity {
@@ -58,6 +49,7 @@ public class Chat extends AppCompatActivity {
         drawChat();
     }
 
+    //region Test function for chat messages
     private void testDrawChat() {
         for (User friend : this.user.friends) {
             ChatMessage friendMessage = new ChatMessage();
@@ -73,7 +65,9 @@ public class Chat extends AppCompatActivity {
             Log.d("Open Chat ID", String.valueOf(openChatId));
         }
     }
+    //endregion
 
+    //region Draws the currently accessed chat region
     private void drawChat() {
         if (user.friends.size() > 0 && user.getChat(openChatId) == null) {
             testDrawChat();
@@ -118,7 +112,9 @@ public class Chat extends AppCompatActivity {
         }
         findViewById(R.id.chat_dialogue_scroll_view).scrollTo(0, findViewById(R.id.chat_dialogue_scroll_view).getBottom());
     }
+    //endregion
 
+    //region Test function for friend images
     private void testDrawFriends() {
         user.friends.add(new User("test1", activity));
         user.friends.add(new User("test2", activity));
@@ -133,7 +129,9 @@ public class Chat extends AppCompatActivity {
             friend.profilePicDrawable = testPicList.pop();
         }
     }
+    //endregion
 
+    //region Draws each friends image
     private void drawFriends() {
         testDrawFriends();
         LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
@@ -185,6 +183,7 @@ public class Chat extends AppCompatActivity {
             });
         }
     }
+    //endregion
 
 
 }
