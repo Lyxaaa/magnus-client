@@ -103,7 +103,7 @@ public abstract class Client {
                     default:
                         Log.e(TAG, "Protocol " + dataType + " unsupported");
                 }
-                invokeOnReceiveListeners(socketType, dataType, data);
+                invokeOnReceiveListeners(socketType, dataType, processedData);
                 break;
             default:
                 Log.e(TAG, "Version " + val + " unsupported");
