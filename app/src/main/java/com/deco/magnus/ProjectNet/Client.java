@@ -8,7 +8,12 @@ import com.deco.magnus.ProjectNet.Messages.MsgInitialise;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class Client extends com.deco.magnus.Netbase.Client {
 
@@ -48,7 +53,7 @@ public class Client extends com.deco.magnus.Netbase.Client {
         end();
     }
 
-    ConcurrentLinkedQueue<MessageObject> messageQueue = new ConcurrentLinkedQueue<>();
+    BlockingQueue<MessageObject> messageQueue = new LinkedBlockingQueue<>();
     Thread sendThread;
 
     private class MessageObject {
@@ -68,14 +73,12 @@ public class Client extends com.deco.magnus.Netbase.Client {
     }
 
     private final Object sendLock = new Object();
-    private final Object monitorObject = new Object();
     private boolean sending = false;
 
     public void threadSafeSend(Object data, SocketType socketType, DataType dataType) {
         synchronized (sendLock) {
             messageQueue.add(new MessageObject(data, socketType, dataType));
             startSendThread();
-            monitorObject.notify();
         }
     }
 
@@ -91,10 +94,9 @@ public class Client extends com.deco.magnus.Netbase.Client {
                             sending = true;
                             while (sending) {
                                 try {
-                                    monitorObject.wait();
                                     while(messageQueue.size() > 0) {
-                                        MessageObject obj = messageQueue.poll();
-                                        send(obj.data, obj.socketType, obj.dataType);
+                                        MessageObject obj = messageQueue.poll(1000, TimeUnit.MILLISECONDS);
+                                        if(obj != null) send(obj.data, obj.socketType, obj.dataType);
                                     }
                                 } catch (Exception e) {
                                     sending = false;
