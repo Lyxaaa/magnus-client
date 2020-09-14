@@ -9,6 +9,8 @@ import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.deco.magnus.ProjectNet.Client;
+import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.Message;
 import com.deco.magnus.R;
 import com.deco.magnus.ResourceDirectory;
@@ -151,6 +153,15 @@ public class User extends Message {
      * @return Users ID if correct, 0 otherwise
      */
     private UserInfo detailsCorrect(String name, String pword) {
+        new Thread(() -> {
+            try {
+                Client.getInstance().send(new Login(name, pword));
+            } catch (Exception e) {
+                Log.e("Login", e.toString());
+            }
+        }).start();
+
+
         UserInfo userDataRequest = userExists(name);
         if (userDataRequest != null &&
                 name.toLowerCase().equals(userDataRequest.email.toLowerCase()) &&
