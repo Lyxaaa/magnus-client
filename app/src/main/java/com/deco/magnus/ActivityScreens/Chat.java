@@ -23,7 +23,7 @@ public class Chat extends AppCompatActivity {
     GlobalSupport support = new GlobalSupport();
     User user = MainActivity.getLoggedUser();
     Activity activity = this;
-    int openChatId = -1;
+    String openChatId = " ";
     private float density;
 
     @Override
@@ -42,7 +42,7 @@ public class Chat extends AppCompatActivity {
         user.activity = activity;
         density = getResources().getDisplayMetrics().density;
         drawFriends();
-        if (openChatId == -1 && user.friends.size() > 0) {
+        if (openChatId.equals(" ") && user.friends.size() > 0) {
             openChatId = user.friends.get(0).id;
         }
         drawChat();
@@ -116,10 +116,10 @@ public class Chat extends AppCompatActivity {
 
     //region Test function for friend images
     private void testDrawFriends() {
-        user.friends.add(new User("test1", activity));
-        user.friends.add(new User("test2", activity));
-        user.friends.add(new User("test3", activity));
-        user.friends.add(new User("test4", activity));
+        user.friends.add(new User("test1","test1","test1","test1",null, activity));
+        user.friends.add(new User("test2","test2","test2","test2", null, activity));
+        user.friends.add(new User("test3","test3","test3","test3",null, activity));
+        user.friends.add(new User("test4","test4","test4","test4",null, activity));
         Stack<Integer> testPicList = new Stack<>();
         testPicList.add(R.drawable.test);
         testPicList.add(R.drawable.chat);

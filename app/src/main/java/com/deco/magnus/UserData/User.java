@@ -15,6 +15,7 @@ import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
+import com.deco.magnus.ProjectNet.Messages.Result;
 import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.ResourceDirectory;
@@ -33,45 +34,26 @@ public class User extends Message {
         }
     }
     // Integer should be the ID of the receiving user (not the ID of this user)
-    private Map<Integer, List<ChatMessage>> chats = new ArrayMap<>();
+    private Map<String, List<ChatMessage>> chats = new ArrayMap<>();
     public Activity activity;
     public List<User> friends = new ArrayList<>();
+    private final String username;
     private final String email;
-    public final int id;
-    private final boolean authorised;
+    public final String id;
+    private boolean authorised;
     private String bio;
     private byte[] byteImage;
     private Bitmap bitmapImage;
     public int profilePicDrawable;
 
-//    private User(int id, String username, String bio, byte[] profilePic) {
-//        this.id = id;
-//        this.username = username;
-//        this.bio = bio;
-//        this.byteImage = profilePic;
-//        this.bitmapImage = bytesToBitmap(profilePic);
-//    }
-
-    public User(String username, String password, Activity activity) throws IncorrectCredentialsException {
+    public User(String id, String username, String email, String bio, byte[] profilePic, Activity activity) {
         this.activity = activity;
-        UserInfo userInfo = login(username, password);
-        this.authorised = true;
-        this.email = userInfo.email;
-        this.bio = userInfo.bio;
-        this.byteImage = userInfo.profilePic;
-        this.id = emailHash();
-//        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
-    }
-
-    public User(String username, Activity activity) {
-        this.activity = activity;
-        UserInfo userInfo = userExists(username);
-        this.authorised = false;
-        this.email = userInfo.email;
-        this.bio = userInfo.bio;
-        this.byteImage = userInfo.profilePic;
-        this.id = emailHash();
-//        this.bitmapImage = bytesToBitmap(userInfo.profilePic);
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.bio = bio;
+        this.byteImage = profilePic;
+        this.bitmapImage = bytesToBitmap(profilePic);
     }
 
     public UserInfo register(String email, String pword, File image)
@@ -88,21 +70,24 @@ public class User extends Message {
         return userInfo;
     }
 
-    /**
-     * Used to create a User Object for the local User
-     * @param email
-     * @param pword
-     * @throws IncorrectCredentialsException
-     */
-    public UserInfo login(String email, String pword) throws IncorrectCredentialsException {
-        UserInfo userInfo = detailsCorrect(email, pword);
-        if (userInfo == null) {
-            throw new IncorrectCredentialsException("User " + email + " does not exist");
-        } else if (!userInfo.passwordCorrect) {
-            throw new IncorrectCredentialsException("Password for " + email + " is incorrect");
-        }
-        return userInfo;
-    }
+//    /**
+//     * Used to create a User Object for the local User
+//     * @param email
+//     * @param pword
+//     * @throws IncorrectCredentialsException
+//     */
+//    public UserInfo login(String email, String pword) throws IncorrectCredentialsException {
+//        UserInfo userInfo;
+//        detailsCorrect(email, pword, info -> {
+//            userInfo = info;
+//        });
+//        if (userInfo == null) {
+//            throw new IncorrectCredentialsException("User " + email + " does not exist");
+//        } else if (!userInfo.passwordCorrect) {
+//            throw new IncorrectCredentialsException("Password for " + email + " is incorrect");
+//        }
+//        return userInfo;
+//    }
 
     public void getUser(String name) {
 
@@ -149,6 +134,10 @@ public class User extends Message {
         return blob.toByteArray();
     }
 
+    public interface loginResultListener {
+        void OnLoginResult(LoginResult loginResult);
+    }
+
     /**
      * Sends User's name and password to database to verify login information
      *
@@ -156,35 +145,21 @@ public class User extends Message {
      * @param pword User's password
      * @return Users ID if correct, 0 otherwise
      */
-    private UserInfo detailsCorrect(String name, String pword) {
+    public static void detailsCorrect(String name, String pword, final loginResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public void OnReceive(SocketType socketType, DataType dataType, Object data) {
                 LoginResult result = TryCast(dataType, data, Type.LoginResult.getValue(), LoginResult.class);
                 if (result != null) {
                     Client.getInstance().removeOnReceiveListener(this);
+                    listener.OnLoginResult(result);
                     Log.d("Login Data", result.userName);
+
                 }
             }
         });
 
-        new Thread(() -> {
-            try {
-                Client.getInstance().send(new Login(name, pword));
-            } catch (Exception e) {
-                Log.e("Login", e.toString());
-            }
-        }).start();
-
-        UserInfo userDataRequest = userExists(name);
-        if (userDataRequest != null &&
-                name.toLowerCase().equals(userDataRequest.email.toLowerCase()) &&
-                userDataRequest.passwordCorrect) {
-            //Make a server request for all of this information
-            return userDataRequest;
-        }
-        //Make server request here, sending name and password
-        return null;
+        Client.getInstance().threadSafeSend(new Login(name, pword));
     }
 
     public String getEmail() {
@@ -196,7 +171,7 @@ public class User extends Message {
      * @param id The ID of the user in the conversation that is NOT this user
      * @param chat A List {@link ChatMessage} Objects to add to the chats Map
      */
-    public void addChat(int id, List<ChatMessage> chat) {
+    public void addChat(String id, List<ChatMessage> chat) {
         if (chat != null && !chat.isEmpty()) {
             if (chats.containsKey(id)) {
                 chats.get(id).addAll(chat);
@@ -211,7 +186,7 @@ public class User extends Message {
      * @param id The ID of the user in the conversation that is NOT this user
      * @param message A {@link ChatMessage} Object to add to the chats Map
      */
-    public void addChatMessage(int id, ChatMessage message) {
+    public void addChatMessage(String id, ChatMessage message) {
         if (message != null) {
             if (chats.containsKey(id)) {
                 chats.get(id).add(message);
@@ -228,7 +203,7 @@ public class User extends Message {
      * @param id The ID of the user in the conversation that is NOT this user
      * @return null if the chat does not exist
      */
-    public List<ChatMessage> getChat(int id) {
+    public List<ChatMessage> getChat(String id) {
         if (chats.containsKey(id)) {
             return chats.get(id);
         }

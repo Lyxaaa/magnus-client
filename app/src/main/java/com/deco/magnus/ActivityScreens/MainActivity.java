@@ -24,8 +24,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.deco.magnus.DataTransmission;
 import com.deco.magnus.ProjectNet.Client;
+import com.deco.magnus.ProjectNet.Messages.Result;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
+import com.deco.magnus.UserData.UserInfo;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -136,20 +138,21 @@ public class MainActivity extends AppCompatActivity {
                 submitLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
-                            loggedUser = new User(email.getText().toString(), pword.getText().toString(), activity);
-                        } catch (User.IncorrectCredentialsException ice) {
-                            loggedUser = null;
-                        }
+                        User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
+//                            Log.d("Result", String.valueOf(info.result.getValue()));
+                            if (info.result == Result.Success) {
+                                loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
+                                activity.runOnUiThread(() -> createHome(v));
+                            } else {
+                                activity.runOnUiThread(() -> {
+                                    email.clearComposingText();
+                                    pword.clearComposingText();
+                                    credentialInfo.setText(R.string.bad_login);
+                                    credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
+                                });
+                            }
+                        });
 
-                        if (loggedUser != null) {
-                            createHome(v);
-                        } else {
-                            email.clearComposingText();
-                            pword.clearComposingText();
-                            credentialInfo.setText(R.string.bad_login);
-                            credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
-                        }
                     }
                 });
             }
@@ -210,21 +213,18 @@ public class MainActivity extends AppCompatActivity {
                         if (!pword.getText().toString().equals("") &&
                                 !cfrmPword.getText().toString().equals("") &&
                                 pword.getText().toString().equals(cfrmPword.getText().toString())) {
-                            try {
-                                loggedUser = new User(email.getText().toString(), pword.getText().toString(), activity);
-                            } catch (User.IncorrectCredentialsException ice) {
-                                loggedUser = null;
-                            }
-
-                            if (loggedUser != null) {
-                                createHome(v);
-                            } else {
-                                email.setText("");
-                                pword.setText("");
-                                cfrmPword.setText("");
-                                credentialInfo.setText(R.string.bad_register_email);
-                                credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
-                            }
+                            User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
+                                if (info.result == Result.Success) {
+                                    loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
+                                    createHome(v);
+                                } else {
+                                    email.setText("");
+                                    pword.setText("");
+                                    cfrmPword.setText("");
+                                    credentialInfo.setText(R.string.bad_register_email);
+                                    credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
+                                }
+                            });
                         } else {
                             pword.setText("");
                             cfrmPword.setText("");
