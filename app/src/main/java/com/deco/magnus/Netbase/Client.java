@@ -74,10 +74,10 @@ public abstract class Client {
 
     protected void receive(SocketType socketType, byte[] data) {
         // parse version
-        int val = ByteBuffer.wrap(data, 0, 4).getInt();
+        int val = ByteBuffer.wrap(data, 0, 4).order(ByteOrder.LITTLE_ENDIAN).getInt();
         switch (val) {
             case 0:
-                val = ByteBuffer.wrap(data, 4, 4).getInt();
+                val = ByteBuffer.wrap(data, 4, 4).order(ByteOrder.LITTLE_ENDIAN).getInt();
                 DataType dataType = DataType.fromInt(val);
 
                 byte[] dataSegment = new byte[data.length - 8];
