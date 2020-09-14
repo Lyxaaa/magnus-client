@@ -53,7 +53,7 @@ public class Client extends com.deco.magnus.Netbase.Client {
         end();
     }
 
-    BlockingQueue<MessageObject> messageQueue = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<MessageObject> messageQueue = new LinkedBlockingQueue<>();
     Thread sendThread;
 
     private class MessageObject {
@@ -95,8 +95,8 @@ public class Client extends com.deco.magnus.Netbase.Client {
                             while (sending) {
                                 try {
                                     while(messageQueue.size() > 0) {
-                                        MessageObject obj = messageQueue.poll(1000, TimeUnit.MILLISECONDS);
-                                        if(obj != null) send(obj.data, obj.socketType, obj.dataType);
+                                        MessageObject obj = messageQueue.take();
+                                        send(obj.data, obj.socketType, obj.dataType);
                                     }
                                 } catch (Exception e) {
                                     sending = false;
