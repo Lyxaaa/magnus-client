@@ -78,7 +78,7 @@
         <!--    Chat Dialogue    -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <ScrollView
@@ -96,7 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="message one"/>
+                        android:text="message one" />
                 </LinearLayout>
 
             </ScrollView>
@@ -106,10 +106,10 @@
         <!--    First row of chat interactions    -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/chatFlowTray"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:orientation="horizontal">
             <!--      Hint Button      -->
             <LinearLayout
                 android:id="@+id/chat_hint_button_tab"
@@ -121,7 +121,7 @@
                 <FrameLayout
                     android:id="@+id/chat_hint_border"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/small_button_border_round"
                     android:backgroundTint="@color/lighter">
 
@@ -131,19 +131,22 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/large_button_internal"
                         android:backgroundTint="@color/yellow"
-                        android:clickable="true">
+                        android:clickable="true"
+                        android:visibility="visible">
 
                         <LinearLayout
                             android:id="@+id/chat_hint_frame_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center">
+
                             <ImageView
                                 android:id="@+id/chat_hint_frame_image"
                                 android:layout_width="@dimen/chatActionImage"
                                 android:layout_height="@dimen/chatActionImage"
                                 android:background="@drawable/baseline_help_outline_black_48dp1"
-                                android:backgroundTint="@color/white">
+                                android:backgroundTint="@color/white"
+                                android:visibility="visible">
 
                             </ImageView>
                         </LinearLayout>
@@ -156,23 +159,25 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center">
+
                 <FrameLayout
                     android:id="@+id/chat_edit_text_border"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/small_button_border_round"
                     android:backgroundTint="@color/lighter">
-                <EditText
-                    android:id="@+id/chat_edit_text_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textFontWeight="500"
-                    android:paddingLeft="@dimen/actionTrayMargin"
-                    android:hint="Tap here to type"
-                    android:background="@drawable/small_button_internal_round"
-                    android:backgroundTint="@color/dark">
 
-                </EditText>
+                    <EditText
+                        android:id="@+id/chat_edit_text_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/small_button_internal_round"
+                        android:backgroundTint="@color/dark"
+                        android:hint="Tap here to type"
+                        android:paddingLeft="@dimen/actionTrayMargin"
+                        android:textFontWeight="500">
+
+                    </EditText>
                 </FrameLayout>
             </LinearLayout>
             <!--      Send Message Button      -->
@@ -200,15 +205,16 @@
 
                         <LinearLayout
                             android:id="@+id/chat_send_frame_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/chatActionImage"
+                            android:layout_height="@dimen/chatActionImage"
                             android:gravity="center">
+
                             <ImageView
                                 android:id="@+id/chat_send_frame_image"
                                 android:layout_width="@dimen/sendActionImage"
                                 android:layout_height="@dimen/sendActionImage"
-                                android:background="@drawable/baseline_send_black_48dp"
                                 android:layout_margin="5dp"
+                                android:background="@drawable/baseline_send_black_48dp"
                                 android:backgroundTint="@color/white">
 
                             </ImageView>
@@ -222,16 +228,16 @@
         <!--    Second row of chat interactions    -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/chatActionTray"
-            android:layout_weight="1"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:gravity="center"
+            android:orientation="horizontal"
             android:paddingVertical="@dimen/actionTrayMargin">
             <!--      Game Invite Tab      -->
             <LinearLayout
                 android:id="@+id/chat_game_invite_button_tab"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/actionTrayMargin"
                 android:paddingRight="@dimen/actionTrayMargin">
 
@@ -255,12 +261,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center">
+
                             <ImageView
                                 android:id="@+id/chat_game_invite_frame_image"
                                 android:layout_width="@dimen/chatActionImage"
                                 android:layout_height="@dimen/chatActionImage"
-                                android:background="@drawable/pawn"
-                                android:layout_marginLeft="@dimen/actionTrayMargin">
+                                android:layout_marginLeft="@dimen/actionTrayMargin"
+                                android:background="@drawable/pawn">
 
                             </ImageView>
 
@@ -268,11 +275,11 @@
                                 android:id="@+id/chat_game_invite_frame_txt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Invite"
-                                android:textSize="@dimen/actionTrayString"
-                                android:gravity="center"
                                 android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/actionTrayMargin">
+                                android:layout_marginRight="@dimen/actionTrayMargin"
+                                android:gravity="center"
+                                android:text="Invite"
+                                android:textSize="@dimen/actionTrayString">
 
                             </TextView>
                         </LinearLayout>
@@ -280,53 +287,53 @@
                 </FrameLayout>
             </LinearLayout>
             <!--      Message Tab      -->
-<!--            <LinearLayout-->
-<!--                android:id="@+id/chat_message_button_tab"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1">-->
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/chat_message_button_tab"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_weight="1">-->
 
-<!--                <FrameLayout-->
-<!--                    android:id="@+id/chat_message_frame"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@drawable/large_button_internal"-->
-<!--                    android:backgroundTint="@color/chatBtn"-->
-<!--                    android:clickable="true">-->
+            <!--                <FrameLayout-->
+            <!--                    android:id="@+id/chat_message_frame"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:background="@drawable/large_button_internal"-->
+            <!--                    android:backgroundTint="@color/chatBtn"-->
+            <!--                    android:clickable="true">-->
 
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/chat_message_frame_layout"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:gravity="left">-->
-<!--                        <ImageView-->
-<!--                            android:id="@+id/chat_message_frame_image"-->
-<!--                            android:layout_width="@dimen/chatActionImage"-->
-<!--                            android:layout_height="@dimen/chatActionImage"-->
-<!--                            android:background="@drawable/chat"-->
-<!--                            android:layout_marginLeft="@dimen/actionTrayMargin">-->
+            <!--                    <LinearLayout-->
+            <!--                        android:id="@+id/chat_message_frame_layout"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="match_parent"-->
+            <!--                        android:gravity="left">-->
+            <!--                        <ImageView-->
+            <!--                            android:id="@+id/chat_message_frame_image"-->
+            <!--                            android:layout_width="@dimen/chatActionImage"-->
+            <!--                            android:layout_height="@dimen/chatActionImage"-->
+            <!--                            android:background="@drawable/chat"-->
+            <!--                            android:layout_marginLeft="@dimen/actionTrayMargin">-->
 
-<!--                        </ImageView>-->
+            <!--                        </ImageView>-->
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/chat_message_frame_txt"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Message"-->
-<!--                            android:textSize="@dimen/actionTrayString"-->
-<!--                            android:gravity="center"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginRight="@dimen/actionTrayMargin">-->
+            <!--                        <TextView-->
+            <!--                            android:id="@+id/chat_message_frame_txt"-->
+            <!--                            android:layout_width="match_parent"-->
+            <!--                            android:layout_height="wrap_content"-->
+            <!--                            android:text="Message"-->
+            <!--                            android:textSize="@dimen/actionTrayString"-->
+            <!--                            android:gravity="center"-->
+            <!--                            android:layout_gravity="center"-->
+            <!--                            android:layout_marginRight="@dimen/actionTrayMargin">-->
 
-<!--                        </TextView>-->
-<!--                    </LinearLayout>-->
-<!--                </FrameLayout>-->
-<!--            </LinearLayout>-->
+            <!--                        </TextView>-->
+            <!--                    </LinearLayout>-->
+            <!--                </FrameLayout>-->
+            <!--            </LinearLayout>-->
             <!--      Voice Chat Tab      -->
             <LinearLayout
                 android:id="@+id/chat_voice_button_tab"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/actionTrayMargin"
                 android:paddingRight="@dimen/actionTrayMargin">
 
@@ -350,12 +357,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center">
+
                             <ImageView
                                 android:id="@+id/chat_voice_frame_image"
                                 android:layout_width="@dimen/chatActionImage"
                                 android:layout_height="@dimen/chatActionImage"
-                                android:background="@drawable/baseline_call_black_48dp"
-                                android:layout_marginLeft="@dimen/actionTrayMargin">
+                                android:layout_marginLeft="@dimen/actionTrayMargin"
+                                android:background="@drawable/baseline_call_black_48dp">
 
                             </ImageView>
 
@@ -363,11 +371,11 @@
                                 android:id="@+id/chat_voice_frame_txt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Voice"
-                                android:textSize="@dimen/actionTrayString"
-                                android:gravity="center"
                                 android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/actionTrayMargin">
+                                android:layout_marginRight="@dimen/actionTrayMargin"
+                                android:gravity="center"
+                                android:text="Voice"
+                                android:textSize="@dimen/actionTrayString">
 
                             </TextView>
                         </LinearLayout>
@@ -378,7 +386,7 @@
             <LinearLayout
                 android:id="@+id/chat_video_button_tab"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/actionTrayMargin"
                 android:paddingRight="@dimen/largeButtonMargin">
 
@@ -402,12 +410,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center">
+
                             <ImageView
                                 android:id="@+id/chat_video_frame_image"
                                 android:layout_width="@dimen/chatActionImage"
                                 android:layout_height="@dimen/chatActionImage"
-                                android:background="@drawable/baseline_videocam_black_48dp"
-                                android:layout_marginLeft="@dimen/actionTrayMargin">
+                                android:layout_marginLeft="@dimen/actionTrayMargin"
+                                android:background="@drawable/baseline_videocam_black_48dp">
 
                             </ImageView>
 
@@ -415,11 +424,11 @@
                                 android:id="@+id/chat_video_frame_txt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Video"
-                                android:textSize="@dimen/actionTrayString"
-                                android:gravity="center"
                                 android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/actionTrayMargin">
+                                android:layout_marginRight="@dimen/actionTrayMargin"
+                                android:gravity="center"
+                                android:text="Video"
+                                android:textSize="@dimen/actionTrayString">
 
                             </TextView>
                         </LinearLayout>
