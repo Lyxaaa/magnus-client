@@ -3,42 +3,55 @@ package com.deco.magnus.ProjectNet.Messages;
 import android.util.SparseArray;
 
 public enum Type {
-    Ack(0),
+	Ack(0)
+    Heartbeat(1)
 
-    Heartbeat(1),
+    Initialise(2)
+    InitialiseResult(3)
 
-    Disconnect(2),
+    RegisterUser(4)
+    RegisterUserResult(5)
 
-    Initialise(3),
-    InitialiseResult(4),
+    UpdateUserProfile(6)
 
-    RegisterUser(5),
-    RegisterUserResult(6),
+    SendFriendRequest(7)
+    AcceptFriend(8)
+    AcceptFriendResult(9
 
-    UpdateUserProfile(7),
+    GetMyFriendRequests(10)
+    GetMyFriendRequestsResult(11)
 
-    SendFriendRequest(8),
-    AddFriend(9),
+    GetFriendsRequestingMe(12)
+    GetFriendsRequestingMeResult(13) 
 
-    GetMyFriendRequests(10),
-    GetFriendsRequestingMe(11),
+    GetFriends(14)
+    GetFriendsResult(15)
 
-    GetFriends(12),
+    SendMessage(16)
+    RetrieveMessages(17)
+    RetrieveMessagesResult(18)
 
-    SendMessage(13),
 
-    RetrieveUserProfile(14),
+    RetrieveUserProfile(19)
+    RetrieveUserProfileResult(20)
 
-    GetMatchDetails(15),
+    GetMatchDetails(21)
 
-    Login(16),
-    LoginResult(17),
+    Login(22)
+    LoginResult(23)
 
-    UserInfo(18),
+    EnterMatchQueue(24)
+    MatchFound(25)
 
-    EnterMatchQueue(19),
-    MatchFound(20),
-    Unknown(Integer.MAX_VALUE);
+
+    Disconnect(26)
+
+    UpdateUserPassword(27)
+    CreateMatch(28)
+    CreateMatchResult(29)
+
+
+    Unknown(int.MaxValue);
 
     private int value;
 
