@@ -3,55 +3,55 @@ package com.deco.magnus.ProjectNet.Messages;
 import android.util.SparseArray;
 
 public enum Type {
-	Ack(0)
-    Heartbeat(1)
+    Ack(0),
+    Heartbeat(1),
 
-    Initialise(2)
-    InitialiseResult(3)
+    Initialise(2),
+    InitialiseResult(3),
 
-    RegisterUser(4)
-    RegisterUserResult(5)
+    RegisterUser(4),
+    RegisterUserResult(5),
 
-    UpdateUserProfile(6)
+    UpdateUserProfile(6),
 
-    SendFriendRequest(7)
-    AcceptFriend(8)
-    AcceptFriendResult(9)
+    SendFriendRequest(7),
+    AcceptFriend(8),
+    AcceptFriendResult(9),
 
-    GetMyFriendRequests(10)
-    GetMyFriendRequestsResult(11)
+    GetMyFriendRequests(10),
+    GetMyFriendRequestsResult(11),
 
-    GetFriendsRequestingMe(12)
-    GetFriendsRequestingMeResult(13) 
+    GetFriendsRequestingMe(12),
+    GetFriendsRequestingMeResult(13),
 
-    GetFriends(14)
-    GetFriendsResult(15)
+    GetFriends(14),
+    GetFriendsResult(15),
 
-    SendMessage(16)
-    RetrieveMessages(17)
-    RetrieveMessagesResult(18)
-
-
-    RetrieveUserProfile(19)
-    RetrieveUserProfileResult(20)
-
-    GetMatchDetails(21)
-
-    Login(22)
-    LoginResult(23)
-
-    EnterMatchQueue(24)
-    MatchFound(25)
+    SendMessage(16),
+    RetrieveMessages(17),
+    RetrieveMessagesResult(18),
 
 
-    Disconnect(26)
+    RetrieveUserProfile(19),
+    RetrieveUserProfileResult(20),
 
-    UpdateUserPassword(27)
-    CreateMatch(28)
-    CreateMatchResult(29)
+    GetMatchDetails(21),
+
+    Login(22),
+    LoginResult(23),
+
+    EnterMatchQueue(24),
+    MatchFound(25),
 
 
-    Unknown(int.MaxValue);
+    Disconnect(26),
+
+    UpdateUserPassword(27),
+    CreateMatch(28),
+    CreateMatchResult(29),
+
+
+    Unknown(Integer.MAX_VALUE);
 
     private int value;
 
