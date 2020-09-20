@@ -82,7 +82,13 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                Client.getInstance().connect(/*"49.3.201.65"*/ "192.168.0.6", 2457);
+                String oscarsPCExt = "49.3.201.65";
+                String oscarsPCInt = "192.168.0.6";
+                String cysPCInt =  "192.168.1.42";
+
+                String target = cysPCInt;
+
+                Client.getInstance().connect(target, 2457);
             } catch (Exception e) {
                 Log.e(logTag, e.toString());
             }
