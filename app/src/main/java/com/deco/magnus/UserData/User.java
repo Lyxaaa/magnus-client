@@ -158,7 +158,6 @@ public class User extends Message {
                 }
             }
         });
-
         Client.getInstance().threadSafeSend(new Login(name, pword));
     }
 

@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
-//                            Log.d("Result", String.valueOf(info.result.getValue()));
+//                            Log.d("Login Info", String.valueOf(info.result.getValue()));
                             if (info.result == Result.Success) {
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
                                 activity.runOnUiThread(() -> createHome(v));

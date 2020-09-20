@@ -8,7 +8,7 @@ public class GetUser extends Message {
     public String email;
 
     public GetUser(String email) {
-        this.type = Type.UserInfo.getValue();
+        this.type = Type.RetrieveUserProfile.getValue();
         this.email = email;
     }
 }

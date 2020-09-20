@@ -3,42 +3,60 @@ package com.deco.magnus.ProjectNet.Messages;
 import android.util.SparseArray;
 
 public enum Type {
-    Ack(0),
+	Ack(0)
+    Heartbeat(1)
 
-    Heartbeat(1),
+    Initialise(2)         //not sure how we are handling this
+    InitialiseResult(3)   //not sure how we are handling this
 
-    Disconnect(2),
+    RegisterUser(4)
+    GenericResponse(5)
 
-    Initialise(3),
-    InitialiseResult(4),
+    UpdateUserProfile(6)
+    UpdateUserPassword(7)
 
-    RegisterUser(5),
-    RegisterUserResult(6),
+    SendFriendRequest(8)
+    AcceptFriend(9)
+    AcceptFriendResult(10)
 
-    UpdateUserProfile(7),
+    GetMyFriendRequests(11)
+    GetMyFriendRequestsResult(12)
 
-    SendFriendRequest(8),
-    AddFriend(9),
+    GetFriendsRequestingMe(13)
+    GetFriendsRequestingMeResult(14) 
 
-    GetMyFriendRequests(10),
-    GetFriendsRequestingMe(11),
+    GetFriends(15)
+    GetFriendsResult(16)
 
-    GetFriends(12),
+    SendMessage(17)
+    RetrieveMessages(18)
+    RetrieveMessagesResult(19)
 
-    SendMessage(13),
 
-    RetrieveUserProfile(14),
+    RetrieveUserProfile(20)
+    RetrieveUserProfileResult(21)
 
-    GetMatchDetails(15),
+    GetMatchDetails(22)
+    GetMatchDetailsResult(23)
 
-    Login(16),
-    LoginResult(17),
+    Login(24)
+    LoginResult(25)
 
-    UserInfo(18),
+    EnterMatchQueue(26)   //not sure how we are handling this
+    MatchFound(27)        //not sure how we are handling this
+    SendChallenge(28)
 
-    EnterMatchQueue(19),
-    MatchFound(20),
-    Unknown(Integer.MAX_VALUE);
+
+    Disconnect(29)        //not sure how we are handling this
+
+    
+    CreateMatch(30)
+    CreateMatchResult(31)
+
+    GetMatchHistory(32)
+    GetMatchHistoryResult(33)
+
+    Unknown(int.MaxValue);
 
     private int value;
 
