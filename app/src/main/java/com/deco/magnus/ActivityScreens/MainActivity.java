@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 String oscarsPCInt = "192.168.0.6";
                 String cysPCInt =  "192.168.1.42";
 
-                String target = cysPCInt;
+                String target = oscarsPCInt;
 
                 Client.getInstance().connect(target, 2457);
             } catch (Exception e) {
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
-//                            Log.d("Login Info", String.valueOf(info.result.getValue()));
+                            Log.d("Login Info", String.valueOf(info.result.getValue()));
                             if (info.result == Result.Success) {
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
                                 activity.runOnUiThread(() -> createHome(v));
