@@ -3,60 +3,60 @@ package com.deco.magnus.ProjectNet.Messages;
 import android.util.SparseArray;
 
 public enum Type {
-	Ack(0)
-    Heartbeat(1)
+	Ack(0),
+    Heartbeat(1),
 
-    Initialise(2)         //not sure how we are handling this
-    InitialiseResult(3)   //not sure how we are handling this
+    Initialise(2),         //not sure how we are handling this
+    InitialiseResult(3),   //not sure how we are handling this
 
-    RegisterUser(4)
-    GenericResponse(5)
+    RegisterUser(4),
+    GenericResponse(5),
 
-    UpdateUserProfile(6)
-    UpdateUserPassword(7)
+    UpdateUserProfile(6),
+    UpdateUserPassword(7),
 
-    SendFriendRequest(8)
-    AcceptFriend(9)
-    AcceptFriendResult(10)
+    SendFriendRequest(8),
+    AcceptFriend(9),
+    AcceptFriendResult(10),
 
-    GetMyFriendRequests(11)
-    GetMyFriendRequestsResult(12)
+    GetMyFriendRequests(11),
+    GetMyFriendRequestsResult(12),
 
-    GetFriendsRequestingMe(13)
-    GetFriendsRequestingMeResult(14) 
+    GetFriendsRequestingMe(13),
+    GetFriendsRequestingMeResult(14) ,
 
-    GetFriends(15)
-    GetFriendsResult(16)
+    GetFriends(15),
+    GetFriendsResult(16),
 
-    SendMessage(17)
-    RetrieveMessages(18)
-    RetrieveMessagesResult(19)
-
-
-    RetrieveUserProfile(20)
-    RetrieveUserProfileResult(21)
-
-    GetMatchDetails(22)
-    GetMatchDetailsResult(23)
-
-    Login(24)
-    LoginResult(25)
-
-    EnterMatchQueue(26)   //not sure how we are handling this
-    MatchFound(27)        //not sure how we are handling this
-    SendChallenge(28)
+    SendMessage(17),
+    RetrieveMessages(18),
+    RetrieveMessagesResult(19),
 
 
-    Disconnect(29)        //not sure how we are handling this
+    RetrieveUserProfile(20),
+    RetrieveUserProfileResult(21),
 
-    
-    CreateMatch(30)
-    CreateMatchResult(31)
+    GetMatchDetails(22),
+    GetMatchDetailsResult(23),
 
-    GetMatchHistory(32)
-    GetMatchHistoryResult(33)
+    Login(24),
+    LoginResult(25),
 
-    Unknown(int.MaxValue);
+    EnterMatchQueue(26),    //not sure how we are handling this
+    MatchFound(27),        //not sure how we are handling this
+    SendChallenge(28),
+
+
+    Disconnect(29),             //not sure how we are handling this
+
+
+    CreateMatch(30),
+    CreateMatchResult(31),
+
+    GetMatchHistory(32),
+    GetMatchHistoryResult(33),
+
+    Unknown(Integer.MAX_VALUE);
 
     private int value;
 
