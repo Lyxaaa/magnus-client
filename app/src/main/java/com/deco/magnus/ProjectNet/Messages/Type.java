@@ -3,60 +3,57 @@ package com.deco.magnus.ProjectNet.Messages;
 import android.util.SparseArray;
 
 public enum Type {
-	Ack(0)
-    Heartbeat(1)
+    Ack(0),
+    Heartbeat(1),
 
-    Initialise(2)         //not sure how we are handling this
-    InitialiseResult(3)   //not sure how we are handling this
+    Disconnect(2),
+    Initialise(3),         //not sure how we are handling this
+    InitialiseResult(4),   //not sure how we are handling this
 
-    RegisterUser(4)
-    GenericResponse(5)
+    RegisterUser(5),
+    GenericResponse(6),
 
-    UpdateUserProfile(6)
-    UpdateUserPassword(7)
+    UpdateUserProfile(7),
+    UpdateUserPassword(8),
 
-    SendFriendRequest(8)
-    AcceptFriend(9)
-    AcceptFriendResult(10)
+    SendFriendRequest(9),
+    AcceptFriend(10),
+    AcceptFriendResult(11),
 
-    GetMyFriendRequests(11)
-    GetMyFriendRequestsResult(12)
+    GetMyFriendRequests(12),
+    GetMyFriendRequestsResult(13),
 
-    GetFriendsRequestingMe(13)
-    GetFriendsRequestingMeResult(14) 
+    GetFriendsRequestingMe(14),
+    GetFriendsRequestingMeResult(15),
 
-    GetFriends(15)
-    GetFriendsResult(16)
+    GetFriends(16),
+    GetFriendsResult(17),
 
-    SendMessage(17)
-    RetrieveMessages(18)
-    RetrieveMessagesResult(19)
-
-
-    RetrieveUserProfile(20)
-    RetrieveUserProfileResult(21)
-
-    GetMatchDetails(22)
-    GetMatchDetailsResult(23)
-
-    Login(24)
-    LoginResult(25)
-
-    EnterMatchQueue(26)   //not sure how we are handling this
-    MatchFound(27)        //not sure how we are handling this
-    SendChallenge(28)
+    SendMessage(18),
+    RetrieveMessages(19),
+    RetrieveMessagesResult(20),
 
 
-    Disconnect(29)        //not sure how we are handling this
+    RetrieveUserProfile(21),
+    RetrieveUserProfileResult(22),
 
-    
-    CreateMatch(30)
-    CreateMatchResult(31)
+    GetMatchDetails(23),
+    GetMatchDetailsResult(24),
 
-    GetMatchHistory(32)
-    GetMatchHistoryResult(33)
+    Login(25),
+    LoginResult(26),
 
-    Unknown(int.MaxValue);
+    EnterMatchQueue(27),
+    MatchFound(28),
+    SendChallenge(29),
+
+    CreateMatch(30),
+    CreateMatchResult(31),
+
+    GetMatchHistory(32),
+    GetMatchHistoryResult(33),
+
+    Unknown(Integer.MAX_VALUE);
 
     private int value;
 
