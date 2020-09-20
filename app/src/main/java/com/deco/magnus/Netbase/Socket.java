@@ -1,10 +1,14 @@
 package com.deco.magnus.Netbase;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Socket {
+    protected String TAG = "Socket";
+
     public static byte[] HEADER = {(byte) 0x5a, (byte) 0xfe, (byte) 0xc0, (byte) 0xde };
     public static int MAXPACKETSIZE = 65535;
     public static int INTSIZE = 4;
@@ -40,7 +44,11 @@ public abstract class Socket {
 
     protected void invokeOnReceiveListeners(byte[] data){
         for(OnReceiveListener listener: OnReceiveListeners) {
-            if(listener != null) listener.onReceive(data);
+            try{
+                if(listener != null) listener.onReceive(data);
+            } catch (Exception e){
+                Log.e(TAG + " Listener", e.toString());
+            }
         }
     }
 

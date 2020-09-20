@@ -1,24 +1,29 @@
 package com.deco.magnus.ProjectNet.Messages;
-
 import android.util.SparseArray;
 
-public enum Result {
-    Success(0),
-    Pending(1),
-    Failure(2);
+import com.google.gson.annotations.SerializedName;
+
+// do not send this back to the server or expect badness
+// Result will be serialized into a string rather than int and the server may behave predictably unpredictable
+public enum Result{
+    @SerializedName("-1")Invalid(-1), // error in code on the other side
+    @SerializedName("0")Success(0),   // operation was a success
+    @SerializedName("1")Pending(1),   // operation has not failed, stand by for result
+    @SerializedName("2")Failure(2);   // operation failed
 
     private int value;
 
-    private static final SparseArray<Result> intToTypeMap = new SparseArray<>();
+    private static final SparseArray<Result> intToResultMap = new SparseArray<>();
 
     static {
-        for (Result type : Result.values()) {
-            intToTypeMap.put(type.value, type);
+        for (Result result : Result.values()) {
+            intToResultMap.put(result.value, result);
         }
     }
 
     public static Result fromInt(int i) {
-       return intToTypeMap.get(i);
+        Result result = intToResultMap.get(i);
+        return result;
     }
 
     Result(int value) {
@@ -28,4 +33,4 @@ public enum Result {
     public int getValue() {
         return value;
     }
-    }
+}
