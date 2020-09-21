@@ -1,8 +1,9 @@
 package com.deco.magnus.ProjectNet.Messages;
 
 /**
- * Sends a User's email to request a list of their friends (as emails)
- * Should receive a FriendList in return
+ * Sends a {@link com.deco.magnus.UserData.User}'s email to request a list of their friends (as
+ * emails)
+ * Should receive a {@link GetFriendsResult} in return
  */
 public class GetFriends extends Message {
     public String email;

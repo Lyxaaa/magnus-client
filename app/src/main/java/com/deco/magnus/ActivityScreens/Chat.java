@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.deco.magnus.R;
-import com.deco.magnus.UserData.ChatMessage;
 import com.deco.magnus.UserData.User;
 
 import java.util.Stack;
@@ -52,12 +51,12 @@ public class Chat extends AppCompatActivity {
     //region Test function for chat messages
     private void testDrawChat() {
         for (User friend : this.user.friends) {
-            ChatMessage friendMessage = new ChatMessage();
+            com.deco.magnus.UserData.Chat friendMessage = new com.deco.magnus.UserData.Chat();
             friendMessage.userId = friend.id;
             friendMessage.contents = "Hey, my email is " + friend.getEmail() + " under the ID " + friend.id;
             user.addChatMessage(friend.id, friendMessage);
 
-            ChatMessage userMessage = new ChatMessage();
+            com.deco.magnus.UserData.Chat userMessage = new com.deco.magnus.UserData.Chat();
             userMessage.userId = user.id;
             userMessage.contents = "Hey, my email is " + this.user.getEmail() + " under the ID " + this.user.id;
             user.addChatMessage(friend.id, userMessage);
@@ -77,7 +76,7 @@ public class Chat extends AppCompatActivity {
         }
         LinearLayout layout = findViewById(R.id.chat_dialogue_linear_layout_scroller);
         layout.removeAllViews();
-        for (ChatMessage message : user.getChat(openChatId)) {
+        for (com.deco.magnus.UserData.Chat message : user.getChat(openChatId)) {
             Log.d("Message user ID", String.valueOf(message.userId));
             // Create a new TextView to display a message
             LinearLayout messageContainer = new LinearLayout(this);

@@ -1,13 +1,10 @@
 package com.deco.magnus.UserData;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.SocketType;
@@ -16,8 +13,6 @@ import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
 import com.deco.magnus.ProjectNet.Messages.Type;
-import com.deco.magnus.R;
-import com.deco.magnus.ResourceDirectory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,7 +28,7 @@ public class User extends Message {
         }
     }
     // Integer should be the ID of the receiving user (not the ID of this user)
-    private Map<String, List<ChatMessage>> chats = new ArrayMap<>();
+    private Map<String, List<Chat>> chats = new ArrayMap<>();
     public Activity activity;
     public List<User> friends = new ArrayList<>();
     private final String username;
@@ -171,9 +166,9 @@ public class User extends Message {
     /**
      *
      * @param id The ID of the user in the conversation that is NOT this user
-     * @param chat A List {@link ChatMessage} Objects to add to the chats Map
+     * @param chat A List {@link Chat} Objects to add to the chats Map
      */
-    public void addChat(String id, List<ChatMessage> chat) {
+    public void addChat(String id, List<Chat> chat) {
         if (chat != null && !chat.isEmpty()) {
             if (chats.containsKey(id)) {
                 chats.get(id).addAll(chat);
@@ -186,14 +181,14 @@ public class User extends Message {
     /**
      *
      * @param id The ID of the user in the conversation that is NOT this user
-     * @param message A {@link ChatMessage} Object to add to the chats Map
+     * @param message A {@link Chat} Object to add to the chats Map
      */
-    public void addChatMessage(String id, ChatMessage message) {
+    public void addChatMessage(String id, Chat message) {
         if (message != null) {
             if (chats.containsKey(id)) {
                 chats.get(id).add(message);
             } else {
-                List<ChatMessage> msgList = new ArrayList<>();
+                List<Chat> msgList = new ArrayList<>();
                 msgList.add(message);
                 chats.put(id, msgList);
             }
@@ -205,7 +200,7 @@ public class User extends Message {
      * @param id The ID of the user in the conversation that is NOT this user
      * @return null if the chat does not exist
      */
-    public List<ChatMessage> getChat(String id) {
+    public List<Chat> getChat(String id) {
         if (chats.containsKey(id)) {
             return chats.get(id);
         }

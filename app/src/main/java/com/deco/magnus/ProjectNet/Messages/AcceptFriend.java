@@ -5,6 +5,7 @@ public class AcceptFriend extends Message {
     String toEmail;
 
     public AcceptFriend(String fromEmail, String toEmail) {
+        this.type = Type.AcceptFriend.getValue();
         this.fromEmail = fromEmail;
         this.toEmail = toEmail;
     }
