@@ -1,8 +1,6 @@
 package com.deco.magnus.ProjectNet.Messages;
 
-public class LoginResult extends Message {
-    public Result result;
-    public String error;
+public class LoginResult extends MessageResult {
     public String email;
     public String userName;
     public String uniqueId;
