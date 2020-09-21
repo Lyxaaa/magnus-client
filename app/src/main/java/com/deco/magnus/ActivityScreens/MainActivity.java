@@ -24,7 +24,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.deco.magnus.DataTransmission;
 import com.deco.magnus.ProjectNet.Client;
-import com.deco.magnus.ProjectNet.Messages.Result;
+import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 import com.deco.magnus.UserData.UserInfo;
@@ -144,9 +144,10 @@ public class MainActivity extends AppCompatActivity {
                 submitLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("Login Info", "Beginning login sequence");
                         User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
                             Log.d("Login Info", String.valueOf(info.result.getValue()));
-                            if (info.result == Result.Success) {
+                            if (info.result == MessageResult.Result.Success) {
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
                                 activity.runOnUiThread(() -> createHome(v));
                             } else {
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                                 !cfrmPword.getText().toString().equals("") &&
                                 pword.getText().toString().equals(cfrmPword.getText().toString())) {
                             User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
-                                if (info.result == Result.Success) {
+                                if (info.result == MessageResult.Result.Success) {
                                     loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
                                     createHome(v);
                                 } else {

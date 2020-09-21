@@ -15,7 +15,6 @@ import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
-import com.deco.magnus.ProjectNet.Messages.Result;
 import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.ResourceDirectory;
