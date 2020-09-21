@@ -24,7 +24,8 @@ public class JsonMsg {
             JsonMsg cast = (JsonMsg)data;
             if (cast.type == msgType) {
                 try {
-                    return new Gson().fromJson(cast.message, type);
+                    T result = new Gson().fromJson(cast.message, type);
+                    return result;
                 } catch(Exception e) {
                     throw e;
                 }
