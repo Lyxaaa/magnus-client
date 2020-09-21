@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 submitLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("Login Info", "Beginning login sequence");
                         User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
                             Log.d("Login Info", String.valueOf(info.result.getValue()));
                             if (info.result == Result.Success) {

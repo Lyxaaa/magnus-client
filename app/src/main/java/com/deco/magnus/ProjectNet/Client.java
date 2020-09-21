@@ -4,16 +4,11 @@ import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.Netbase.TCPSocket;
 import com.deco.magnus.ProjectNet.Messages.Message;
-import com.deco.magnus.ProjectNet.Messages.MsgInitialise;
+import com.deco.magnus.ProjectNet.Messages.Initialise;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class Client extends com.deco.magnus.Netbase.Client {
 
@@ -139,7 +134,7 @@ public class Client extends com.deco.magnus.Netbase.Client {
         tcp = new TCPSocket(address, port);
         tcp.addOnReceiveListener(this::OnTCP);
         tcp.begin();
-        send(new MsgInitialise(id));
+        send(new Initialise(id));
         return tcp.isConnected;
     }
 }
