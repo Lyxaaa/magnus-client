@@ -110,7 +110,10 @@ public class User extends Message {
     }
 
     public Bitmap bytesToBitmap(byte[] bytes) {
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        if (bytes != null) {
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        return null;
     }
 
     public Bitmap imageToBitmap(String imageName) {
@@ -148,6 +151,7 @@ public class User extends Message {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+                Log.d("Login Info", "Made it into onReceive");
                 LoginResult result = TryCast(dataType, data, Type.LoginResult.getValue(), LoginResult.class);
                 if (result != null) {
                     Client.getInstance().removeOnReceiveListener(this);

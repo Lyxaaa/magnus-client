@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 String oscarsPCInt = "192.168.0.6";
                 String cysPCInt =  "192.168.1.42";
 
-                String target = cysPCInt;
+                String target = oscarsPCInt;
 
                 Client.getInstance().connect(target, 2457);
             } catch (Exception e) {
@@ -145,11 +145,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.d("Login Info", "Beginning login sequence");
+                        PopupWindow loading = new PopupWindow(loginInflater.inflate(R.layout.loading, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
+                        loading.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
+                        Log.d("Login Info", "Loading content");
                         User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
+                            activity.runOnUiThread(() -> loading.dismiss());
                             Log.d("Login Info", String.valueOf(info.result.getValue()));
                             if (info.result == MessageResult.Result.Success) {
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
-                                activity.runOnUiThread(() -> createHome(v));
+                                activity.runOnUiThread(() -> {
+                                    loginWindow.dismiss();
+                                    createHome(v);
+                                });
                             } else {
                                 activity.runOnUiThread(() -> {
                                     email.clearComposingText();
@@ -217,12 +224,17 @@ public class MainActivity extends AppCompatActivity {
                 submitRegister.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("Login Info", "Beginning register sequence");
+                        PopupWindow loading = new PopupWindow(registerInflater.inflate(R.layout.loading, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
+                        loading.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
                         if (!pword.getText().toString().equals("") &&
                                 !cfrmPword.getText().toString().equals("") &&
                                 pword.getText().toString().equals(cfrmPword.getText().toString())) {
                             User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
+                                loading.dismiss();
                                 if (info.result == MessageResult.Result.Success) {
                                     loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
+                                    registerWindow.dismiss();
                                     createHome(v);
                                 } else {
                                     email.setText("");
