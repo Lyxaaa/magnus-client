@@ -111,7 +111,7 @@ public class Home extends AppCompatActivity {
     }
 
     public void createChat(View view) {
-        Intent chatScreen = new Intent(this, Chat.class);
+        Intent chatScreen = new Intent(this, ChatScreen.class);
         startActivity(chatScreen);
     }
 

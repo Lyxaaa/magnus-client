@@ -9,9 +9,12 @@ import android.util.Log;
 import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
+import com.deco.magnus.ProjectNet.Messages.GetFriends;
+import com.deco.magnus.ProjectNet.Messages.GetFriendsResult;
 import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
+import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.RegisterUser;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
@@ -31,7 +34,7 @@ public class User extends Message {
     // String should be the ID of the receiving user (or maybe the conversation ID) (not the ID of this user)
     private Map<String, List<Chat>> chats = new ArrayMap<>();
     public Activity activity;
-    public List<User> friends = new ArrayList<>();
+    private List<User> friends = new ArrayList<>();
     private final String username;
     private final String email;
     public final String id;
@@ -86,6 +89,30 @@ public class User extends Message {
 
     public void getUser(String name) {
 
+    }
+
+    public interface getFriendsResultListener {
+        void OnGetFriendsResult(GetFriendsResult getFriendsResult);
+    }
+
+    public void updateFriends(getFriendsResultListener listener) {
+        Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
+            @Override
+            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+                Log.d("Update Friends", "Made it into onReceive");
+                GetFriendsResult result = TryCast(dataType, data, Type.GetFriendsResult.getValue(), GetFriendsResult.class);
+                if (result != null) {
+                    Client.getInstance().removeOnReceiveListener(this);
+                    listener.OnGetFriendsResult(result);
+                    Log.d("Login Data", "Result: " + result);
+                }
+            }
+        });
+        Client.getInstance().threadSafeSend(new GetFriends(this.email));
+    }
+
+    public List<User> getFriends() {
+        return friends;
     }
 
     /**

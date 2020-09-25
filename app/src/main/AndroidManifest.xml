@@ -37,7 +37,7 @@
             />
 
         <activity
-            android:name="com.deco.magnus.ActivityScreens.Chat"
+            android:name="com.deco.magnus.ActivityScreens.ChatScreen"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan"
             />

@@ -233,17 +233,17 @@ public class MainActivity extends AppCompatActivity {
                                     registerWindow.dismiss();
                                     createHome(v);
                                 } else {
-                                    email.setText("");
-                                    pword.setText("");
-                                    cfrmPword.setText("");
+                                    email.getText().clear();
+                                    pword.getText().clear();
+                                    cfrmPword.getText().clear();
                                     credentialInfo.setText(R.string.bad_register_email);
                                     credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
                                 }
                             }));
                         } else {
                             loading.dismiss();
-                            pword.setText("");
-                            cfrmPword.setText("");
+                            pword.getText().clear();
+                            cfrmPword.getText().clear();
                             credentialInfo.setText(R.string.bad_register_pword);
                             credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
                         }
