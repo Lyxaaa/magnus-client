@@ -148,24 +148,20 @@ public class MainActivity extends AppCompatActivity {
                         PopupWindow loading = new PopupWindow(loginInflater.inflate(R.layout.loading, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
                         loading.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
                         Log.d("Login Info", "Loading content");
-                        User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
-                            activity.runOnUiThread(() -> loading.dismiss());
-                            Log.d("Login Info", String.valueOf(info.result.getValue()));
+                        User.authenticateUser(email.getText().toString(), pword.getText().toString(), info -> runOnUiThread(() ->{
+                            Log.d("Login Info", String.valueOf(info.result.getValue()) + " : " + String.valueOf(MessageResult.Result.Success.getValue()));
+                            loading.dismiss();
                             if (info.result == MessageResult.Result.Success) {
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
-                                activity.runOnUiThread(() -> {
-                                    loginWindow.dismiss();
-                                    createHome(v);
-                                });
+                                loginWindow.dismiss();
+                                createHome(v);
                             } else {
-                                activity.runOnUiThread(() -> {
-                                    email.clearComposingText();
-                                    pword.clearComposingText();
-                                    credentialInfo.setText(R.string.bad_login);
-                                    credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
-                                });
+                                email.clearComposingText();
+                                pword.clearComposingText();
+                                credentialInfo.setText(R.string.bad_login);
+                                credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
                             }
-                        });
+                        }));
 
                     }
                 });
@@ -230,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                         if (!pword.getText().toString().equals("") &&
                                 !cfrmPword.getText().toString().equals("") &&
                                 pword.getText().toString().equals(cfrmPword.getText().toString())) {
-                            User.detailsCorrect(email.getText().toString(), pword.getText().toString(), info -> {
+                            User.registerUser(email.getText().toString(), pword.getText().toString(), info -> runOnUiThread(() -> {
                                 loading.dismiss();
                                 if (info.result == MessageResult.Result.Success) {
                                     loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
@@ -243,8 +239,9 @@ public class MainActivity extends AppCompatActivity {
                                     credentialInfo.setText(R.string.bad_register_email);
                                     credentialInfo.setTextColor(getResources().getColor(R.color.credentialsError));
                                 }
-                            });
+                            }));
                         } else {
+                            loading.dismiss();
                             pword.setText("");
                             cfrmPword.setText("");
                             credentialInfo.setText(R.string.bad_register_pword);

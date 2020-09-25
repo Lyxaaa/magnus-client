@@ -2,9 +2,11 @@ package com.deco.magnus.ActivityScreens;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,19 +48,31 @@ public class Chat extends AppCompatActivity {
         }
         drawChat();
         drawChat();
+
+        final FrameLayout sendMessageBtn = findViewById(R.id.chat_send_frame);
+        sendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
+
+
+
+
 
     //region Test function for chat messages
     private void testDrawChat() {
         for (User friend : this.user.friends) {
             com.deco.magnus.UserData.Chat friendMessage = new com.deco.magnus.UserData.Chat();
             friendMessage.userId = friend.id;
-            friendMessage.contents = "Hey, my email is " + friend.getEmail() + " under the ID " + friend.id;
+            friendMessage.text = "Hey, my email is " + friend.getEmail() + " under the ID " + friend.id;
             user.addChatMessage(friend.id, friendMessage);
 
             com.deco.magnus.UserData.Chat userMessage = new com.deco.magnus.UserData.Chat();
             userMessage.userId = user.id;
-            userMessage.contents = "Hey, my email is " + this.user.getEmail() + " under the ID " + this.user.id;
+            userMessage.text = "Hey, my email is " + this.user.getEmail() + " under the ID " + this.user.id;
             user.addChatMessage(friend.id, userMessage);
             Log.d("Friends id", String.valueOf(friend.id));
             Log.d("Open Chat ID", String.valueOf(openChatId));
@@ -79,39 +93,46 @@ public class Chat extends AppCompatActivity {
         for (com.deco.magnus.UserData.Chat message : user.getChat(openChatId)) {
             Log.d("Message user ID", String.valueOf(message.userId));
             // Create a new TextView to display a message
-            LinearLayout messageContainer = new LinearLayout(this);
-            TextView displayMessage = new TextView(this);
-            int gravity;
-            if (message.userId == openChatId) {
-                gravity = Gravity.START;
-            } else {
-                gravity = Gravity.END;
-            }
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            messageContainer.setOrientation(LinearLayout.VERTICAL);
-            messageContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
-            messageContainer.setLayoutParams(params);
-            messageContainer.setGravity(gravity);
-
-            FrameLayout messageBubble = new FrameLayout(this);
-            messageBubble.setPadding((int) (5 * density), (int) (5 * density), (int) (5 * density), (int) (5 * density));
-            messageBubble.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-            messageBubble.setBackground(getResources().getDrawable(R.drawable.large_button_internal));
-            messageBubble.setBackgroundColor(getResources().getColor(R.color.dark));
-
-            displayMessage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            displayMessage.setText(message.contents);
-            displayMessage.setTextSize(getResources().getDimension(R.dimen.chatMessageTextSize));
-            displayMessage.setGravity(gravity);
-
-            messageBubble.addView(displayMessage);
-            messageContainer.addView(messageBubble);
-            layout.addView(messageContainer);
+            layout.addView(messageToLinearLayout(message));
         }
         findViewById(R.id.chat_dialogue_scroll_view).scrollTo(0, findViewById(R.id.chat_dialogue_scroll_view).getBottom());
     }
     //endregion
+
+    private void updateChat() {
+    }
+
+    private LinearLayout messageToLinearLayout(com.deco.magnus.UserData.Chat message) {
+        LinearLayout messageContainer = new LinearLayout(this);
+        TextView displayMessage = new TextView(this);
+        int gravity;
+        if (message.userId == openChatId) {
+            gravity = Gravity.START;
+        } else {
+            gravity = Gravity.END;
+        }
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        messageContainer.setOrientation(LinearLayout.VERTICAL);
+        messageContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
+        messageContainer.setLayoutParams(params);
+        messageContainer.setGravity(gravity);
+
+        FrameLayout messageBubble = new FrameLayout(this);
+        messageBubble.setPadding((int) (5 * density), (int) (5 * density), (int) (5 * density), (int) (5 * density));
+        messageBubble.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        messageBubble.setBackground(getResources().getDrawable(R.drawable.large_button_internal));
+        messageBubble.setBackgroundColor(getResources().getColor(R.color.dark));
+
+        displayMessage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        displayMessage.setText(message.text);
+        displayMessage.setTextSize(getResources().getDimension(R.dimen.chatMessageTextSize));
+        displayMessage.setGravity(gravity);
+
+        messageBubble.addView(displayMessage);
+        messageContainer.addView(messageBubble);
+        return messageContainer;
+    }
 
     //region Test function for friend images
     private void testDrawFriends() {

@@ -12,6 +12,7 @@ import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
+import com.deco.magnus.ProjectNet.Messages.RegisterUser;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
 import java.io.ByteArrayOutputStream;
@@ -27,7 +28,7 @@ public class User extends Message {
             super(errorMessage);
         }
     }
-    // Integer should be the ID of the receiving user (not the ID of this user)
+    // String should be the ID of the receiving user (or maybe the conversation ID) (not the ID of this user)
     private Map<String, List<Chat>> chats = new ArrayMap<>();
     public Activity activity;
     public List<User> friends = new ArrayList<>();
@@ -142,7 +143,7 @@ public class User extends Message {
      * @param pword User's password
      * @return Users ID if correct, 0 otherwise
      */
-    public static void detailsCorrect(String name, String pword, final loginResultListener listener) {
+    public static void authenticateUser(String name, String pword, final loginResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public void OnReceive(SocketType socketType, DataType dataType, Object data) {
@@ -151,12 +152,28 @@ public class User extends Message {
                 if (result != null) {
                     Client.getInstance().removeOnReceiveListener(this);
                     listener.OnLoginResult(result);
-                    Log.d("Login Data", result.userName);
-
+                    Log.d("Login Data", "Result: " + result);
                 }
             }
         });
         Client.getInstance().threadSafeSend(new Login(name, pword));
+    }
+
+    public static void registerUser(String name, String pword, final loginResultListener listener) {
+        Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
+            @Override
+            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+                Log.d("Registration Info", "Made it into onReceive");
+                LoginResult result = TryCast(dataType, data, Type.LoginResult.getValue(), LoginResult.class);
+                if (result != null) {
+                    Client.getInstance().removeOnReceiveListener(this);
+                    listener.OnLoginResult(result);
+                    Log.d("Registration Data", "Result: " + result.result.getValue());
+
+                }
+            }
+        });
+        Client.getInstance().threadSafeSend(new RegisterUser(name, pword, name, "Hey I am new here"));
     }
 
     public String getEmail() {
