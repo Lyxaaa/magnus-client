@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.deco.magnus.ProjectNet.Messages.GetFriendsResult;
+import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
@@ -34,7 +36,13 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
-        User user = MainActivity.getLoggedUser();
+        user.updateFriends(friends -> {
+            if (friends.result == GetFriendsResult.Result.Success) {
+                GetFriendsResult friendsResult = friends;
+                //TODO can't see contents of friends lambda, even though code is the exact same
+//                user.unstableAddFriend(friends.);
+            }
+        });
 
         final FrameLayout gameBtn = findViewById(R.id.home_game_frame);
         final FrameLayout chatBtn = findViewById(R.id.home_chat_frame);

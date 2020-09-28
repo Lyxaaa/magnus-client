@@ -31,6 +31,7 @@ import com.deco.magnus.UserData.UserInfo;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         PopupWindow loading = new PopupWindow(loginInflater.inflate(R.layout.loading, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
                         loading.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
                         Log.d("Login Info", "Loading content");
-                        User.authenticateUser(email.getText().toString(), pword.getText().toString(), info -> runOnUiThread(() ->{
+                        User.authenticateUser(email.getText().toString(), pword.getText().toString(), info -> runOnUiThread(() -> {
                             Log.d("Login Info", String.valueOf(info.result.getValue()) + " : " + String.valueOf(MessageResult.Result.Success.getValue()));
                             loading.dismiss();
                             if (info.result == MessageResult.Result.Success) {
@@ -344,5 +345,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * We don't want the hash to be calculated differently depending on which user is interacting
+     * with the conversation, so a simple hash like this will prevent that. No need for anything
+     * more complex
+     * @param thisUserId
+     * @param otherUserId
+     * @return A hashed String to be used as the conversation ID
+     */
+    public static String nameHash(String thisUserId, String otherUserId) {
+        return String.valueOf(31 * Integer.parseInt(thisUserId) * Integer.parseInt(otherUserId));
     }
 }

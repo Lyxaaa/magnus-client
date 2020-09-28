@@ -115,6 +115,10 @@ public class User extends Message {
         return friends;
     }
 
+    public void unstableAddFriend(User friend) {
+        friends.add(friend);
+    }
+
     /**
      * Asks the database if a user exists, database sends back a {@link UserInfo} Object
      * @param username User's username
@@ -224,7 +228,7 @@ public class User extends Message {
 
     /**
      *
-     * @param id The ID of the user in the conversation that is NOT this user
+     * @param id The ID of the desired conversation
      * @param message A {@link Chat} Object to add to the chats Map
      */
     public void addChatMessage(String id, Chat message) {

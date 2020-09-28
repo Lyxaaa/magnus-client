@@ -92,11 +92,29 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="right">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="2dp"
+                        android:background="@drawable/small_button_internal_round"
+                        android:backgroundTint="@color/blue">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="message one" />
+                        android:text="message one lets see when thisgetsreallylong" />
+
+                    </FrameLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </ScrollView>
