@@ -71,7 +71,7 @@ public class ChatScreen extends AppCompatActivity {
             public void onClick(View v) {
                 if (sendMessageText.getText().toString().trim().length() > 0) {
                     sendMessage(sendMessageText.getText().toString(), messageResult -> runOnUiThread(() -> {
-
+                        //TODO Need a timeout for this listener thread, after 1 second I want to just say the message came back as an error
                     }));
                     //TODO Move this into the above Lambda once we have a MessageResult acceptance
                     user.addChatMessage(openChatId,
