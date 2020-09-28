@@ -11,7 +11,7 @@ public enum Type {
     InitialiseResult(4),   //not sure how we are handling this
 
     RegisterUser(5),
-    GenericResponse(6),
+    MessageResult(6),
 
     UpdateUserProfile(7),
     UpdateUserPassword(8),
@@ -52,6 +52,8 @@ public enum Type {
 
     GetMatchHistory(32),
     GetMatchHistoryResult(33),
+
+    GenericResult(34),
 
     Unknown(Integer.MAX_VALUE);
 

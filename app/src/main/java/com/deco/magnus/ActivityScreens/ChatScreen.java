@@ -93,7 +93,7 @@ public class ChatScreen extends AppCompatActivity {
             public void OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Send Message", "Made it into onReceive");
                 //TODO There's no type for MessageResult, meaning no way to receive a generic MessageResult from the server
-                MessageResult result = JsonMsg.TryCast(dataType, data, Type.SendMessage.getValue(), MessageResult.class);
+                MessageResult result = JsonMsg.TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
                 if (result != null) {
                     Client.getInstance().removeOnReceiveListener(this);
                     listener.OnSendMessageResult(result);
