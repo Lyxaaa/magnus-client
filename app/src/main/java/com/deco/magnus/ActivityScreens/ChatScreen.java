@@ -90,15 +90,16 @@ public class ChatScreen extends AppCompatActivity {
     private void sendMessage(String message, sendMessageResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
-            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Send Message", "Made it into onReceive");
                 //TODO There's no type for MessageResult, meaning no way to receive a generic MessageResult from the server
                 MessageResult result = JsonMsg.TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
                 if (result != null) {
-                    Client.getInstance().removeOnReceiveListener(this);
                     listener.OnSendMessageResult(result);
                     Log.d("Login Data", "Result: " + result);
+                    return true;
                 }
+                return false;
             }
         });
         Client.getInstance().threadSafeSend(new SendMessage(user.getEmail(), message, openChatId));
