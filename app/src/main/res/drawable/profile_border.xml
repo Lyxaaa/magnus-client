@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadius="0dp"
+    android:thicknessRatio="1.9"
+    android:useLevel="false"
+    android:shape="ring">
+    <size android:width="@dimen/profilePicRadius"
+        android:height="@dimen/profilePicRadius"/>
+    <!--            <gradient android:startColor="#FFFFFF"-->
+    <!--                android:endColor="@color/gameBtn"-->
+    <!--                android:angle="270" />-->
+<!--    <corners android:radius="20dp"/>-->
+<!--    <padding android:left="5dp" android:right="5dp" android:top="5dp" />-->
+
+    <stroke android:width="2dp" android:color="@color/white" />
+</shape>

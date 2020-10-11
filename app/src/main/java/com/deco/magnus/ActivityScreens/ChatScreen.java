@@ -71,14 +71,13 @@ public class ChatScreen extends AppCompatActivity {
             public void onClick(View v) {
                 if (sendMessageText.getText().toString().trim().length() > 0) {
                     sendMessage(sendMessageText.getText().toString(), messageResult -> runOnUiThread(() -> {
-                        //TODO Need a timeout for this listener thread, after 1 second I want to just say the message came back as an error
+                        user.addChatMessage(openChatId,
+                                new Chat(user.id, user.getEmail(), sendMessageText.getText().toString(),
+                                        System.currentTimeMillis(), messageResult.result));
+                        drawChat();
+                        sendMessageText.getText().clear();
                     }));
-                    //TODO Move this into the above Lambda once we have a MessageResult acceptance
-                    user.addChatMessage(openChatId,
-                            new Chat(user.id, user.getEmail(), sendMessageText.getText().toString(), System.currentTimeMillis(), MessageResult.Result.Failure));
-                    drawChat();
                 }
-                sendMessageText.getText().clear();
             }
         });
     }
@@ -90,18 +89,23 @@ public class ChatScreen extends AppCompatActivity {
     private void sendMessage(String message, sendMessageResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
-            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Send Message", "Made it into onReceive");
                 //TODO There's no type for MessageResult, meaning no way to receive a generic MessageResult from the server
                 MessageResult result = JsonMsg.TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
                 if (result != null) {
-                    Client.getInstance().removeOnReceiveListener(this);
                     listener.OnSendMessageResult(result);
                     Log.d("Login Data", "Result: " + result);
+                    return true;
                 }
+                return false;
             }
         });
         Client.getInstance().threadSafeSend(new SendMessage(user.getEmail(), message, openChatId));
+    }
+
+    private void getConversation(String userId) {
+
     }
 
     //region Test function for chat messages
@@ -122,6 +126,7 @@ public class ChatScreen extends AppCompatActivity {
     }
     //endregion
 
+    //make sure to put drawChat inside getConversation listener to ensure operation
     //region Draws the currently accessed chat region
     private void drawChat() {
         if (user.getFriends().size() > 0 && user.getChat(openChatId) == null) {
@@ -273,6 +278,7 @@ public class ChatScreen extends AppCompatActivity {
             friendContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //TODO Put getConversation listener here. Open chat Id is determined by database
                     openChatId = friend.id;
                     drawChat();
                 }

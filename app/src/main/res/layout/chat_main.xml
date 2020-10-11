@@ -1,70 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darker">
+    android:background="@color/darker"
+    android:orientation="horizontal">
 
     <!--  Friend icons  -->
     <LinearLayout
         android:id="@+id/chat_friends_linear_layout_holder"
         android:layout_width="@dimen/chatFriendTray"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
+
         <ScrollView
             android:id="@+id/chat_friends_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/chat_friends_linear_layout_scroller"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            <LinearLayout
+                android:id="@+id/chat_friends_linear_layout_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/set_to_friends_id"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:clickable="true"-->
-<!--                android:paddingVertical="5dp"-->
-<!--                android:onClick="createChat"-->
-<!--                android:gravity="center"-->
-<!--                android:orientation="vertical">-->
+                <!--            <LinearLayout-->
+                <!--                android:id="@+id/set_to_friends_id"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:clickable="true"-->
+                <!--                android:paddingVertical="5dp"-->
+                <!--                android:onClick="createChat"-->
+                <!--                android:gravity="center"-->
+                <!--                android:orientation="vertical">-->
 
-<!--                <androidx.cardview.widget.CardView-->
-<!--                    android:layout_width="@dimen/chatSidebarProfilePic"-->
-<!--                    android:layout_height="@dimen/chatSidebarProfilePic"-->
-<!--                    app:cardCornerRadius="250dp"-->
-<!--                    android:id="@+id/profile_pic_card_view"-->
-<!--                    android:layout_gravity="center">-->
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:layout_width="@dimen/chatSidebarProfilePic"-->
+                <!--                    android:layout_height="@dimen/chatSidebarProfilePic"-->
+                <!--                    app:cardCornerRadius="250dp"-->
+                <!--                    android:id="@+id/profile_pic_card_view"-->
+                <!--                    android:layout_gravity="center">-->
 
-<!--                    <ImageView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:src="@drawable/test"-->
-<!--                        android:scaleType="centerCrop">-->
+                <!--                    <ImageView-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:src="@drawable/test"-->
+                <!--                        android:scaleType="centerCrop">-->
 
-<!--                    </ImageView>-->
+                <!--                    </ImageView>-->
 
-<!--                </androidx.cardview.widget.CardView>-->
+                <!--                </androidx.cardview.widget.CardView>-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="test0"-->
-<!--                    android:gravity="center">-->
-<!--                </TextView>-->
-<!--            </LinearLayout>-->
-
-
+                <!--                <TextView-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="test0"-->
+                <!--                    android:gravity="center">-->
+                <!--                </TextView>-->
+                <!--            </LinearLayout>-->
 
 
-
-        </LinearLayout>
+            </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
@@ -92,28 +91,25 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right">
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:background="@drawable/small_button_internal_round"
-                        android:backgroundTint="@color/blue">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="message one lets see when thisgetsreallylong" />
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/small_button_internal_round"
+                            android:backgroundTint="@color/blue"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="2dp"
+                            android:layout_gravity="right">
 
-                    </FrameLayout>
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="message" />
+
+                        </FrameLayout>
 
                 </LinearLayout>
 

@@ -10,6 +10,72 @@
     android:id="@+id/home_main"
     android:background="@color/darker">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="@dimen/friendLayoutPadding">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_button"
+            android:layout_width="@dimen/profileBorderRadius"
+            android:layout_height="@dimen/profileBorderRadius"
+            app:cardCornerRadius="250dp"
+            app:cardBackgroundColor="@color/white"
+            android:clickable="true">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/profilePicRadius"
+                android:layout_height="@dimen/profilePicRadius"
+                app:cardCornerRadius="250dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/profilePicRadius"
+                    android:layout_height="@dimen/profilePicRadius"
+                    android:src="@drawable/test"
+                    android:scaleType="centerCrop"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+<!--        <FrameLayout-->
+<!--            android:id="@+id/profile_frame"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/circular_border"-->
+<!--            android:clickable="true">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center">-->
+
+<!--                <FrameLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/profile_image_frame"-->
+<!--                    android:backgroundTint="@color/dark">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/profile_image_view"-->
+<!--                        android:layout_width="@dimen/profilePicRadius"-->
+<!--                        android:layout_height="@dimen/profilePicRadius"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@drawable/test">-->
+
+<!--                    </ImageView>-->
+
+<!--                </FrameLayout>-->
+
+<!--            </LinearLayout>-->
+
+<!--        </FrameLayout>-->
+
+    </LinearLayout>
+
 
     <!--  Holds the 3 main buttons [Game, Chat, Friends]  -->
     <LinearLayout
