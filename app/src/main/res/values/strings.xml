@@ -10,4 +10,5 @@
     <string name="bad_register_email">Email already in use</string>
     <string name="bad_register_pword">Passwords do not Match</string>
     <string name="message_not_sent">Error sending message:</string>
+    <string name="search_friend">Search for a Friend</string>
 </resources>

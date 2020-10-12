@@ -40,8 +40,8 @@ public class User extends Message {
     public final String id;
     private boolean authorised;
     private String bio;
-    private byte[] byteImage;
-    private Bitmap bitmapImage;
+    public byte[] byteImage;
+    public Bitmap bitmapImage;
     public int profilePicDrawable;
 
     public User(String id, String username, String email, String bio, byte[] profilePic, Activity activity) {

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -13,12 +15,14 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +34,9 @@ import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +45,9 @@ public class Home extends AppCompatActivity {
     User user = MainActivity.getLoggedUser();
     //Used for Gallery Image Picker
     private Uri outputFileUri;
-
+    final int GALLERY_CODE = 27;
+    final int DISPLAY_PICTURE_RESOLUTION = 256;
+    final String PROFILE_IMAGE = "profile.jpg";
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -136,6 +145,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createProfile(v);
+                profileImage.setImageURI(null);
                 profileImage.setImageURI(outputFileUri);
             }
         });
@@ -161,42 +171,13 @@ public class Home extends AppCompatActivity {
     }
 
     public void createFriends(View view) {
-//        Intent chatScreen = new Intent(this, Chat.class);
-//        startActivity(chatScreen);
+        Intent friendsScreen = new Intent(this, FriendsScreen.class);
+        startActivity(friendsScreen);
     }
 
     public void createProfile(View view) {
         openImageIntent();
     }
-
-    /*
-    Image requestGalleryImage() {
-        Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
-        Intent galleryIntent=new Intent(Intent.ACTION_GET_CONTENT);
-        Intent camIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-        galleryIntent.setType("image/*");
-        pickIntent.putExtra(Intent.EXTRA_INTENT, camIntent);
-        pickIntent.putExtra(Intent.EXTRA_INTENT, galleryIntent);
-        pickIntent.putExtra(Intent.EXTRA_TITLE, "Select Source");
-        startActivityForResult(pickIntent, R.integer.GalleryIntent);
-
-        // Chooser of filesystem options.
-        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
-
-        // Add the camera options.
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
-
-        startActivityForResult(chooserIntent, YOUR_SELECT_PICTURE_REQUEST_CODE);
-
-
-
-
-        Intent image = new Intent(Intent.ACTION_GET_CONTENT);
-        image.setType("Image/*");
-        startActivityForResult(image, 0);
-    }
-
-     */
 
     private String getUniqueImageFilename() {
         return "img_"+ System.currentTimeMillis() + ".jpg";
@@ -208,22 +189,17 @@ public class Home extends AppCompatActivity {
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
         final String fname = getUniqueImageFilename();
-        final File sdImageMainDirectory = new File(root, fname);
-        outputFileUri = Uri.fromFile(sdImageMainDirectory);
+//        final File sdImageMainDirectory = new File(root, fname);
+//        outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
         // Camera.
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final Intent cameraIntent = new Intent();
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
-            intent.setPackage(packageName);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            cameraIntents.add(intent);
-        }
+        final ResolveInfo cam = packageManager.resolveActivity(captureIntent, 0);
+//        captureIntent.setComponent(new ComponentName(cam.activityInfo.packageName, cam.activityInfo.name));
+//        captureIntent.setPackage(cam.activityInfo.packageName);
+//        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 
         // Filesystem.
         final Intent galleryIntent = new Intent();
@@ -234,16 +210,16 @@ public class Home extends AppCompatActivity {
         final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
 
         // Add the camera options.
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, captureIntent);
 
-        startActivityForResult(chooserIntent, R.integer.GalleryIntent);
+        startActivityForResult(chooserIntent, GALLERY_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == R.integer.GalleryIntent) {
+            if (requestCode == GALLERY_CODE) {
                 final boolean isCamera;
                 if (data == null || data.getData() == null) {
                     isCamera = true;
@@ -255,13 +231,54 @@ public class Home extends AppCompatActivity {
                         isCamera = action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
                     }
                 }
-                Uri selectedImageUri;
                 if (isCamera) {
-                    selectedImageUri = outputFileUri;
+                    outputFileUri = null;
                 } else {
-                    selectedImageUri = data == null ? null : data.getData();
+                    outputFileUri = data == null ? null : data.getData();
                 }
+                try {
+                    user.bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), outputFileUri);
+                    int dim = user.bitmapImage.getHeight() > user.bitmapImage.getWidth() ? user.bitmapImage.getWidth() : user.bitmapImage.getHeight();
+                    Bitmap crop = Bitmap.createBitmap(user.bitmapImage, 0, 0, dim, dim);
+                    user.bitmapImage = Bitmap.createScaledBitmap(crop, DISPLAY_PICTURE_RESOLUTION, DISPLAY_PICTURE_RESOLUTION, false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (user.bitmapImage != null) {
+                    try {
+                        FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
+                        user.bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Toast.makeText(this, fetchProfileImage() ? "Display picture set" : "Failed to set display picture", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private boolean fetchProfileImage() {
+        if (user.bitmapImage == null) {
+            final File imageFile = new File(getFilesDir(), PROFILE_IMAGE);
+            user.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            return true;
+        }
+        return false;
+    }
+
+    private void deleteProfileImage() {
+        File file = new File(getFilesDir(), PROFILE_IMAGE);
+        if (file.isFile()) {
+            file.delete();
+        }
+        Toast.makeText(this, fetchProfileImage() ? "Failed to remove Profile Image" : "Profile Image removed", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean refreshProfileImage() {
+        if (user.bitmapImage != null) {
+            final File imageFile = new File(getFilesDir(), PROFILE_IMAGE);
+        }
+        return false;
     }
 }
