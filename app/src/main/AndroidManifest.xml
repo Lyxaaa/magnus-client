@@ -46,6 +46,11 @@
             android:name="com.deco.magnus.ActivityScreens.Chess"
             android:screenOrientation="landscape"
             />
+
+        <activity
+            android:name="com.deco.magnus.ActivityScreens.FriendsScreen"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

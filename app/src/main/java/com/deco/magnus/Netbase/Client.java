@@ -7,7 +7,10 @@ import com.google.gson.Gson;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public abstract class Client {
     public static int VERSION = 0;
@@ -18,7 +21,7 @@ public abstract class Client {
     private List<OnDisconnectListener> OnDisconnectListeners = new ArrayList<>();
 
     public interface OnReceiveListener {
-        void OnReceive(SocketType socketType, DataType dataType, Object data);
+        boolean OnReceive(SocketType socketType, DataType dataType, Object data);
     }
 
     public interface OnDisconnectListener {
@@ -119,6 +122,18 @@ public abstract class Client {
         OnDisconnectListeners.add(listener);
     }
 
+    public void addOnReceiveListener(OnReceiveListener listener, long timeoutMillis) {
+        addOnReceiveListener(listener);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                removeOnReceiveListener(listener);
+            }
+        }, timeoutMillis);
+    }
+
     public void removeOnReceiveListener(OnReceiveListener listener) {
         OnReceiveListeners.remove(listener);
     }
@@ -128,8 +143,12 @@ public abstract class Client {
     }
 
     public void invokeOnReceiveListeners(SocketType socketType, DataType dataType, Object data) {
-        for (OnReceiveListener listener : OnReceiveListeners) {
-            listener.OnReceive(socketType, dataType, data);
+        Iterator<OnReceiveListener> itr = OnReceiveListeners.iterator();
+        while (itr.hasNext()) {
+            OnReceiveListener listener = itr.next();
+            if (listener.OnReceive(socketType, dataType, data)) {
+                OnReceiveListeners.remove(listener);
+            }
         }
     }
 

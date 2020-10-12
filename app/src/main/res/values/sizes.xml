@@ -15,7 +15,9 @@
     <dimen name="actionTrayMargin">10dp</dimen>
     <dimen name="flowTrayImage">25dp</dimen>
     <dimen name="chatSidebarProfilePic">80dp</dimen>
-    <dimen name="profilePicRadius">250dp</dimen>
+    <dimen name="profilePicRadius">80dp</dimen>
+    <dimen name="profileBorderRadius">85dp</dimen>
     <dimen name="friendLayoutPadding">5dp</dimen>
     <dimen name="chatMessageTextSize">3.5pt</dimen>
+    <dimen name="searchFriend">50dp</dimen>
 </resources>

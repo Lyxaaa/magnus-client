@@ -40,8 +40,8 @@ public class User extends Message {
     public final String id;
     private boolean authorised;
     private String bio;
-    private byte[] byteImage;
-    private Bitmap bitmapImage;
+    public byte[] byteImage;
+    public Bitmap bitmapImage;
     public int profilePicDrawable;
 
     public User(String id, String username, String email, String bio, byte[] profilePic, Activity activity) {
@@ -98,14 +98,15 @@ public class User extends Message {
     public void updateFriends(getFriendsResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
-            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Update Friends", "Made it into onReceive");
                 GetFriendsResult result = TryCast(dataType, data, Type.GetFriendsResult.getValue(), GetFriendsResult.class);
                 if (result != null) {
-                    Client.getInstance().removeOnReceiveListener(this);
                     listener.OnGetFriendsResult(result);
                     Log.d("Login Data", "Result: " + result);
+                    return true;
                 }
+                return false;
             }
         });
         Client.getInstance().threadSafeSend(new GetFriends(this.email));
@@ -177,14 +178,15 @@ public class User extends Message {
     public static void authenticateUser(String name, String pword, final loginResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
-            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Login Info", "Made it into onReceive");
                 LoginResult result = TryCast(dataType, data, Type.LoginResult.getValue(), LoginResult.class);
                 if (result != null) {
-                    Client.getInstance().removeOnReceiveListener(this);
                     listener.OnLoginResult(result);
                     Log.d("Login Data", "Result: " + result);
+                    return true;
                 }
+                return false;
             }
         });
         Client.getInstance().threadSafeSend(new Login(name, pword));
@@ -193,15 +195,15 @@ public class User extends Message {
     public static void registerUser(String name, String pword, final loginResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
-            public void OnReceive(SocketType socketType, DataType dataType, Object data) {
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Registration Info", "Made it into onReceive");
                 LoginResult result = TryCast(dataType, data, Type.LoginResult.getValue(), LoginResult.class);
                 if (result != null) {
-                    Client.getInstance().removeOnReceiveListener(this);
                     listener.OnLoginResult(result);
                     Log.d("Registration Data", "Result: " + result.result.getValue());
-
+                    return true;
                 }
+                return false;
             }
         });
         Client.getInstance().threadSafeSend(new RegisterUser(name, pword, name, "Hey I am new here"));
