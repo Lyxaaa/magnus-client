@@ -7,8 +7,8 @@ public enum Type {
     Heartbeat(1),
 
     Disconnect(2),
-    Initialise(3),         //not sure how we are handling this
-    InitialiseResult(4),   //not sure how we are handling this
+    Initialise(3),
+    InitialiseResult(4),
 
     RegisterUser(5),
     MessageResult(6),
@@ -53,7 +53,13 @@ public enum Type {
     GetMatchHistory(32),
     GetMatchHistoryResult(33),
 
-    GenericResult(34),
+    AcceptChallenge(34),
+    UpdateBoard(35),
+    GetBoardState(36),
+    BoardResult(37),
+
+    RetrieveOtherUsers(38),
+    RetrieveOtherUsersResult(39),
 
     Unknown(Integer.MAX_VALUE);
 

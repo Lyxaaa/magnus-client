@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 String oscarsPCExt = "49.3.201.65";
                 String oscarsPCInt = "192.168.0.6";
                 String cysPCInt =  "192.168.1.42";
+                String markPC =  "192.168.171.34";
 
                 String target = oscarsPCInt;
 
