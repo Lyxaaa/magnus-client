@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
     EditText email, pword, cfrmPword;
     Button submitLogin, submitRegister;
 
-    private static User loggedUser;
+    //changed to public so i can access
+    public static User loggedUser;
 
     public static void setLoggedUser(User user) {
         if (user != null) {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 String cysPCInt =  "192.168.1.42";
                 String markPC =  "192.168.171.34";
 
-                String target = oscarsPCInt;
+                String target = markPC;
 
                 Client.getInstance().connect(target, 2457);
             } catch (Exception e) {

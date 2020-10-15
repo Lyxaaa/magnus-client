@@ -63,6 +63,7 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
+        /*
         user.updateFriends(friends -> {
             if (friends.result == GetFriendsResult.Result.Success) {
                 GetFriendsResult friendsResult = friends;
@@ -70,6 +71,7 @@ public class Home extends AppCompatActivity {
 //                user.unstableAddFriend(friends.);
             }
         });
+         */
 
         final FrameLayout gameBtn = findViewById(R.id.home_game_frame);
         final FrameLayout chatBtn = findViewById(R.id.home_chat_frame);
@@ -180,7 +182,7 @@ public class Home extends AppCompatActivity {
     }
 
     private String getUniqueImageFilename() {
-        return "img_"+ System.currentTimeMillis() + ".jpg";
+        return "img_" + System.currentTimeMillis() + ".jpg";
     }
 
     private void openImageIntent() {

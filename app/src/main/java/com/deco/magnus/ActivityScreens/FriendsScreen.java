@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -18,6 +19,8 @@ import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.GetFriends;
 import com.deco.magnus.ProjectNet.Messages.GetFriendsResult;
+import com.deco.magnus.ProjectNet.Messages.RetrieveOtherUsers;
+import com.deco.magnus.ProjectNet.Messages.RetrieveOtherUsersResult;
 import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Type;
@@ -27,6 +30,7 @@ import com.deco.magnus.UserData.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.deco.magnus.ActivityScreens.MainActivity.loggedUser;
 import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
 public class FriendsScreen extends AppCompatActivity {
@@ -57,8 +61,10 @@ public class FriendsScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String search = searchFriendTxt.getText().toString();
-                searchFriends(search, (GetFriendsResult friends) -> runOnUiThread(() -> {
+                //String newsearch = loggedUser.getEmail();
+                searchFriends(search, (friends) -> runOnUiThread(() -> {
                     for (int i = 0; i < friends.userId.length; i++) {
+                        Toast.makeText(v.getContext() ,friends.name[i],Toast.LENGTH_SHORT).show();
                         searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], "bio", null, activity));
                     }
                 }));
@@ -68,7 +74,7 @@ public class FriendsScreen extends AppCompatActivity {
 
     //TODO Change this to listen for all users when implemented
     public interface searchListener {
-        void OnFriendsResult(GetFriendsResult GetFriendsResult);
+        void OnFriendsResult(RetrieveOtherUsersResult RetrieveOtherUsersResult);
     }
 
     /**
@@ -80,8 +86,8 @@ public class FriendsScreen extends AppCompatActivity {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
-                Log.d("Login Info", "Made it into onReceive");
-                GetFriendsResult result = TryCast(dataType, data, Type.GetFriendsResult.getValue(), GetFriendsResult.class);
+                Log.d("Message", "Made it into onReceive " + (json));
+                RetrieveOtherUsersResult result = TryCast(dataType, data, Type.RetrieveOtherUsersResult.getValue(), RetrieveOtherUsersResult.class);
                 if (result != null) {
                     listener.OnFriendsResult(result);
                     Log.d("Friends Data", "Result: " + result);
@@ -90,7 +96,7 @@ public class FriendsScreen extends AppCompatActivity {
                 return false;
             }
         });
-        Client.getInstance().threadSafeSend(new GetFriends(search));
+        Client.getInstance().threadSafeSend(new RetrieveOtherUsers(loggedUser.getEmail(),search,10,0));
     }
 
     private void drawFriends() {

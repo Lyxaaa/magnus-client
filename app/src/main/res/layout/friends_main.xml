@@ -1,47 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/search_friend_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/search_friend" />
+
         <ImageView
             android:id="@+id/search_friends_asset_clickable"
             android:layout_width="@dimen/searchFriend"
             android:layout_height="@dimen/searchFriend"
+            android:layout_weight="0"
             android:background="@drawable/search"
-            android:clickable="true"/>
-        <EditText
-            android:id="@+id/search_friend_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/search_friend" />
+            android:clickable="true" />
+
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/search_friends_linear_layout_holder"
+    <ScrollView
+        android:id="@+id/search_friends_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
-        <ScrollView
-            android:id="@+id/search_friends_scroll_view"
+        <LinearLayout
+            android:id="@+id/search_friends_linear_layout_scroller"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/search_friends_linear_layout_scroller"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

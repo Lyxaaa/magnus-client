@@ -1,10 +1,10 @@
 package com.deco.magnus.ProjectNet.Messages;
 
 public class RetrieveOtherUsersResult extends MessageResult {
-    String[] userId;
-    String[] email;
-    String[] name;
-    String[] bio;
+    public String[] userId;
+    public String[] email;
+    public String[] name;
+    public String[] bio;
 
 
     public RetrieveOtherUsersResult(String[] name, String[] userId, String[] email, String[] bio) {
