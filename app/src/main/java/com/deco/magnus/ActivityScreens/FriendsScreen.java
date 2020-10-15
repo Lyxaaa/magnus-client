@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.deco.magnus.Netbase.DataType;
+import com.deco.magnus.Netbase.JsonMsg;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.GetFriends;
@@ -74,7 +75,7 @@ public class FriendsScreen extends AppCompatActivity {
 
     //TODO Change this to listen for all users when implemented
     public interface searchListener {
-        void OnFriendsResult(RetrieveOtherUsersResult RetrieveOtherUsersResult);
+        void OnFriendsResult(RetrieveOtherUsersResult retrieveOtherUsersResult);
     }
 
     /**
@@ -86,7 +87,7 @@ public class FriendsScreen extends AppCompatActivity {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
-                Log.d("Message", "Made it into onReceive " + (json));
+                Log.d("Message", "Made it into onReceive " + ((JsonMsg) data).type);
                 RetrieveOtherUsersResult result = TryCast(dataType, data, Type.RetrieveOtherUsersResult.getValue(), RetrieveOtherUsersResult.class);
                 if (result != null) {
                     listener.OnFriendsResult(result);
