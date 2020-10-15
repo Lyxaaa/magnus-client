@@ -64,9 +64,11 @@ public class FriendsScreen extends AppCompatActivity {
                 String search = searchFriendTxt.getText().toString();
                 //String newsearch = loggedUser.getEmail();
                 searchFriends(search, (friends) -> runOnUiThread(() -> {
+                    searchResult = new ArrayList<>();
                     for (int i = 0; i < friends.userId.length; i++) {
                         Toast.makeText(v.getContext() ,friends.name[i],Toast.LENGTH_SHORT).show();
                         searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], "bio", null, activity));
+                        drawFriends();
                     }
                 }));
             }
@@ -101,9 +103,9 @@ public class FriendsScreen extends AppCompatActivity {
     }
 
     private void drawFriends() {
-        LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
+        LinearLayout layout = findViewById(R.id.search_friends_linear_layout_scroller);
 
-        for (User friend : user.getFriends()) {
+        for (User friend : searchResult) {
 
             // Values related to the current displays dimensions
             int layoutSize = (int) (80 * density);
