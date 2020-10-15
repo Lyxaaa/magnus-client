@@ -17,6 +17,7 @@ import com.deco.magnus.ProjectNet.Messages.Message;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.RegisterUser;
 import com.deco.magnus.ProjectNet.Messages.Type;
+import com.deco.magnus.ProjectNet.Messages.UpdateUserProfile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -164,6 +165,14 @@ public class User extends Message {
         return blob.toByteArray();
     }
 
+    public void bitmapToBytes() {
+        Bitmap image = BitmapFactory.decodeFile(new File("profile.jpg").getAbsolutePath());
+        ByteArrayOutputStream blob = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, blob);
+        byteImage = blob.toByteArray();
+
+    }
+
     public interface loginResultListener {
         void OnLoginResult(LoginResult loginResult);
     }
@@ -207,6 +216,25 @@ public class User extends Message {
             }
         });
         Client.getInstance().threadSafeSend(new RegisterUser(name, pword, name, "Hey I am new here"));
+    }
+
+    public interface updateProfileImageListener {
+        void OnUpdateProfileImageResult(MessageResult messageResult);
+    }
+
+    public void updateProfileImage(final updateProfileImageListener listener) {
+        Client.getInstance().addOnReceiveListener(new Client.OnReceiveListener() {
+            @Override
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
+                MessageResult result = TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
+                if (result != null) {
+                    listener.OnUpdateProfileImageResult(result);
+                    Log.d("Profile Image", "Result: " + result.result);
+                }
+                return false;
+            }
+        });
+        Client.getInstance().threadSafeSend(new UpdateUserProfile(this.email, this.username, this.bio, byteImage));
     }
 
     public String getEmail() {

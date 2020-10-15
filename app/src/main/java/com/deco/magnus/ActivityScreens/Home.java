@@ -1,5 +1,6 @@
 package com.deco.magnus.ActivityScreens;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -48,6 +50,9 @@ public class Home extends AppCompatActivity {
     final int GALLERY_CODE = 27;
     final int DISPLAY_PICTURE_RESOLUTION = 256;
     final String PROFILE_IMAGE = "profile.jpg";
+    Activity activity = this;
+
+    ImageView profileImage;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -84,7 +89,7 @@ public class Home extends AppCompatActivity {
         final TextView gameTxt = findViewById(R.id.home_game_txt);
         final TextView chatTxt = findViewById(R.id.home_chat_txt);
         final TextView friendsTxt = findViewById(R.id.home_friends_txt);
-        final ImageView profileImage = findViewById(R.id.profile_image);
+        profileImage = findViewById(R.id.profile_image);
 
         gameBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -147,8 +152,6 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createProfile(v);
-                profileImage.setImageURI(null);
-                profileImage.setImageURI(outputFileUri);
             }
         });
     }
@@ -220,26 +223,13 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == GALLERY_CODE) {
-                final boolean isCamera;
-                if (data == null || data.getData() == null) {
-                    isCamera = true;
-                } else {
-                    final String action = data.getAction();
-                    if (action == null) {
-                        isCamera = false;
-                    } else {
-                        isCamera = action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
-                }
-                if (isCamera) {
-                    outputFileUri = null;
-                } else {
-                    outputFileUri = data == null ? null : data.getData();
-                }
+        if (resultCode == RESULT_OK && requestCode == GALLERY_CODE) {
+            if (data != null) {
+                final String action = data.getAction();
+                profileImage.setImageURI(data.getData());
+                profileImage.refreshDrawableState();
                 try {
-                    user.bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), outputFileUri);
+                    user.bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                     int dim = user.bitmapImage.getHeight() > user.bitmapImage.getWidth() ? user.bitmapImage.getWidth() : user.bitmapImage.getHeight();
                     Bitmap crop = Bitmap.createBitmap(user.bitmapImage, 0, 0, dim, dim);
                     user.bitmapImage = Bitmap.createScaledBitmap(crop, DISPLAY_PICTURE_RESOLUTION, DISPLAY_PICTURE_RESOLUTION, false);
@@ -255,16 +245,26 @@ public class Home extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                Toast.makeText(this, fetchProfileImage() ? "Display picture set" : "Failed to set display picture", Toast.LENGTH_SHORT).show();
+                boolean check = updateProfileImage();
             }
         }
     }
 
-    private boolean fetchProfileImage() {
+    private boolean updateProfileImage() {
         if (user.bitmapImage == null) {
             final File imageFile = new File(getFilesDir(), PROFILE_IMAGE);
-            user.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-            return true;
+            try {
+                FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
+                user.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                user.bitmapToBytes();
+                user.updateProfileImage(messageResult -> runOnUiThread(() -> {
+                    Toast.makeText(activity, messageResult.result == MessageResult.Result.Success ? "Successfully Updated Profile Picture" : "Failed to Update Profile Picture", Toast.LENGTH_SHORT).show();
+                }));
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -274,7 +274,7 @@ public class Home extends AppCompatActivity {
         if (file.isFile()) {
             file.delete();
         }
-        Toast.makeText(this, fetchProfileImage() ? "Failed to remove Profile Image" : "Profile Image removed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, updateProfileImage() ? "Failed to remove Profile Image" : "Profile Image removed", Toast.LENGTH_SHORT).show();
     }
 
     private boolean refreshProfileImage() {
