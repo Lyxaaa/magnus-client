@@ -41,7 +41,6 @@ public class User extends Message {
     public final String id;
     private boolean authorised;
     private String bio;
-    public byte[] byteImage;
     public Bitmap bitmapImage;
     public int profilePicDrawable;
 
@@ -51,7 +50,6 @@ public class User extends Message {
         this.username = username;
         this.email = email;
         this.bio = bio;
-        this.byteImage = profilePic;
         this.bitmapImage = bytesToBitmap(profilePic);
     }
 
@@ -165,12 +163,11 @@ public class User extends Message {
         return blob.toByteArray();
     }
 
-    public void bitmapToBytes() {
+    public byte[] bitmapToBytes() {
         Bitmap image = BitmapFactory.decodeFile(new File("profile.jpg").getAbsolutePath());
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, blob);
-        byteImage = blob.toByteArray();
-
+        return blob.toByteArray();
     }
 
     public interface loginResultListener {
@@ -234,7 +231,7 @@ public class User extends Message {
                 return false;
             }
         });
-        Client.getInstance().threadSafeSend(new UpdateUserProfile(this.email, this.username, this.bio, byteImage));
+        Client.getInstance().threadSafeSend(new UpdateUserProfile(this.email, this.username, this.bio, bitmapToBytes()));
     }
 
     public String getEmail() {

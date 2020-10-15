@@ -239,8 +239,12 @@ public class Home extends AppCompatActivity {
                 if (user.bitmapImage != null) {
                     try {
                         FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
-                        user.bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);
                         out.close();
+                        user.bitmapToBytes();
+                        user.updateProfileImage(messageResult -> runOnUiThread(() -> {
+                            Toast.makeText(activity, messageResult.result == MessageResult.Result.Success ? "Successfully Updated Profile Picture" : "Failed to Update Profile Picture", Toast.LENGTH_SHORT).show();
+                        }));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -257,10 +261,8 @@ public class Home extends AppCompatActivity {
                 FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
                 user.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                user.bitmapToBytes();
-                user.updateProfileImage(messageResult -> runOnUiThread(() -> {
-                    Toast.makeText(activity, messageResult.result == MessageResult.Result.Success ? "Successfully Updated Profile Picture" : "Failed to Update Profile Picture", Toast.LENGTH_SHORT).show();
-                }));
+
+
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
