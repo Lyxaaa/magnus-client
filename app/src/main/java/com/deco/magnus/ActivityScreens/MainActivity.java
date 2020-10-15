@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 String cysPCInt =  "192.168.1.42";
                 String markPC =  "192.168.171.34";
 
-                String target = oscarsPCInt;
+                String target = markPC;
 
                 Client.getInstance().connect(target, 2457);
             } catch (Exception e) {

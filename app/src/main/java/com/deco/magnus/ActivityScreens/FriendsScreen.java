@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class FriendsScreen extends AppCompatActivity {
 
         final EditText searchFriendTxt = findViewById(R.id.search_friend_edit_text);
         final ImageView searchFriendBtn = findViewById(R.id.search_friends_asset_clickable);
+        final LinearLayout friendsLayout = findViewById(R.id.search_friends_linear_layout_scroller);
 
         searchFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,10 +67,18 @@ public class FriendsScreen extends AppCompatActivity {
                 //String newsearch = loggedUser.getEmail();
                 searchFriends(search, (friends) -> runOnUiThread(() -> {
                     searchResult = new ArrayList<>();
+                    friendsLayout.removeAllViews();
+                    if (friends.userId.length == 0) {
+                        Toast.makeText(v.getContext(), "no matches found", Toast.LENGTH_SHORT).show();
+                    }
                     for (int i = 0; i < friends.userId.length; i++) {
-                        Toast.makeText(v.getContext() ,friends.name[i],Toast.LENGTH_SHORT).show();
-                        searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], "bio", null, activity));
-                        drawFriends();
+                        searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], friends.bio[i], null, activity));
+                        View box = getLayoutInflater().inflate(R.layout.friend_box, null);
+                        TextView friendname = box.findViewById(R.id.txt_name);
+                        friendname.setText(friends.name[i]);
+                        TextView friendbio = box.findViewById(R.id.txt_bio);
+                        friendbio.setText(friends.bio[i]);
+                        friendsLayout.addView(box);
                     }
                 }));
             }
@@ -99,15 +109,15 @@ public class FriendsScreen extends AppCompatActivity {
                 return false;
             }
         });
-        Client.getInstance().threadSafeSend(new RetrieveOtherUsers(loggedUser.getEmail(),search,10,0));
+        Client.getInstance().threadSafeSend(new RetrieveOtherUsers(loggedUser.getEmail(), search, 10, 0));
     }
 
     private void drawFriends() {
         LinearLayout layout = findViewById(R.id.search_friends_linear_layout_scroller);
-
+        layout.removeAllViews();
         for (User friend : searchResult) {
 
-            // Values related to the current displays dimensions
+            /*// Values related to the current displays dimensions
             int layoutSize = (int) (80 * density);
 
             // Initialise layout for entire clickable profile
@@ -134,7 +144,7 @@ public class FriendsScreen extends AppCompatActivity {
             // Initialise profile name
             TextView profileName = new TextView(this);
             profileName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            profileName.setText(friend.getEmail());
+            profileName.setText(friend.username);
             profileName.setGravity(Gravity.CENTER);
 
             // Add views to their containers
@@ -148,7 +158,7 @@ public class FriendsScreen extends AppCompatActivity {
                 public void onClick(View v) {
                     //TODO Buttons can be created here to do a certain thing for every friend we create
                 }
-            });
+            });*/
         }
     }
 }
