@@ -254,59 +254,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-//        final TextView socket_test = findViewById(R.id.socket_test);
         DataTransmission dataTransmission = new DataTransmission();
 
-//        final LinearLayout home_sidebar = findViewById(R.id.home_sidebar);
-//        final Button btn_friends = findViewById(R.id.btn_friends);
-//        final Button btn_games = findViewById(R.id.btn_games);
-//        final Button btn_chat = findViewById(R.id.btn_chat);
-//        final Button btn_profile = findViewById(R.id.btn_profile);
-
-//        home_sidebar.setMinimumWidth(btn_friends.getHeight());
-//        btn_friends.setWidth(btn_friends.getHeight());
-//        btn_games.setWidth(btn_games.getHeight() );
-//        btn_chat.setWidth(btn_chat.getHeight());
-//        btn_profile.setWidth(btn_profile.getHeight());
-
-
         getSupportFragmentManager().beginTransaction().add(MessageFragment.newInstance(), lastFragTag).commitAllowingStateLoss();
-
-//        btn_friends.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btn_friends.setTextColor(Color.rgb(100, 200, 0));
-//
-//            }
-//        });
-
-//        btn_chat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentTransaction ft = fragmentManager.beginTransaction();
-//                Fragment previous = fragmentManager.findFragmentByTag(lastFragTag);
-//                if (previous != null) {
-//                    ft.remove(previous);
-//                }
-//                lastFragTag = "chatFrag";
-//                ft.add(MessageFragment.newInstance(), lastFragTag).commit();
-//                Fragment current = fragmentManager.findFragmentByTag(lastFragTag);
-//                ViewGroup.LayoutParams frag_chat_params = current.getView().getLayoutParams();
-////                frag_chat_params.width = 150;
-////                current.getView().setLayoutParams(frag_chat_params);
-//            }
-//        });
-
-//        ViewTreeObserver obsv_friends = btn_friends.getViewTreeObserver();
-//        obsv_friends.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//            }
-//        });
-//        getSocketData();
-//        socket_test.setText(socketData);
     }
 
     public void createHome(View view) {

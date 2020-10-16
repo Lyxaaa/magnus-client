@@ -30,8 +30,16 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.deco.magnus.Netbase.DataType;
+import com.deco.magnus.Netbase.SocketType;
+import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.GetFriendsResult;
+import com.deco.magnus.ProjectNet.Messages.Login;
+import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
+import com.deco.magnus.ProjectNet.Messages.RetrieveUserProfile;
+import com.deco.magnus.ProjectNet.Messages.RetrieveUserProfileResult;
+import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
@@ -41,6 +49,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
 public class Home extends AppCompatActivity {
     GlobalSupport support = new GlobalSupport();
@@ -90,6 +100,7 @@ public class Home extends AppCompatActivity {
         final TextView chatTxt = findViewById(R.id.home_chat_txt);
         final TextView friendsTxt = findViewById(R.id.home_friends_txt);
         profileImage = findViewById(R.id.profile_image);
+        refreshProfileImage();
 
         gameBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -194,79 +205,61 @@ public class Home extends AppCompatActivity {
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
         final String fname = getUniqueImageFilename();
-//        final File sdImageMainDirectory = new File(root, fname);
-//        outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
         // Camera.
         final Intent cameraIntent = new Intent();
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getPackageManager();
         final ResolveInfo cam = packageManager.resolveActivity(captureIntent, 0);
-//        captureIntent.setComponent(new ComponentName(cam.activityInfo.packageName, cam.activityInfo.name));
-//        captureIntent.setPackage(cam.activityInfo.packageName);
-//        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        final Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
 
-        // Filesystem.
-        final Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-        // Chooser of filesystem options.
-        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
-
-        // Add the camera options.
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, captureIntent);
-
-        startActivityForResult(chooserIntent, GALLERY_CODE);
+        startActivityForResult(galleryIntent, GALLERY_CODE);
     }
 
+    // Required method for startActivityForResult, grabs an image from the phones local storage
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == GALLERY_CODE) {
             if (data != null) {
-                final String action = data.getAction();
                 profileImage.setImageURI(data.getData());
                 profileImage.refreshDrawableState();
                 try {
+                    Log.d("Profile", "Updating user.bitmapImage");
                     user.bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                     int dim = user.bitmapImage.getHeight() > user.bitmapImage.getWidth() ? user.bitmapImage.getWidth() : user.bitmapImage.getHeight();
                     Bitmap crop = Bitmap.createBitmap(user.bitmapImage, 0, 0, dim, dim);
                     user.bitmapImage = Bitmap.createScaledBitmap(crop, DISPLAY_PICTURE_RESOLUTION, DISPLAY_PICTURE_RESOLUTION, false);
+                    Log.d("Profile", "Cropping");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 if (user.bitmapImage != null) {
                     try {
-                        FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
+                        FileOutputStream out = new FileOutputStream(new File(getFilesDir(), PROFILE_IMAGE));
                         user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);
-                        out.close();
                         user.bitmapToBytes();
                         user.updateProfileImage(messageResult -> runOnUiThread(() -> {
                             Toast.makeText(activity, messageResult.result == MessageResult.Result.Success ? "Successfully Updated Profile Picture" : "Failed to Update Profile Picture", Toast.LENGTH_SHORT).show();
                         }));
+                        out.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                boolean check = updateProfileImage();
+//                Toast.makeText(activity, updateProfileImage() ? "Changed Profile Picture" : "Failed to Change Profile Picture", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private boolean updateProfileImage() {
-        if (user.bitmapImage == null) {
-            final File imageFile = new File(getFilesDir(), PROFILE_IMAGE);
-            try {
-                FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
-                user.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
-
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
+            user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -279,10 +272,47 @@ public class Home extends AppCompatActivity {
         Toast.makeText(this, updateProfileImage() ? "Failed to remove Profile Image" : "Profile Image removed", Toast.LENGTH_SHORT).show();
     }
 
-    private boolean refreshProfileImage() {
-        if (user.bitmapImage != null) {
-            final File imageFile = new File(getFilesDir(), PROFILE_IMAGE);
-        }
-        return false;
+    public interface fetchProfileDataListener {
+        void OnProfileDataReceive(RetrieveUserProfileResult retrieveUserProfileResult);
+    }
+
+    public static void fetchProfileData(String email, final fetchProfileDataListener listener) {
+        long start = System.currentTimeMillis();
+        Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
+            @Override
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
+                Log.d("Refresh Image", "Made it into onReceive");
+                RetrieveUserProfileResult result = TryCast(dataType, data, Type.RetrieveUserProfileResult.getValue(), RetrieveUserProfileResult.class);
+                if (result != null || start < System.currentTimeMillis() + 1000) {
+                    listener.OnProfileDataReceive(result);
+                    Log.d("Refresh Image", "Result: " + result);
+                    return true;
+                }
+                return false;
+            }
+        });
+        Client.getInstance().threadSafeSend(new RetrieveUserProfile(email));
+    }
+
+    private void refreshProfileImage() {
+        fetchProfileData(user.getEmail(), profileResult -> runOnUiThread(() -> {
+            if (profileResult != null) {
+                user.bitmapImage = user.bytesToBitmap(profileResult.profile);
+                try {
+                    FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
+                    user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                File image = new File(getFilesDir(), PROFILE_IMAGE);
+                user.bitmapImage = BitmapFactory.decodeFile(image.getAbsolutePath());
+            }
+
+            Log.d("Profile", "Init Profile Picture");
+            profileImage.setImageURI(Uri.fromFile(new File(getFilesDir(), PROFILE_IMAGE)));
+            profileImage.refreshDrawableState();
+        }));
     }
 }

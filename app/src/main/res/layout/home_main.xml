@@ -33,7 +33,6 @@
                     android:id="@+id/profile_image"
                     android:layout_width="@dimen/profilePicRadius"
                     android:layout_height="@dimen/profilePicRadius"
-                    android:src="@drawable/test"
                     android:scaleType="centerCrop"/>
 
             </androidx.cardview.widget.CardView>

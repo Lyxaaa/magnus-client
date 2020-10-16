@@ -1,11 +1,11 @@
 package com.deco.magnus.ProjectNet.Messages;
 
 public class RetrieveUserProfileResult extends MessageResult {
-    String userId;
-    String email;
-    String name;
-    String bio;
-    byte[] profile;
+    public String userId;
+    public String email;
+    public String name;
+    public String bio;
+    public byte[] profile;
 
     public RetrieveUserProfileResult(String userId, String email, String name, String bio, byte[] profile) {
         this.type = Type.RetrieveUserProfileResult.getValue();

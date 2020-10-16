@@ -8,7 +8,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
-        applicationId "com.personal.deco3801_app"
+        applicationId "com.deco.magnus"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1

@@ -164,9 +164,8 @@ public class User extends Message {
     }
 
     public byte[] bitmapToBytes() {
-        Bitmap image = BitmapFactory.decodeFile(new File("profile.jpg").getAbsolutePath());
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, blob);
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, blob);
         return blob.toByteArray();
     }
 
