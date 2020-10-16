@@ -36,7 +36,7 @@ public class User extends Message {
     private Map<String, List<Chat>> chats = new ArrayMap<>();
     public Activity activity;
     private List<User> friends = new ArrayList<>();
-    private final String username;
+    public final String username;
     private final String email;
     public final String id;
     private boolean authorised;
@@ -251,6 +251,7 @@ public class User extends Message {
             }
         }
     }
+
 
     /**
      *
