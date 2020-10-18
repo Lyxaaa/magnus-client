@@ -1,11 +1,16 @@
 package com.deco.magnus.ActivityScreens;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,18 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.JsonMsg;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
-import com.deco.magnus.ProjectNet.Messages.GetFriends;
-import com.deco.magnus.ProjectNet.Messages.GetFriendsResult;
 import com.deco.magnus.ProjectNet.Messages.RetrieveOtherUsers;
 import com.deco.magnus.ProjectNet.Messages.RetrieveOtherUsersResult;
-import com.deco.magnus.ProjectNet.Messages.Login;
-import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
@@ -60,28 +60,45 @@ public class FriendsScreen extends AppCompatActivity {
         final ImageView searchFriendBtn = findViewById(R.id.search_friends_asset_clickable);
         final LinearLayout friendsLayout = findViewById(R.id.search_friends_linear_layout_scroller);
 
-        searchFriendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String search = searchFriendTxt.getText().toString();
-                //String newsearch = loggedUser.getEmail();
-                searchFriends(search, (friends) -> runOnUiThread(() -> {
-                    searchResult = new ArrayList<>();
-                    friendsLayout.removeAllViews();
-                    if (friends.userId.length == 0) {
-                        Toast.makeText(v.getContext(), "no matches found", Toast.LENGTH_SHORT).show();
-                    }
-                    for (int i = 0; i < friends.userId.length; i++) {
-                        searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], friends.bio[i], null, activity));
-                        View box = getLayoutInflater().inflate(R.layout.friend_box, null);
-                        TextView friendname = box.findViewById(R.id.txt_name);
-                        friendname.setText(friends.name[i]);
-                        TextView friendbio = box.findViewById(R.id.txt_bio);
-                        friendbio.setText(friends.bio[i]);
-                        friendsLayout.addView(box);
-                    }
-                }));
-            }
+        searchFriendBtn.setOnClickListener(v -> {
+            String search = searchFriendTxt.getText().toString();
+            searchFriends(search, (friends) -> runOnUiThread(() -> {
+                searchResult = new ArrayList<>();
+                friendsLayout.removeAllViews();
+                if (friends.userId.length == 0) {
+                    Toast.makeText(v.getContext(), "no matches found", Toast.LENGTH_SHORT).show();
+                }
+                for (int i = 0; i < friends.userId.length; i++) {
+                    searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], friends.bio[i], null, activity));
+                    View box = getLayoutInflater().inflate(R.layout.friend_box, null);
+                    TextView friendname = box.findViewById(R.id.txt_name);
+                    friendname.setText(friends.name[i]);
+                    TextView friendbio = box.findViewById(R.id.txt_bio);
+                    friendbio.setText(friends.bio[i]);
+                    friendsLayout.addView(box);
+
+                    // get profile picture
+                    // save to disk
+                    // set Bitmap displayPicture to that image
+
+                   /* ImageView friendImage = box.findViewById(R.id.img_friend_box);
+
+                    Bitmap displayPicture = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+                    Bitmap result = Bitmap.createBitmap(Home.DISPLAY_PICTURE_RESOLUTION, Home.DISPLAY_PICTURE_RESOLUTION, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(result);
+                    Paint paint = new Paint();
+
+                    // this is to get the damned display picture in a button_photo
+                    paint.setAntiAlias(true);
+                    paint.setColor(Color.parseColor("#FFFFFF"));
+                    canvas.drawCircle(Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, paint);
+                    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                    canvas.drawBitmap(displayPicture, 0, 0, paint);
+
+                    friendImage.setImageBitmap(result);*/
+                }
+            }));
         });
     }
 

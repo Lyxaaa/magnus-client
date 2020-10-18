@@ -58,8 +58,12 @@ public enum Type {
     GetBoardState(36),
     BoardResult(37),
 
+    //added 11/10/2020
     RetrieveOtherUsers(38),
     RetrieveOtherUsersResult(39),
+
+    //18/10/2020
+    ExitMatchQueue (40),
 
     Unknown(Integer.MAX_VALUE);
 

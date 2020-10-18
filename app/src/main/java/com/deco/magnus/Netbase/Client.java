@@ -24,6 +24,10 @@ public abstract class Client {
         boolean OnReceive(SocketType socketType, DataType dataType, Object data);
     }
 
+    public interface OnTimeoutListener {
+        void OnTimeout();
+    }
+
     public interface OnDisconnectListener {
         void OnDisconnect();
     }
@@ -51,6 +55,7 @@ public abstract class Client {
     }
 
     Object sendlock = new Object();
+
     public void send(SocketType socketType, DataType dataType, byte[] data) {
         synchronized (sendlock) {
             switch (socketType) {
@@ -122,20 +127,23 @@ public abstract class Client {
         OnDisconnectListeners.add(listener);
     }
 
-    public void addOnReceiveListener(OnReceiveListener listener, long timeoutMillis) {
-        addOnReceiveListener(listener);
+    public void addOnReceiveListener(OnReceiveListener onReceive, long timeoutMillis, OnTimeoutListener onTimeout) {
+        addOnReceiveListener(onReceive);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                removeOnReceiveListener(listener);
+                if (removeOnReceiveListener(onReceive)) {
+                    if (onTimeout != null)
+                        onTimeout.OnTimeout();
+                }
             }
         }, timeoutMillis);
     }
 
-    public void removeOnReceiveListener(OnReceiveListener listener) {
-        OnReceiveListeners.remove(listener);
+    public boolean removeOnReceiveListener(OnReceiveListener listener) {
+        return OnReceiveListeners.remove(listener);
     }
 
     public void removeOnDisconnectListener(OnDisconnectListener listener) {
