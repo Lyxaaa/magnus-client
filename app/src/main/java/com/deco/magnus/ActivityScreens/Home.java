@@ -58,7 +58,7 @@ public class Home extends AppCompatActivity {
     //Used for Gallery Image Picker
     private Uri outputFileUri;
     final int GALLERY_CODE = 27;
-    final int DISPLAY_PICTURE_RESOLUTION = 256;
+    final int DISPLAY_PICTURE_RESOLUTION = 100;
     final String PROFILE_IMAGE = "profile.jpg";
     Activity activity = this;
 
