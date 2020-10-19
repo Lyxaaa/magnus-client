@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -27,6 +28,11 @@ public class Board {
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
     public static final int SIZE = WIDTH * HEIGHT;
+
+    private int dark;
+    private int darker;
+    private int light;
+    private int white;
 
     //region Interaction Listener
     public interface OnInteractListener {
@@ -77,14 +83,24 @@ public class Board {
     static public String[] LETTERS = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
     static public String[] NUMBERS = new String[]{"8", "7", "6", "5", "4", "3", "2", "1"};
     static public int FONTSIZE = 6;
-    static public float EDGEWEIGHT = 1 / 18f;
-    static public float SQUAREWEIGHT = 1 / 9f;
+    static public float EDGEWEIGHT = 0;
+    static public float SQUAREWEIGHT = 1;
     //endregion
 
     @SuppressLint("ClickableViewAccessibility")
-    public Board(Activity a, final TableLayout table) {
+    public Board(Activity a, final TableLayout table, int fontSize) {
+        if (fontSize > 0) {
+            FONTSIZE = fontSize;
+        }
+
+        dark = a.getResources().getColor(R.color.dark);
+        darker = a.getResources().getColor(R.color.darker);
+        light = a.getResources().getColor(R.color.light);
+        white = a.getResources().getColor(R.color.white);
+
         activity = a;
         table.setGravity(Gravity.CENTER);
+        table.setBackgroundColor(darker);
 
         View topLeft = null;
         View botRight = null;
@@ -97,7 +113,7 @@ public class Board {
             row.setLayoutParams(
                     new TableRow.LayoutParams(
                             TableRow.LayoutParams.MATCH_PARENT,
-                            TableRow.LayoutParams.MATCH_PARENT,
+                            i == 0 || i == 9 ? FONTSIZE * 4 : TableRow.LayoutParams.MATCH_PARENT,
                             i == 0 || i == 9 ? EDGEWEIGHT : SQUAREWEIGHT
                     )
             );
@@ -112,28 +128,32 @@ public class Board {
                 square.setGravity(Gravity.CENTER);
                 square.setLayoutParams(
                         new TableRow.LayoutParams(
-                                TableRow.LayoutParams.MATCH_PARENT,
-                                TableRow.LayoutParams.MATCH_PARENT,
+                                j == 0 || j == 9 ? FONTSIZE * 4 : TableRow.LayoutParams.MATCH_PARENT,
+                                j == 0 || j == 9 ? FONTSIZE * 4 : TableRow.LayoutParams.MATCH_PARENT,
                                 j == 0 || j == 9 ? EDGEWEIGHT : SQUAREWEIGHT
                         )
                 );
                 square.setBackgroundColor(i == 0 || i == 9 || j == 0 || j == 9 ?
-                        Color.GRAY : getColourOfSquare(i, j));
+                        darker : getColourOfSquare(i, j));
                 //endregion
                 //region Squares and Labels
                 if ((i == 0 || i == 9) && (j > 0 && j < 9)) {
                     TextView tv = new TextView(activity);
                     square.addView(tv);
                     tv.setTextSize(FONTSIZE);
+                    tv.setHeight(FONTSIZE * 3);
+                    tv.setHeight(FONTSIZE * 3);
                     tv.setGravity(Gravity.CENTER);
-                    tv.setTextColor(Color.WHITE);
+                    tv.setTextColor(white);
                     tv.setText(LETTERS[j - 1]);
                 } else if ((j == 0 || j == 9) && (i > 0 && i < 9)) {
+                    FrameLayout fl = new FrameLayout(activity);
                     TextView tv = new TextView(activity);
                     square.addView(tv);
                     tv.setTextSize(FONTSIZE);
+
                     tv.setGravity(Gravity.CENTER);
-                    tv.setTextColor(Color.WHITE);
+                    tv.setTextColor(white);
                     tv.setText(NUMBERS[i - 1]);
                 } else if (i > 0 && i < 9) {
                     ImageView iv = new ImageView(activity);
@@ -245,8 +265,8 @@ public class Board {
 
     // gets if a square should be black or white
     int getColourOfSquare(int i, int j) {
-        if (i % 2 == j % 2) return Color.WHITE;
-        else return Color.DKGRAY;
+        if (i % 2 == j % 2) return light;
+        else return dark;
     }
 
     // gets the official name of the square

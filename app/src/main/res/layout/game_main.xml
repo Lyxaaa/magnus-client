@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundUnFocus"
     android:gravity="center"
     android:orientation="horizontal"
-    tools:context=".ActivityScreens.MainActivity"
-    android:id="@+id/game_main"
-    android:background="@color/backgroundFocus">
+    tools:context=".ActivityScreens.MainActivity">
 
     <LinearLayout
         android:id="@+id/layout_game_main"
