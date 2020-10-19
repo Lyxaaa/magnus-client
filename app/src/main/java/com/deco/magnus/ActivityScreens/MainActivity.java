@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.deco.magnus.DataTransmission;
+import com.deco.magnus.Games.Chess.GameState;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.R;
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater loginInflater = getLayoutInflater();
                 PopupWindow loginWindow = new PopupWindow(loginInflater.inflate(R.layout.login_main, null, false), rootLayout.getWidth(), rootLayout.getHeight(), true);
                 loginWindow.showAtLocation(activity.findViewById(R.id.root_layout), Gravity.CENTER, 0, getSupportActionBar().getHeight());
+
                 support.setSupportBarActive(getSupportActionBar(), true);
                 email = loginWindow.getContentView().findViewById(R.id.login_email_edit_text);
                 pword = loginWindow.getContentView().findViewById(R.id.login_password_edit_text);
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                     edit.apply();
                                 }
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, null, activity);
+                                GameState.getInstance().setUser(loggedUser);
                                 loginWindow.dismiss();
                                 createHome(v);
                             } else {

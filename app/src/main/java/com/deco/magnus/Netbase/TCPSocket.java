@@ -72,6 +72,7 @@ public class TCPSocket extends Socket {
             stream = client.getInputStream();
         } catch (IOException io) {
             io.printStackTrace();
+            invokeOnDisconnectListeners();
         }
         if (stream == null) return;
 
@@ -148,6 +149,7 @@ public class TCPSocket extends Socket {
             client.getOutputStream().flush();
         } catch (IOException io) {
             io.printStackTrace();
+            invokeOnDisconnectListeners();
         }
     }
 }

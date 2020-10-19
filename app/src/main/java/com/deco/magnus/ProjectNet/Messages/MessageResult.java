@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class MessageResult extends Message {
     public Result result;
+    public Type callingType;
     public String error;
 
     // do not send this back to the server or expect badness

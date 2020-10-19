@@ -18,7 +18,10 @@ public class Chess extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chess_game);
-        board = new Board(this, (TableLayout) findViewById(R.id.chess_board));
+        View v = findViewById(R.layout.chess_game);
+
+
+        board = new Board(this, findViewById(R.id.chess_board));
 
         Button b = (Button)findViewById(R.id.chess_reset);
         b.setOnClickListener(new View.OnClickListener() {

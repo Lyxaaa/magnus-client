@@ -1,17 +1,8 @@
 package com.deco.magnus.Games.Chess;
 
-import com.deco.magnus.Netbase.DataType;
-import com.deco.magnus.Netbase.SocketType;
-import com.deco.magnus.Netbase.TCPSocket;
-import com.deco.magnus.ProjectNet.Messages.Initialise;
 import com.deco.magnus.ProjectNet.Messages.MatchFound;
-import com.deco.magnus.ProjectNet.Messages.Message;
-import com.deco.magnus.ProjectNet.Messages.Type;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.LinkedBlockingQueue;
+import com.deco.magnus.ProjectNet.Messages.MatchStart;
+import com.deco.magnus.UserData.User;
 
 public class GameState {
 
@@ -35,12 +26,45 @@ public class GameState {
     //endregion
 
     private MatchFound matchFound;
+    private MatchStart matchStart;
+    private String email;
+
+    public boolean isReady() {
+        return matchFound != null && matchStart != null && email != null;
+    }
+
+    public String getEmail () {
+        if(email == null) return null;
+        return email;
+    }
+
+    public String getOpponent () {
+        if(matchFound == null) return null;
+        return matchFound.opponentemail;
+    }
+
+    public String getMatchId() {
+        return isReady() ? null : matchFound.matchId;
+    }
+
+    public boolean isWhite() {
+        return isReady() ? null : matchStart.playeriswhite;
+    }
 
     public void setMatchFound(MatchFound found) {
+        matchFound = found;
+    }
 
+    public void setMatchStart(MatchStart start) {
+        matchStart = start;
+    }
+
+    public void setUser(User user) {
+        this.email = user.getEmail();
     }
 
     public void clear() {
         matchFound = null;
+        matchStart = null;
     }
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker80"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_dark"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="80dp"
+        android:paddingTop="40dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="40dp">
+
+        <TextView
+            android:id="@+id/txt_game_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waiting for opponent..."
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <ProgressBar
+            android:id="@+id/pb_awaiting"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:paddingTop="20dp"
+            android:progress="100"
+            android:scrollbarStyle="outsideInset"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
+
+            <Button
+                android:id="@+id/btn_decline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="40dp"
+                android:background="@drawable/round_red"
+                android:minHeight="15dp"
+                android:text="Decline" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="40dp"
+                android:background="@drawable/round_green"
+                android:minHeight="15dp"
+                android:text="Accept" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

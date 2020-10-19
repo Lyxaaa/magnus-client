@@ -157,7 +157,7 @@ public abstract class Client {
         }
     }
 
-    public void invokeOnDisconnectListeners(SocketType socketType, DataType dataType, Object data) {
+    public void invokeOnDisconnectListeners() {
         for (OnDisconnectListener listener : OnDisconnectListeners) {
             listener.OnDisconnect();
         }

@@ -1,6 +1,7 @@
 package com.deco.magnus.ProjectNet;
 
 import com.deco.magnus.Netbase.DataType;
+import com.deco.magnus.Netbase.JsonMsg;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.Netbase.TCPSocket;
 import com.deco.magnus.ProjectNet.Messages.Message;
@@ -10,6 +11,8 @@ import com.deco.magnus.ProjectNet.Messages.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client extends com.deco.magnus.Netbase.Client {
@@ -143,11 +146,22 @@ public class Client extends com.deco.magnus.Netbase.Client {
         super.send(socketType, dataType, datata);
     }
 
+    Timer heartBeat;
     public boolean connect(String address, int port) {
         tcp = new TCPSocket(address, port);
         tcp.addOnReceiveListener(this::OnTCP);
+        tcp.addOnDisconnectListener(this::invokeOnDisconnectListeners);
         tcp.begin();
         send(new Initialise(id));
+
+        heartBeat = new Timer();
+        heartBeat.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                send(new Message(Type.Heartbeat));
+            }
+        }, 1000, 1000);
+
         return tcp.isConnected;
     }
 }

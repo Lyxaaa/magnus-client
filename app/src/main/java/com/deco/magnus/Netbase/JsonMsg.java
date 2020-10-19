@@ -21,16 +21,23 @@ public class JsonMsg {
 
     public static <T> T TryCast(DataType dataType, Object data, int msgType, Class<T> type) {
         if (dataType == DataType.JSON) {
-            JsonMsg cast = (JsonMsg)data;
+            JsonMsg cast = (JsonMsg) data;
             if (cast.type == msgType) {
                 try {
                     T result = new Gson().fromJson(cast.message, type);
                     return result;
-                } catch(Exception e) {
+                } catch (Exception e) {
                     throw e;
                 }
             }
         }
         return null;
+    }
+
+    public JsonMsg() {
+    }
+
+    public JsonMsg(int type) {
+        this.type = type;
     }
 }

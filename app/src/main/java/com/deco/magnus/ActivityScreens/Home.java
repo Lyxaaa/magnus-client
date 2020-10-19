@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.deco.magnus.Games.Chess.GameState;
 import com.deco.magnus.Netbase.ByteMsg;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
@@ -50,6 +51,8 @@ public class Home extends AppCompatActivity {
     final String PROFILE_IMAGE = "profile.jpg";
     final Activity activity = this;
     ImageView profileImage;
+
+    public final static String TAG = "HOME";
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -88,7 +91,9 @@ public class Home extends AppCompatActivity {
         final TextView friendsTxt = findViewById(R.id.home_friends_txt);
 
         profileImage = findViewById(R.id.profile_image);
-        refreshProfileImage();
+
+            refreshProfileImage();
+
 
         gameBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -307,7 +312,7 @@ public class Home extends AppCompatActivity {
     }
 
     private void refreshProfileImage() {
-        fetchProfileData(activity, user.getEmail(), dataResult -> {}, profileResult -> runOnUiThread(() -> {
+        fetchProfileData(activity, GameState.getInstance().getEmail(), dataResult -> {}, profileResult -> runOnUiThread(() -> {
             if (profileResult != null) {
                 user.bitmapImage = user.bytesToBitmap(profileResult);
                 try {
@@ -319,6 +324,7 @@ public class Home extends AppCompatActivity {
                 }
             } else {
                 File image = new File(getFilesDir(), PROFILE_IMAGE);
+                if( user == null) return;
                 user.bitmapImage = BitmapFactory.decodeFile(image.getAbsolutePath());
             }
 

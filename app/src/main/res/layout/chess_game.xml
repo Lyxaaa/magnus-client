@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:background="@color/backgroundFocus"
+    android:gravity="left|center_vertical"
     android:orientation="horizontal"
-    tools:context=".ActivityScreens.MainActivity"
-    android:id="@+id/home_main"
-    android:background="@color/backgroundFocus">
+    tools:context=".ActivityScreens.MainActivity">
 
     <TableLayout
         android:id="@+id/chess_board"
         android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:background="@android:color/holo_blue_bright"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_bright" />
 
     <Button
         android:id="@+id/chess_reset"
@@ -28,4 +24,4 @@
         tools:layout_editor_absoluteX="161dp"
         tools:layout_editor_absoluteY="578dp" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

@@ -47,14 +47,18 @@ public abstract class Socket {
             try{
                 if(listener != null) listener.onReceive(data);
             } catch (Exception e){
-                Log.e(TAG + " Listener", e.toString());
+                Log.e(TAG + " ReceiveListener", e.toString());
             }
         }
     }
 
     protected void invokeOnDisconnectListeners(){
         for(OnDisconnectListener listener: OnDisconnectListeners) {
-            if(listener != null) listener.onDisconnect();
+            try{
+                if(listener != null) listener.onDisconnect();
+            } catch (Exception e){
+                Log.e(TAG + " DisconnectListener", e.toString());
+            }
         }
     }
 
