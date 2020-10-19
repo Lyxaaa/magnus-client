@@ -1,26 +1,20 @@
 package com.deco.magnus.ActivityScreens;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,12 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.deco.magnus.Netbase.DataType;
-import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
-import com.deco.magnus.ProjectNet.Messages.GetFriendsResult;
-import com.deco.magnus.ProjectNet.Messages.Login;
-import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.RetrieveUserProfile;
 import com.deco.magnus.ProjectNet.Messages.RetrieveUserProfileResult;
@@ -44,11 +33,8 @@ import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
@@ -60,8 +46,7 @@ public class Home extends AppCompatActivity {
     final int GALLERY_CODE = 27;
     final int DISPLAY_PICTURE_RESOLUTION = 100;
     final String PROFILE_IMAGE = "profile.jpg";
-    Activity activity = this;
-
+    final Activity activity = this;
     ImageView profileImage;
 
     @Override
@@ -255,7 +240,7 @@ public class Home extends AppCompatActivity {
     private boolean updateProfileImage() {
         try {
             FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
-            user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);
             out.close();
             return true;
         } catch (IOException e) {
@@ -276,21 +261,21 @@ public class Home extends AppCompatActivity {
         void OnProfileDataReceive(RetrieveUserProfileResult retrieveUserProfileResult);
     }
 
-    public static void fetchProfileData(String email, final fetchProfileDataListener listener) {
-        long start = System.currentTimeMillis();
-        Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
-            @Override
-            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
-                Log.d("Refresh Image", "Made it into onReceive");
-                RetrieveUserProfileResult result = TryCast(dataType, data, Type.RetrieveUserProfileResult.getValue(), RetrieveUserProfileResult.class);
-                if (result != null || start < System.currentTimeMillis() + 1000) {
-                    listener.OnProfileDataReceive(result);
-                    Log.d("Refresh Image", "Result: " + result);
-                    return true;
-                }
-                return false;
-            }
-        });
+    public void fetchProfileData(String email, final fetchProfileDataListener listener) {
+        Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
+                    Log.d("Refresh Image", "Made it into onReceive");
+                    RetrieveUserProfileResult result = TryCast(dataType, data, Type.RetrieveUserProfileResult.getValue(), RetrieveUserProfileResult.class);
+                    if (result != null) {
+                        listener.OnProfileDataReceive(result);
+                        Log.d("Refresh Image", "Result: " + result);
+                        activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
+
+                        return true;
+                    }
+                    return false;
+                },
+                1000,
+                () -> activity.runOnUiThread(() -> Toast.makeText(activity, "Failed to fetch profile image", Toast.LENGTH_SHORT).show()));
         Client.getInstance().threadSafeSend(new RetrieveUserProfile(email));
     }
 

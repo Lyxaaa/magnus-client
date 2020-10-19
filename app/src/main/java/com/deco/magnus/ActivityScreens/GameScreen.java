@@ -7,11 +7,17 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.deco.magnus.Netbase.JsonMsg;
+import com.deco.magnus.ProjectNet.Client;
+import com.deco.magnus.ProjectNet.Messages.EnterMatchQueue;
+import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
-import com.deco.magnus.UserData.User;
+
+import static com.deco.magnus.ActivityScreens.MainActivity.loggedUser;
+import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
 public class GameScreen extends AppCompatActivity {
-    User user = MainActivity.getLoggedUser();
+    boolean isSearching = false;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -26,12 +32,34 @@ public class GameScreen extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        final Button chessBtn = findViewById(R.id.chess_start_btn);
+        final Button chessBtn = findViewById(R.id.btn_start_queue);
 
-        chessBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createChess(v);
+        final com.deco.magnus.Netbase.Client.OnReceiveListener onMatchFound = (socketType, dataType, data) -> {
+            EnterMatchQueue mf =  TryCast(dataType, data, Type.EnterMatchQueue.getValue(), EnterMatchQueue.class);
+            if(mf == null) return false;
+
+            // start of a game,
+            // show accept/decline
+
+
+            return true;
+        };
+
+        chessBtn.setOnClickListener(v -> {
+            if(isSearching) {
+                isSearching = false;
+                chessBtn.setText("FIND MATCH");
+                chessBtn.setBackground(getResources().getDrawable(R.drawable.round_green));
+                Client.getInstance().removeOnReceiveListener(onMatchFound);
+                JsonMsg msg = new JsonMsg();
+                msg.type = Type.ExitMatchQueue.getValue();
+                Client.getInstance().threadSafeSend(msg);
+            } else {
+                isSearching = true;
+                chessBtn.setText("CANCEL QUEUE");
+                chessBtn.setBackground(getResources().getDrawable(R.drawable.round_red));
+                Client.getInstance().addOnReceiveListener(onMatchFound);
+                Client.getInstance().threadSafeSend(new EnterMatchQueue(loggedUser.getEmail()));
             }
         });
     }

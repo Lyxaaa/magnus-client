@@ -2,9 +2,11 @@ package com.deco.magnus.ActivityScreens;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
@@ -81,23 +84,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         System.out.println("Created instance");
         super.onCreate(savedInstanceState);
-
-        new Thread(() -> {
-            try {
-                String oscarsPCExt = "49.3.201.65";
-                String oscarsPCInt = "192.168.0.6";
-                String cysPCInt =  "192.168.1.42";
-                String markPC =  "192.168.171.34";
-
-                String target = oscarsPCInt;
-
-                Client.getInstance().connect(target, 2457);
-            } catch (Exception e) {
-                Log.e(logTag, e.toString());
-            }
-        }).start();
-
-
         setContentView(R.layout.activity_main);
 //        setSupportActionBar(findViewById(R.id.my_toolbar));
 
@@ -127,6 +113,15 @@ public class MainActivity extends AppCompatActivity {
                 support.setSupportBarActive(getSupportActionBar(), true);
                 email = loginWindow.getContentView().findViewById(R.id.login_email_edit_text);
                 pword = loginWindow.getContentView().findViewById(R.id.login_password_edit_text);
+                final CheckBox loginRemember = loginWindow.getContentView().findViewById(R.id.cb_remember);
+
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
+                if(pref.getBoolean("login_remember", false))  {
+                    loginRemember.setChecked(true);
+                    email.setText(pref.getString("login_email", ""));
+                    pword.setText(pref.getString("login_password", ""));
+                }
+
                 email.setInputType(InputType.TYPE_CLASS_TEXT);
                 pword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
@@ -155,6 +150,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Login Info", String.valueOf(info.result.getValue()) + " : " + String.valueOf(MessageResult.Result.Success.getValue()));
                             loading.dismiss();
                             if (info.result == MessageResult.Result.Success) {
+                                if(loginRemember.isChecked()) {
+                                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
+                                    SharedPreferences.Editor edit = pref.edit();
+                                    edit.putString("login_email", info.email);
+                                    edit.putString("login_password", pword.getText().toString());
+                                    edit.putBoolean("login_remember", true);
+                                    edit.apply();
+                                }
                                 loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
                                 loginWindow.dismiss();
                                 createHome(v);

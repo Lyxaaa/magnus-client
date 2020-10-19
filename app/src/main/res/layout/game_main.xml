@@ -18,24 +18,19 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/chess_start_btn"
+            android:id="@+id/btn_start_queue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="#0099FF"
-            android:text="Beep boop i am button. Maybe u can press me maybe u can't"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/game_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="This is game, yes. Do not question. Play game yes.\nok"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@drawable/round_green"
+            android:paddingLeft="30dp"
+            android:paddingTop="20dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="20dp"
+            android:text="Find Match"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            />
 
     </LinearLayout>
 

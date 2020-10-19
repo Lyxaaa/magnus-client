@@ -11,9 +11,46 @@
     <LinearLayout
         android:layout_width="@dimen/credentialsViewWidth"
         android:layout_height="@dimen/credentialsViewHeight"
-        android:background="@android:color/white"
+        android:background="@color/backgroundFocus"
         android:gravity="center"
         android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/login_email_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="email"
+            android:textAlignment="center"
+            android:textColor="@color/lighter"
+            android:textColorHint="@color/light"></EditText>
+
+        <EditText
+            android:id="@+id/login_password_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="password"
+            android:textAlignment="center"
+            android:textColor="@color/lighter"
+            android:textColorHint="@color/light"></EditText>
+
+        <CheckBox
+            android:id="@+id/cb_remember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="remember me"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/submit_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0099FF"
+            android:text="Log In"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/login_view"
@@ -23,34 +60,5 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/credentialsDefault" />
 
-        <EditText
-            android:id="@+id/login_email_edit_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="email"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:textColorHint="#777777"></EditText>
-
-        <EditText
-            android:id="@+id/login_password_edit_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="password"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:textColorHint="#777777"></EditText>
-
-        <Button
-            android:id="@+id/submit_login_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="#0099FF"
-            android:text="Log In"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"/>
     </LinearLayout>
 </LinearLayout>
