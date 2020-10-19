@@ -18,6 +18,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.deco.magnus.ProjectNet.Messages.BoardResult;
 import com.deco.magnus.R;
 
 import java.util.ArrayList;
@@ -33,6 +36,8 @@ public class Board {
     private int darker;
     private int light;
     private int white;
+
+    private Object lock = new Object();
 
     //region Interaction Listener
     public interface OnInteractListener {
@@ -245,8 +250,29 @@ public class Board {
     }
 
     public void forceUpdate(ChessPiece[] board) {
-        System.arraycopy(board, 0, state, 0, state.length);
+        synchronized (lock){
+            System.arraycopy(board, 0, state, 0, state.length);
+        }
         reRender();
+    }
+
+    public void setStateFromNetworkMessage(BoardResult result) {
+        String[] squares = result.board.split(", ");
+        ChessPiece[] board = new ChessPiece[state.length];
+        for(int i = 0; i < state.length; i++) {
+            board[i] = ChessPiece.fromInt(Integer.parseInt(squares[i]));
+        }
+        forceUpdate(board);
+    }
+
+    public String getStateForSending( ) {
+        synchronized (lock){
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < state.length; i ++) {
+                sb.append(state[i].toString()).append(", ");
+            }
+            return sb.substring(0, sb.length() - 2);
+        }
     }
 
     public static Point indexToPoint(int index) {
@@ -320,6 +346,12 @@ public class Board {
 
         public int getValue() {
             return value;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return Integer.toString(this.value) ;
         }
     }
 }

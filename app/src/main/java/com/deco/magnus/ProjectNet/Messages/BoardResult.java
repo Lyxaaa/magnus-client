@@ -1,8 +1,8 @@
 package com.deco.magnus.ProjectNet.Messages;
 
 public class BoardResult extends MessageResult {
-    String matchId;
-    String board;
+    public String matchId;
+    public String board;
 
     public BoardResult(String matchId, String board) {
         this.type = Type.BoardResult.getValue();

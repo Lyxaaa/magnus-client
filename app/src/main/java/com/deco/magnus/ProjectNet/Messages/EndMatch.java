@@ -8,4 +8,11 @@ public class EndMatch extends Message {
         type = Type.EndMatch.getValue();
         youwon = false;
     }
+
+
+    public EndMatch (String matchId) {
+        type = Type.EndMatch.getValue();
+        this.matchId = matchId;
+        youwon = false;
+    }
 }
