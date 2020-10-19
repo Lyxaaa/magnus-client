@@ -165,7 +165,7 @@ public class User extends Message {
 
     public byte[] bitmapToBytes() {
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, blob);
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 20, blob);
         return blob.toByteArray();
     }
 
