@@ -65,6 +65,11 @@ public enum Type {
     //18/10/2020
     ExitMatchQueue (40),
 
+    ByteClientProfileImage(41),
+
+    ByteUpdateProfileImage(42),
+
+
     Unknown(Integer.MAX_VALUE);
 
     private int value;

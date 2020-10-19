@@ -73,7 +73,7 @@ public class Client extends com.deco.magnus.Netbase.Client {
                 0, packet, pos, 4);
         pos += 4;
         System.arraycopy(data,0, packet, pos, data.length);
-        threadSafeSend(data, SocketType.TCP, DataType.JSON);
+        threadSafeSend(packet, SocketType.TCP, DataType.Bytes);
     }
 
     public void threadSafeSend(Object data) {

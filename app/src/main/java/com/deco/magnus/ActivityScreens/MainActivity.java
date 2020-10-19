@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                                     edit.putBoolean("login_remember", true);
                                     edit.apply();
                                 }
-                                loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
+                                loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, null, activity);
                                 loginWindow.dismiss();
                                 createHome(v);
                             } else {
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                             User.registerUser(email.getText().toString(), pword.getText().toString(), info -> runOnUiThread(() -> {
                                 loading.dismiss();
                                 if (info.result == MessageResult.Result.Success) {
-                                    loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, info.profile, activity);
+                                    loggedUser = new User(info.uniqueId, info.userName, info.email, info.bio, null, activity);
                                     registerWindow.dismiss();
                                     createHome(v);
                                 } else {

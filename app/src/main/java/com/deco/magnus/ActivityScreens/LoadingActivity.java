@@ -36,7 +36,7 @@ public class LoadingActivity extends AppCompatActivity {
         String cysPCInt = "192.168.1.42";
         String markPC = "192.168.171.34";
 
-        String target = cysPCInt;
+        String target = oscarsPCInt;
 
         final Timer timeout = new Timer();
         timeout.schedule(new TimerTask() {
