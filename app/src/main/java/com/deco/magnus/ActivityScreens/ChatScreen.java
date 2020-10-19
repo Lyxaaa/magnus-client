@@ -46,6 +46,8 @@ public class ChatScreen extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
+        layout.removeAllViews();
         finish();
         return true;
     }
@@ -236,11 +238,13 @@ public class ChatScreen extends AppCompatActivity {
 
     //region Draws each friends image
     private void drawFriends() {
-//        testDrawFriends();
+        if (user.getFriends().size() == 0) {
+            testDrawFriends();
+        }
         LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
 
         for (User friend : user.getFriends()) {
-            fetchProfileData(activity, friend.getEmail(), profileData -> {}, imageData -> runOnUiThread(() -> {
+//            fetchProfileData(activity, friend.getEmail(), profileData -> {}, imageData -> runOnUiThread(() -> {
 
                 // Values related to the current displays dimensions
                 int layoutSize = (int) (80 * density);
@@ -264,8 +268,8 @@ public class ChatScreen extends AppCompatActivity {
                 ImageView profilePic = new ImageView(this);
                 profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
-                profilePic.setImageBitmap(user.bytesToBitmap(imageData));
-//                profilePic.setImageResource(friend.profilePicDrawable);
+//                profilePic.setImageBitmap(user.bytesToBitmap(imageData));
+                profilePic.setImageResource(friend.profilePicDrawable);
 
                 // Initialise profile name
                 TextView profileName = new TextView(this);
@@ -287,7 +291,7 @@ public class ChatScreen extends AppCompatActivity {
                         drawChat();
                     }
                 });
-            }));
+//            }));
         }
 
     }

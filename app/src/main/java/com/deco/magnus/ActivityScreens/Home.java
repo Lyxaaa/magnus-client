@@ -36,6 +36,7 @@ import com.deco.magnus.UserData.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
@@ -85,6 +86,7 @@ public class Home extends AppCompatActivity {
         final TextView gameTxt = findViewById(R.id.home_game_txt);
         final TextView chatTxt = findViewById(R.id.home_chat_txt);
         final TextView friendsTxt = findViewById(R.id.home_friends_txt);
+
         profileImage = findViewById(R.id.profile_image);
         refreshProfileImage();
 
@@ -158,7 +160,7 @@ public class Home extends AppCompatActivity {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker)));
         } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.lighter)));
+            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.dark)));
         }
     }
 

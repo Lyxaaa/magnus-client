@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker)));
         } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.lighter)));
+            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.dark)));
         }
     }
 
