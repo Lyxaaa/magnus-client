@@ -63,7 +63,7 @@ public enum Type {
     RetrieveOtherUsersResult(39),
 
     //18/10/2020
-    ExitMatchQueue (40),
+    ExitMatchQueue(40),
 
     Unknown(Integer.MAX_VALUE);
 
@@ -91,4 +91,4 @@ public enum Type {
     public int getValue() {
         return value;
     }
-    }
+}

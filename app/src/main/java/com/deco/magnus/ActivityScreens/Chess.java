@@ -24,7 +24,6 @@ public class Chess extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                board.reset();
             }
         });
 
