@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.ArrayMap;
 import android.util.Log;
 
+import com.deco.magnus.Netbase.ByteMsg;
 import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
@@ -165,7 +166,7 @@ public class User extends Message {
 
     public byte[] bitmapToBytes() {
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 20, blob);
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 70, blob);
         return blob.toByteArray();
     }
 
@@ -230,7 +231,9 @@ public class User extends Message {
                 return false;
             }
         });
-        Client.getInstance().threadSafeSend(new UpdateUserProfile(this.email, this.username, this.bio, bitmapToBytes()));
+        Log.d("Profile", "Sending image to server");
+
+        Client.getInstance().threadSafeSend(Type.ByteUpdateProfileImage.getValue(), bitmapToBytes());
     }
 
     public String getEmail() {

@@ -34,6 +34,8 @@ import com.deco.magnus.UserData.User;
 
 import java.util.Stack;
 
+import static com.deco.magnus.ActivityScreens.Home.fetchProfileData;
+
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class ChatScreen extends AppCompatActivity {
     GlobalSupport support = new GlobalSupport();
@@ -44,6 +46,8 @@ public class ChatScreen extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
+        layout.removeAllViews();
         finish();
         return true;
     }
@@ -234,56 +238,62 @@ public class ChatScreen extends AppCompatActivity {
 
     //region Draws each friends image
     private void drawFriends() {
-        testDrawFriends();
+        if (user.getFriends().size() == 0) {
+            testDrawFriends();
+        }
         LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
 
         for (User friend : user.getFriends()) {
+//            fetchProfileData(activity, friend.getEmail(), profileData -> {}, imageData -> runOnUiThread(() -> {
 
-            // Values related to the current displays dimensions
-            int layoutSize = (int) (80 * density);
+                // Values related to the current displays dimensions
+                int layoutSize = (int) (80 * density);
 
-            // Initialise layout for entire clickable profile
-            LinearLayout friendContainer = new LinearLayout(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            friendContainer.setOrientation(LinearLayout.VERTICAL);
-            friendContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
-            friendContainer.setLayoutParams(params);
-            friendContainer.setGravity(Gravity.CENTER);
-            friendContainer.setClickable(true);
+                // Initialise layout for entire clickable profile
+                LinearLayout friendContainer = new LinearLayout(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                friendContainer.setOrientation(LinearLayout.VERTICAL);
+                friendContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
+                friendContainer.setLayoutParams(params);
+                friendContainer.setGravity(Gravity.CENTER);
+                friendContainer.setClickable(true);
 
-            // Initialise holder for profile picture
-            CardView imageContainer = new CardView(this);
-            imageContainer.setLayoutParams(new CardView.LayoutParams(layoutSize, layoutSize));
-            imageContainer.setRadius(250 * density);
-            imageContainer.setCardBackgroundColor(getResources().getColor(R.color.yewwo));
+                // Initialise holder for profile picture
+                CardView imageContainer = new CardView(this);
+                imageContainer.setLayoutParams(new CardView.LayoutParams(layoutSize, layoutSize));
+                imageContainer.setRadius(250 * density);
+                imageContainer.setCardBackgroundColor(getResources().getColor(R.color.yewwo));
 
-            // Initialise profile picture
-            ImageView profilePic = new ImageView(this);
-            profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
-            profilePic.setImageResource(friend.profilePicDrawable);
+                // Initialise profile picture
+                ImageView profilePic = new ImageView(this);
+                profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
+//                profilePic.setImageBitmap(user.bytesToBitmap(imageData));
+                profilePic.setImageResource(friend.profilePicDrawable);
 
-            // Initialise profile name
-            TextView profileName = new TextView(this);
-            profileName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            profileName.setText(friend.getEmail());
-            profileName.setGravity(Gravity.CENTER);
+                // Initialise profile name
+                TextView profileName = new TextView(this);
+                profileName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                profileName.setText(friend.getEmail());
+                profileName.setGravity(Gravity.CENTER);
 
-            // Add views to their containers
-            imageContainer.addView(profilePic);
-            friendContainer.addView(imageContainer);
-            friendContainer.addView(profileName);
-            layout.addView(friendContainer);
+                // Add views to their containers
+                imageContainer.addView(profilePic);
+                friendContainer.addView(imageContainer);
+                friendContainer.addView(profileName);
+                layout.addView(friendContainer);
 
-            friendContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO Put getConversation listener here. Open chat Id is determined by database
-                    openChatId = friend.id;
-                    drawChat();
-                }
-            });
+                friendContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO Put getConversation listener here. Open chat Id is determined by database
+                        openChatId = friend.id;
+                        drawChat();
+                    }
+                });
+//            }));
         }
+
     }
     //endregion
 

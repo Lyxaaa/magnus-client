@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.deco.magnus.Netbase.ByteMsg;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.RetrieveUserProfile;
@@ -35,6 +36,7 @@ import com.deco.magnus.UserData.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
@@ -84,6 +86,7 @@ public class Home extends AppCompatActivity {
         final TextView gameTxt = findViewById(R.id.home_game_txt);
         final TextView chatTxt = findViewById(R.id.home_chat_txt);
         final TextView friendsTxt = findViewById(R.id.home_friends_txt);
+
         profileImage = findViewById(R.id.profile_image);
         refreshProfileImage();
 
@@ -157,7 +160,7 @@ public class Home extends AppCompatActivity {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker)));
         } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.lighter)));
+            findViewById(frameId).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.dark)));
         }
     }
 
@@ -222,7 +225,7 @@ public class Home extends AppCompatActivity {
                 if (user.bitmapImage != null) {
                     try {
                         FileOutputStream out = new FileOutputStream(new File(getFilesDir(), PROFILE_IMAGE));
-                        user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);
+                        user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 70, out);
                         user.bitmapToBytes();
                         user.updateProfileImage(messageResult -> runOnUiThread(() -> {
                             Toast.makeText(activity, messageResult.result == MessageResult.Result.Success ? "Successfully Updated Profile Picture" : "Failed to Update Profile Picture", Toast.LENGTH_SHORT).show();
@@ -240,7 +243,7 @@ public class Home extends AppCompatActivity {
     private boolean updateProfileImage() {
         try {
             FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
-            user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);
+            user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 70, out);
             out.close();
             return true;
         } catch (IOException e) {
@@ -261,12 +264,16 @@ public class Home extends AppCompatActivity {
         void OnProfileDataReceive(RetrieveUserProfileResult retrieveUserProfileResult);
     }
 
-    public void fetchProfileData(String email, final fetchProfileDataListener listener) {
+    public interface fetchProfileImageListener {
+        void OnProfileImageReceive(byte[] profileImageResult);
+    }
+
+    public static void fetchProfileData(Activity activity, String email, final fetchProfileDataListener dataListener, final fetchProfileImageListener imageListener) {
         Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
                     Log.d("Refresh Image", "Made it into onReceive");
                     RetrieveUserProfileResult result = TryCast(dataType, data, Type.RetrieveUserProfileResult.getValue(), RetrieveUserProfileResult.class);
                     if (result != null) {
-                        listener.OnProfileDataReceive(result);
+                        dataListener.OnProfileDataReceive(result);
                         Log.d("Refresh Image", "Result: " + result);
                         activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
 
@@ -275,14 +282,34 @@ public class Home extends AppCompatActivity {
                     return false;
                 },
                 1000,
-                () -> activity.runOnUiThread(() -> Toast.makeText(activity, "Failed to fetch profile image", Toast.LENGTH_SHORT).show()));
+                () -> activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, "Failed to fetch profile data", Toast.LENGTH_SHORT).show();
+                    dataListener.OnProfileDataReceive(null);
+                }));
+        Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
+                    Log.d("Refresh Image", "Made it into onReceive");
+                    byte[] result = ByteMsg.TryCast(dataType, data, Type.ByteClientProfileImage.getValue());
+                    if (result != null) {
+                        imageListener.OnProfileImageReceive(result);
+                        Log.d("Refresh Image", "Result: " + result.length);
+                        activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
+
+                        return true;
+                    }
+                    return false;
+                },
+                1000,
+                () -> activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, "Failed to fetch profile image", Toast.LENGTH_SHORT).show();
+                    imageListener.OnProfileImageReceive(null);
+                }));
         Client.getInstance().threadSafeSend(new RetrieveUserProfile(email));
     }
 
     private void refreshProfileImage() {
-        fetchProfileData(user.getEmail(), profileResult -> runOnUiThread(() -> {
+        fetchProfileData(activity, user.getEmail(), dataResult -> {}, profileResult -> runOnUiThread(() -> {
             if (profileResult != null) {
-                user.bitmapImage = user.bytesToBitmap(profileResult.profile);
+                user.bitmapImage = user.bytesToBitmap(profileResult);
                 try {
                     FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
                     user.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 75, out);

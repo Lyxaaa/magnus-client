@@ -7,13 +7,11 @@ public class UpdateUserProfile extends Message {
     String email;
     String name;
     String bio;
-    byte[] profile;
 
-    public UpdateUserProfile(String email, String name, String bio, byte[] profile) {
+    public UpdateUserProfile(String email, String name, String bio) {
         this.type = Type.UpdateUserProfile.getValue();
         this.email = email;
         this.name = name;
         this.bio = bio;
-        this.profile = profile;
     }
 }
