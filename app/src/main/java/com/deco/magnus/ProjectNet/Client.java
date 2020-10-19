@@ -7,6 +7,8 @@ import com.deco.magnus.ProjectNet.Messages.Message;
 import com.deco.magnus.ProjectNet.Messages.Initialise;
 import com.deco.magnus.ProjectNet.Messages.Type;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -61,6 +63,17 @@ public class Client extends com.deco.magnus.Netbase.Client {
             this.socketType = socketType;
             this.dataType = dataType;
         }
+    }
+
+    public void threadSafeSend(int identifier, byte[] data) {
+        byte[] packet = new byte[data.length + 4];
+        int pos = 0;
+
+        System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(identifier).array(),
+                0, packet, pos, 4);
+        pos += 4;
+        System.arraycopy(data,0, packet, pos, data.length);
+        threadSafeSend(data, SocketType.TCP, DataType.JSON);
     }
 
     public void threadSafeSend(Object data) {

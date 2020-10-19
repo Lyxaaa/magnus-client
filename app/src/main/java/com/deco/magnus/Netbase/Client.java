@@ -32,7 +32,6 @@ public abstract class Client {
         void OnDisconnect();
     }
 
-
     protected UDPSocket broadcast;
     protected UDPSocket udp;
     protected TCPSocket tcp;
@@ -77,7 +76,6 @@ public abstract class Client {
         }
     }
 
-
     Gson gson = new Gson();
 
     protected void receive(SocketType socketType, byte[] data) {
@@ -117,7 +115,6 @@ public abstract class Client {
                 Log.e(TAG, "Version " + val + " unsupported");
         }
     }
-
 
     public void addOnReceiveListener(OnReceiveListener listener) {
         OnReceiveListeners.add(listener);
