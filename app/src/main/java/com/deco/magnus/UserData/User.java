@@ -42,6 +42,7 @@ public class User extends Message {
     public final String id;
     private boolean authorised;
     private String bio;
+    public String conversationId;
     public Bitmap bitmapImage;
     public int profilePicDrawable;
 
@@ -114,6 +115,10 @@ public class User extends Message {
 
     public List<User> getFriends() {
         return friends;
+    }
+
+    public void setFriends(List<User> friendList) {
+        friends = friendList;
     }
 
     public void unstableAddFriend(User friend) {

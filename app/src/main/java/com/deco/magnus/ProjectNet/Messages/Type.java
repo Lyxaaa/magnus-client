@@ -32,47 +32,48 @@ public enum Type {
     @SerializedName("17") GetFriendsResult(17),
 
     @SerializedName("18") SendMessage(18),
-    @SerializedName("19") RetrieveMessages(19),
-    @SerializedName("20") RetrieveMessagesResult(20),
+    @SerializedName("19") SendMessageResult(19),
+    @SerializedName("20") RetrieveMessages(20),
+    @SerializedName("21") RetrieveMessagesResult(21),
 
 
-    @SerializedName("21") RetrieveUserProfile(21),
-    @SerializedName("22") RetrieveUserProfileResult(22),
+    @SerializedName("22") RetrieveUserProfile(22),
+    @SerializedName("23") RetrieveUserProfileResult(23),
 
-    @SerializedName("23") GetMatchDetails(23),
-    @SerializedName("24") GetMatchDetailsResult(24),
+    @SerializedName("24") GetMatchDetails(24),
+    @SerializedName("25") GetMatchDetailsResult(25),
 
-    @SerializedName("25") Login(25),
-    @SerializedName("26") LoginResult(26),
+    @SerializedName("26") Login(26),
+    @SerializedName("27") LoginResult(27),
 
-    @SerializedName("27") EnterMatchQueue(27),
-    @SerializedName("28") MatchFound(28),
-    @SerializedName("29") SendChallenge(29),
+    @SerializedName("28") EnterMatchQueue(28),
+    @SerializedName("29") MatchFound(29),
+    @SerializedName("30") SendChallenge(30),
 
-    @SerializedName("30") CreateMatch(30),
-    @SerializedName("31") CreateMatchResult(31),
+    @SerializedName("31") CreateMatch(31),
+    @SerializedName("32") CreateMatchResult(32),
 
-    @SerializedName("32") GetMatchHistory(32),
-    @SerializedName("33") GetMatchHistoryResult(33),
+    @SerializedName("33") GetMatchHistory(33),
+    @SerializedName("34") GetMatchHistoryResult(34),
 
-    @SerializedName("34") AcceptChallenge(34),
-    @SerializedName("35") UpdateBoard(35),
-    @SerializedName("36") GetBoardState(36),
-    @SerializedName("37") BoardResult(37),
+    @SerializedName("35") AcceptChallenge(35),
+    @SerializedName("36") UpdateBoard(36),
+    @SerializedName("37") GetBoardState(37),
+    @SerializedName("38") BoardResult(38),
 
     //added 11/10/2020
-    @SerializedName("38") RetrieveOtherUsers(38),
-    @SerializedName("39") RetrieveOtherUsersResult(39),
+    @SerializedName("39") RetrieveOtherUsers(39),
+    @SerializedName("40") RetrieveOtherUsersResult(40),
 
     //18/10/2020
-    @SerializedName("40") ExitMatchQueue(40),
+    @SerializedName("41") ExitMatchQueue(41),
 
-    @SerializedName("41") ByteClientProfileImage(41),
-    @SerializedName("42") ByteUpdateProfileImage(42),
+    @SerializedName("42") ByteClientProfileImage(42),
+    @SerializedName("43") ByteUpdateProfileImage(43),
 
-    @SerializedName("43") MatchStart(43),
-    @SerializedName("44") EndMatch(44),
-    @SerializedName("45") AcceptMatch(45),
+    @SerializedName("44") MatchStart(44),
+    @SerializedName("45") EndMatch(45),
+    @SerializedName("46") AcceptMatch(46),
 
     Unknown(Integer.MAX_VALUE);
 

@@ -27,11 +27,14 @@ import com.deco.magnus.ProjectNet.Messages.Login;
 import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.SendMessage;
+import com.deco.magnus.ProjectNet.Messages.SendMessageResult;
 import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.Chat;
 import com.deco.magnus.UserData.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import static com.deco.magnus.ActivityScreens.Home.fetchProfileData;
@@ -61,12 +64,30 @@ public class ChatScreen extends AppCompatActivity {
         setContentView(R.layout.chat_main);
         user.activity = activity;
         density = getResources().getDisplayMetrics().density;
-        drawFriends();
-        if (openChatId.equals(" ") && user.getFriends().size() > 0) {
-            openChatId = user.getFriends().get(0).id;
-        }
-        drawChat();
-        drawChat();
+        user.updateFriends(friendList -> {
+            Log.d("Friends", "Start List");
+            List<User> friends = new ArrayList<>();
+            for (int i = 0; i < friendList.userId.length; i++) {
+                User friend = new User(friendList.userId[i], friendList.name[i], friendList.email[i], "", null, activity);
+                final int draw = i + 1;
+                fetchProfileData(activity, friend.getEmail(), data -> {}, image -> {
+                    friend.bitmapImage = friend.bytesToBitmap(image);
+                    if (draw == friendList.userId.length) {
+                        drawFriends();
+                    }
+                });
+                friend.conversationId = friendList.conversationId[i];
+                friends.add(friend);
+            }
+            Log.d("Friends", "Finish List");
+            user.setFriends(friends);
+//            drawFriends();
+            Log.d("Friends", "Drew Friends");
+            if (user.getFriends().size() > 0) {
+                openChatId = user.getFriends().get(0).conversationId;
+            }
+            drawChat();
+        });
 
         final FrameLayout sendMessageBtn = findViewById(R.id.chat_send_frame);
         final EditText sendMessageText = findViewById(R.id.chat_edit_text_input);
@@ -87,7 +108,7 @@ public class ChatScreen extends AppCompatActivity {
     }
 
     public interface sendMessageResultListener {
-        void OnSendMessageResult(MessageResult messageResult);
+        void OnSendMessageResult(SendMessageResult sendMessageResult);
     }
 
     private void sendMessage(String message, sendMessageResultListener listener) {
@@ -96,10 +117,10 @@ public class ChatScreen extends AppCompatActivity {
             public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Send Message", "Made it into onReceive");
                 //TODO There's no type for MessageResult, meaning no way to receive a generic MessageResult from the server
-                MessageResult result = JsonMsg.TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
+                SendMessageResult result = JsonMsg.TryCast(dataType, data, Type.SendMessageResult.getValue(), SendMessageResult.class);
                 if (result != null) {
                     listener.OnSendMessageResult(result);
-                    Log.d("Login Data", "Result: " + result);
+                    Log.d("SendMessage", "Result: " + result);
                     return true;
                 }
                 return false;
@@ -169,11 +190,13 @@ public class ChatScreen extends AppCompatActivity {
         TextView displayMessage = new TextView(this);
         int gravity;
         int bubbleColour;
+        int textColour;
         if (message.userId.equals(openChatId)) {
             params.setMargins((int) (2 * density), (int) (5 * density), (int) (10 * density), (int) (5 * density));
             messageBubbleParams.setMargins((int) (5 * density), (int) (3 * density), (int) (100 * density), (int) (3 * density));
             messageContainer.setLayoutParams(params);
             bubbleColour = getResources().getColor(R.color.lighter);
+            textColour = getResources().getColor(R.color.black);
 //            messageContainer.setPadding((int) (2 * density), (int) (5 * density), (int) (10 * density), (int) (5 * density));
             gravity = Gravity.START;
             messageContainer.setGravity(gravity);
@@ -182,6 +205,7 @@ public class ChatScreen extends AppCompatActivity {
             messageBubbleParams.setMargins((int) (100 * density), (int) (3 * density), (int) (5 * density), (int) (3 * density));
             messageContainer.setLayoutParams(params);
             bubbleColour = getResources().getColor(R.color.blue);
+            textColour = getResources().getColor(R.color.white);
 //            messageContainer.setPadding((int) (50 * density), (int) (5 * density), (int) (2 * density), (int) (5 * density));
             gravity = Gravity.END;
             messageContainer.setGravity(gravity);
@@ -205,6 +229,7 @@ public class ChatScreen extends AppCompatActivity {
         displayMessage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         displayMessage.setText(message.text);
         displayMessage.setTextSize(getResources().getDimension(R.dimen.chatMessageTextSize));
+        displayMessage.setTextColor(textColour);
         displayMessage.setGravity(gravity);
 
         if (message.result != MessageResult.Result.Success) {
@@ -242,7 +267,6 @@ public class ChatScreen extends AppCompatActivity {
             testDrawFriends();
         }
         LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
-
         for (User friend : user.getFriends()) {
 //            fetchProfileData(activity, friend.getEmail(), profileData -> {}, imageData -> runOnUiThread(() -> {
 
@@ -269,7 +293,7 @@ public class ChatScreen extends AppCompatActivity {
                 profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
 //                profilePic.setImageBitmap(user.bytesToBitmap(imageData));
-                profilePic.setImageResource(friend.profilePicDrawable);
+                profilePic.setImageBitmap(friend.bitmapImage);
 
                 // Initialise profile name
                 TextView profileName = new TextView(this);
