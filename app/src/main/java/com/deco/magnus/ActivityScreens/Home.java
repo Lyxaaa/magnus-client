@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
@@ -47,7 +48,7 @@ public class Home extends AppCompatActivity {
     //Used for Gallery Image Picker
     private Uri outputFileUri;
     final int GALLERY_CODE = 27;
-    final int DISPLAY_PICTURE_RESOLUTION = 100;
+    public static final int DISPLAY_PICTURE_RESOLUTION = 100;
     final String PROFILE_IMAGE = "profile.jpg";
     final Activity activity = this;
     ImageView profileImage;
@@ -92,7 +93,7 @@ public class Home extends AppCompatActivity {
 
         profileImage = findViewById(R.id.profile_image);
 
-            refreshProfileImage();
+        refreshProfileImage();
 
 
         gameBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -274,6 +275,7 @@ public class Home extends AppCompatActivity {
     }
 
     public static void fetchProfileData(Activity activity, String email, final fetchProfileDataListener dataListener, final fetchProfileImageListener imageListener) {
+        int imageRequestId = (int) (Math.random() * Integer.MAX_VALUE);
         Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
                     Log.d("Refresh Image", "Made it into onReceive");
                     RetrieveUserProfileResult result = TryCast(dataType, data, Type.RetrieveUserProfileResult.getValue(), RetrieveUserProfileResult.class);
@@ -293,7 +295,7 @@ public class Home extends AppCompatActivity {
                 }));
         Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
                     Log.d("Refresh Image", "Made it into onReceive");
-                    byte[] result = ByteMsg.TryCast(dataType, data, Type.ByteClientProfileImage.getValue());
+                    byte[] result = ByteMsg.TryCast(dataType, data, imageRequestId);
                     if (result != null) {
                         imageListener.OnProfileImageReceive(result);
                         Log.d("Refresh Image", "Result: " + result.length);
@@ -308,7 +310,7 @@ public class Home extends AppCompatActivity {
                     Toast.makeText(activity, "Failed to fetch profile image", Toast.LENGTH_SHORT).show();
                     imageListener.OnProfileImageReceive(null);
                 }));
-        Client.getInstance().threadSafeSend(new RetrieveUserProfile(email));
+        Client.getInstance().threadSafeSend(new RetrieveUserProfile(email, imageRequestId));
     }
 
     private void refreshProfileImage() {

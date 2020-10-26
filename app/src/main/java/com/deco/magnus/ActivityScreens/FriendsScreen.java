@@ -8,8 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,20 +20,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.deco.magnus.Netbase.DataType;
 import com.deco.magnus.Netbase.JsonMsg;
 import com.deco.magnus.Netbase.SocketType;
 import com.deco.magnus.ProjectNet.Client;
+import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.RetrieveOtherUsers;
 import com.deco.magnus.ProjectNet.Messages.RetrieveOtherUsersResult;
+import com.deco.magnus.ProjectNet.Messages.SendFriendRequest;
 import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.R;
 import com.deco.magnus.UserData.User;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.deco.magnus.ActivityScreens.Home.fetchProfileData;
 import static com.deco.magnus.ActivityScreens.MainActivity.loggedUser;
 import static com.deco.magnus.Netbase.JsonMsg.TryCast;
 
@@ -69,13 +78,20 @@ public class FriendsScreen extends AppCompatActivity {
                     Toast.makeText(v.getContext(), "no matches found", Toast.LENGTH_SHORT).show();
                 }
                 for (int i = 0; i < friends.userId.length; i++) {
-                    searchResult.add(new User(friends.userId[i], friends.name[i], friends.email[i], friends.bio[i], null, activity));
-                    View box = getLayoutInflater().inflate(R.layout.friend_box, null);
-                    TextView friendname = box.findViewById(R.id.txt_name);
-                    friendname.setText(friends.name[i]);
-                    TextView friendbio = box.findViewById(R.id.txt_bio);
-                    friendbio.setText(friends.bio[i]);
-                    friendsLayout.addView(box);
+                    User searchFriend = new User(friends.userId[i], friends.name[i], friends.email[i], friends.bio[i], null, activity);
+                    fetchProfileData(activity, searchFriend.getEmail(), data -> {}, image -> {
+                        if (image != null) {
+                            Log.d("Friends", "Image File Length = " + image.length);
+                            searchFriend.bitmapImage = searchFriend.bytesToBitmap(image);
+                        } else {
+                            File imageFile = new File(getFilesDir(), "profile.jpg");
+                            if (imageFile.exists()) {
+                                searchFriend.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                            }
+                        }
+                        drawSearch();
+                    });
+                    searchResult.add(searchFriend);
 
                     // get profile picture
                     // save to disk
@@ -98,6 +114,7 @@ public class FriendsScreen extends AppCompatActivity {
 
                     friendImage.setImageBitmap(result);*/
                 }
+
             }));
         });
     }
@@ -129,53 +146,72 @@ public class FriendsScreen extends AppCompatActivity {
         Client.getInstance().threadSafeSend(new RetrieveOtherUsers(loggedUser.getEmail(), search, 10, 0));
     }
 
-    private void drawFriends() {
-        LinearLayout layout = findViewById(R.id.search_friends_linear_layout_scroller);
-        layout.removeAllViews();
-        for (User friend : searchResult) {
-
-            /*// Values related to the current displays dimensions
-            int layoutSize = (int) (80 * density);
-
-            // Initialise layout for entire clickable profile
-            LinearLayout friendContainer = new LinearLayout(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            friendContainer.setOrientation(LinearLayout.VERTICAL);
-            friendContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
-            friendContainer.setLayoutParams(params);
-            friendContainer.setGravity(Gravity.CENTER);
-            friendContainer.setClickable(true);
-
-            // Initialise holder for profile picture
-            CardView imageContainer = new CardView(this);
-            imageContainer.setLayoutParams(new CardView.LayoutParams(layoutSize, layoutSize));
-            imageContainer.setRadius(250 * density);
-            imageContainer.setCardBackgroundColor(getResources().getColor(R.color.yewwo));
-
-            // Initialise profile picture
-            ImageView profilePic = new ImageView(this);
-            profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
-            profilePic.setImageResource(friend.profilePicDrawable);
-
-            // Initialise profile name
-            TextView profileName = new TextView(this);
-            profileName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            profileName.setText(friend.username);
-            profileName.setGravity(Gravity.CENTER);
-
-            // Add views to their containers
-            imageContainer.addView(profilePic);
-            friendContainer.addView(imageContainer);
-            friendContainer.addView(profileName);
-            layout.addView(friendContainer);
-
-            friendContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO Buttons can be created here to do a certain thing for every friend we create
-                }
-            });*/
-        }
+    public interface sendFriendRequestListener {
+        void OnSendFriendRequestResult(MessageResult friendRequestResult);
     }
+
+    public void sendFriendRequest(String from, String to, sendFriendRequestListener listener) {
+        Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
+                Log.d("Message", "Made it into onReceive " + ((JsonMsg) data).type);
+                MessageResult result = TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
+                if (result != null) {
+                    listener.OnSendFriendRequestResult(result);
+                    Log.d("Search", "Result: " + result.result);
+                    return true;
+                }
+                return false;
+                },
+                1000,
+                () -> activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, "Failed to send friend request", Toast.LENGTH_SHORT).show();
+                    listener.OnSendFriendRequestResult(null);
+                }));
+        Client.getInstance().threadSafeSend(new SendFriendRequest(from, to));
+    }
+
+    //region Draws each friends image
+    private void drawSearch() {
+        runOnUiThread(() -> {
+            LinearLayout friendsLayout = findViewById(R.id.search_friends_linear_layout_scroller);
+            friendsLayout.removeAllViews();
+            for (User friend : searchResult) {
+                View box = getLayoutInflater().inflate(R.layout.friend_box, null);
+                TextView friendName = box.findViewById(R.id.txt_name);
+                friendName.setText(friend.username);
+                TextView friendBio = box.findViewById(R.id.txt_bio);
+                friendBio.setText(friend.bio);
+                ImageView profilePic = box.findViewById(R.id.img_friend_box);
+
+                Bitmap result = Bitmap.createBitmap(Home.DISPLAY_PICTURE_RESOLUTION, Home.DISPLAY_PICTURE_RESOLUTION, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(result);
+                Paint paint = new Paint();
+
+                // this is to get the damned display picture in a button_photo
+                paint.setAntiAlias(true);
+                paint.setColor(Color.parseColor("#FFFFFF"));
+                canvas.drawCircle(Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, paint);
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                if (friend.bitmapImage != null) {
+                    canvas.drawBitmap(friend.bitmapImage, 0, 0, paint);
+                } else {
+                    canvas.drawBitmap(user.bitmapImage, 0, 0, paint);
+                }
+                profilePic.setImageBitmap(result);
+
+                profilePic.refreshDrawableState();
+                friendsLayout.addView(box);
+
+                profilePic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO Put getConversation listener here. Open chat Id is determined by database
+                        Log.d("Search", "Sending a friend request to " + friend.getEmail());
+                        sendFriendRequest(user.getEmail(), friend.getEmail(), listener -> {});
+                    }
+                });
+            }
+
+        });
+    }
+    //endregion
 }

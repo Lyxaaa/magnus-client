@@ -17,6 +17,8 @@ import com.deco.magnus.ProjectNet.Messages.LoginResult;
 import com.deco.magnus.ProjectNet.Messages.Message;
 import com.deco.magnus.ProjectNet.Messages.MessageResult;
 import com.deco.magnus.ProjectNet.Messages.RegisterUser;
+import com.deco.magnus.ProjectNet.Messages.RetrieveMessages;
+import com.deco.magnus.ProjectNet.Messages.RetrieveMessagesResult;
 import com.deco.magnus.ProjectNet.Messages.Type;
 import com.deco.magnus.ProjectNet.Messages.UpdateUserProfile;
 
@@ -41,7 +43,7 @@ public class User extends Message {
     private final String email;
     public final String id;
     private boolean authorised;
-    private String bio;
+    public String bio;
     public String conversationId;
     public Bitmap bitmapImage;
     public int profilePicDrawable;
@@ -171,7 +173,7 @@ public class User extends Message {
 
     public byte[] bitmapToBytes() {
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 70, blob);
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 10, blob);
         return blob.toByteArray();
     }
 
@@ -232,6 +234,7 @@ public class User extends Message {
                 if (result != null) {
                     listener.OnUpdateProfileImageResult(result);
                     Log.d("Profile Image", "Result: " + result.result);
+                    return true;
                 }
                 return false;
             }
@@ -278,6 +281,12 @@ public class User extends Message {
         }
     }
 
+    public void clearChat(String conversationId) {
+        if (chats.containsKey(conversationId) && chats.get(conversationId) != null) {
+            chats.put(conversationId, new ArrayList<>());
+        }
+    }
+
     /**
      * Gets the chat history between this user and the user with the given ID
      * @param id The ID of the user in the conversation that is NOT this user
@@ -288,6 +297,31 @@ public class User extends Message {
             return chats.get(id);
         }
         return null;
+    }
+
+    public interface getChatListener {
+        void OnChatResult(RetrieveMessagesResult retrieveMessagesResult);
+    }
+
+    /**
+     * Gets the chat history between this user and the user with the given ID directly from server
+     * @param id The ID of the user in the conversation that is NOT this user
+     */
+    public void getChatFromServer(String id, getChatListener listener) {
+        Client.getInstance().addOnReceiveListener(new Client.OnReceiveListener() {
+            @Override
+            public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
+                RetrieveMessagesResult result = TryCast(dataType, data, Type.RetrieveMessagesResult.getValue(), RetrieveMessagesResult.class);
+                if (result != null) {
+                    listener.OnChatResult(result);
+                    Log.d("Friends", "Chat: " + result.chat[0].email);
+                    return true;
+                }
+                return false;
+            }
+        });
+        Log.d("Profile", "Sending image to server");
+        Client.getInstance().threadSafeSend(new RetrieveMessages(id, 0));
     }
 
     public int emailHash() {

@@ -2,6 +2,9 @@ package com.deco.magnus.ActivityScreens;
 
 import android.app.Activity;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Layout;
@@ -33,9 +36,13 @@ import com.deco.magnus.R;
 import com.deco.magnus.UserData.Chat;
 import com.deco.magnus.UserData.User;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.deco.magnus.ActivityScreens.Home.fetchProfileData;
 
@@ -68,25 +75,50 @@ public class ChatScreen extends AppCompatActivity {
             Log.d("Friends", "Start List");
             List<User> friends = new ArrayList<>();
             for (int i = 0; i < friendList.userId.length; i++) {
+                AtomicInteger j = new AtomicInteger(i);
                 User friend = new User(friendList.userId[i], friendList.name[i], friendList.email[i], "", null, activity);
-                final int draw = i + 1;
                 fetchProfileData(activity, friend.getEmail(), data -> {}, image -> {
-                    friend.bitmapImage = friend.bytesToBitmap(image);
-                    if (draw == friendList.userId.length) {
-                        drawFriends();
+                    String imageName = getImageName(friend.conversationId);
+                    if (image != null) {
+                        Log.d("Friends", "Image File Length = " + image.length);
+                        friend.bitmapImage = friend.bytesToBitmap(image);
+                        try {
+                            FileOutputStream out = openFileOutput(imageName, MODE_PRIVATE);
+                            friend.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            out.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        File imageFile = new File(getFilesDir(), imageName);
+                        if (imageFile.exists()) {
+                            friend.bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                        } else {
+                            try {
+                                friend.bitmapImage = user.bitmapImage;
+                                FileOutputStream out = openFileOutput(imageName, MODE_PRIVATE);
+                                friend.bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                out.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
+                    Log.d("Profile", "Init Profile Picture");
+                    friend.bitmapImage = friend.bytesToBitmap(image); //idk why this is here
+                    Log.d("Friends", "Finish List");
+                    user.setFriends(friends);
+                    Log.d("Friends", "Drew Friends");
+                    if (user.getFriends().size() > 0) {
+                        openChatId = user.getFriends().get(0).conversationId;
+                    }
+                    drawFriends();
+                    drawChat();
                 });
                 friend.conversationId = friendList.conversationId[i];
                 friends.add(friend);
             }
-            Log.d("Friends", "Finish List");
-            user.setFriends(friends);
-//            drawFriends();
-            Log.d("Friends", "Drew Friends");
-            if (user.getFriends().size() > 0) {
-                openChatId = user.getFriends().get(0).conversationId;
-            }
-            drawChat();
+
         });
 
         final FrameLayout sendMessageBtn = findViewById(R.id.chat_send_frame);
@@ -105,6 +137,10 @@ public class ChatScreen extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public String getImageName(String conversationId) {
+        return conversationId + ".jpg";
     }
 
     public interface sendMessageResultListener {
@@ -154,20 +190,27 @@ public class ChatScreen extends AppCompatActivity {
     //make sure to put drawChat inside getConversation listener to ensure operation
     //region Draws the currently accessed chat region
     private void drawChat() {
-        if (user.getFriends().size() > 0 && user.getChat(openChatId) == null) {
-            testDrawChat();
-        }
-        if (user.getChat(openChatId) == null) {
-            return;
-        }
-        LinearLayout layout = findViewById(R.id.chat_dialogue_linear_layout_scroller);
-        layout.removeAllViews();
-        for (Chat message : user.getChat(openChatId)) {
-            Log.d("Message user ID", String.valueOf(message.userId));
-            // Create a new TextView to display a message
-            layout.addView(messageToLinearLayout(message));
-        }
-        findViewById(R.id.chat_dialogue_scroll_view).scrollTo(0, findViewById(R.id.chat_dialogue_linear_layout_scroller).getBottom());
+        user.getChatFromServer(openChatId, chat -> runOnUiThread(() -> {
+//        if (user.getFriends().size() > 0 && user.getChat(openChatId) == null) {
+//            testDrawChat();
+//        }
+            user.clearChat(openChatId);
+            for (int pos = chat.chat.length - 1; pos >= 0; pos--) {
+                chat.chat[pos].result = MessageResult.Result.Success;
+                user.addChatMessage(openChatId, chat.chat[pos]);
+            }
+            if (user.getChat(openChatId) == null) {
+                return;
+            }
+            LinearLayout layout = findViewById(R.id.chat_dialogue_linear_layout_scroller);
+            layout.removeAllViews();
+            for (Chat message : user.getChat(openChatId)) {
+                Log.d("Message user ID", message.email);
+                // Create a new TextView to display a message
+                layout.addView(messageToLinearLayout(message));
+            }
+            findViewById(R.id.chat_dialogue_scroll_view).scrollTo(0, findViewById(R.id.chat_dialogue_linear_layout_scroller).getBottom());
+        }));
     }
     //endregion
 
@@ -191,7 +234,7 @@ public class ChatScreen extends AppCompatActivity {
         int gravity;
         int bubbleColour;
         int textColour;
-        if (message.userId.equals(openChatId)) {
+        if (!message.email.equals(user.getEmail())) {
             params.setMargins((int) (2 * density), (int) (5 * density), (int) (10 * density), (int) (5 * density));
             messageBubbleParams.setMargins((int) (5 * density), (int) (3 * density), (int) (100 * density), (int) (3 * density));
             messageContainer.setLayoutParams(params);
@@ -263,61 +306,71 @@ public class ChatScreen extends AppCompatActivity {
 
     //region Draws each friends image
     private void drawFriends() {
-        if (user.getFriends().size() == 0) {
-            testDrawFriends();
-        }
-        LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
-        for (User friend : user.getFriends()) {
-//            fetchProfileData(activity, friend.getEmail(), profileData -> {}, imageData -> runOnUiThread(() -> {
+        runOnUiThread(() -> {
+    //        if (user.getFriends().size() == 0) {
+    //            testDrawFriends();
+    //        }
+            LinearLayout layout = findViewById(R.id.chat_friends_linear_layout_scroller);
+            layout.removeAllViews();
+            for (User friend : user.getFriends()) {
 
-                // Values related to the current displays dimensions
-                int layoutSize = (int) (80 * density);
+                    // Values related to the current displays dimensions
+                    int layoutSize = (int) (80 * density);
 
-                // Initialise layout for entire clickable profile
-                LinearLayout friendContainer = new LinearLayout(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                friendContainer.setOrientation(LinearLayout.VERTICAL);
-                friendContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
-                friendContainer.setLayoutParams(params);
-                friendContainer.setGravity(Gravity.CENTER);
-                friendContainer.setClickable(true);
+                    // Initialise layout for entire clickable profile
+                    LinearLayout friendContainer = new LinearLayout(this);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    friendContainer.setOrientation(LinearLayout.VERTICAL);
+                    friendContainer.setPadding(0, (int) (5 * density), 0, (int) (5 * density));
+                    friendContainer.setLayoutParams(params);
+                    friendContainer.setGravity(Gravity.CENTER);
+                    friendContainer.setClickable(true);
 
-                // Initialise holder for profile picture
-                CardView imageContainer = new CardView(this);
-                imageContainer.setLayoutParams(new CardView.LayoutParams(layoutSize, layoutSize));
-                imageContainer.setRadius(250 * density);
-                imageContainer.setCardBackgroundColor(getResources().getColor(R.color.yewwo));
+                    // Initialise holder for profile picture
+                    CardView imageContainer = new CardView(this);
+                    imageContainer.setLayoutParams(new CardView.LayoutParams(layoutSize, layoutSize));
+                    imageContainer.setRadius(250 * density);
+                    imageContainer.setCardBackgroundColor(getResources().getColor(R.color.yewwo));
 
-                // Initialise profile picture
-                ImageView profilePic = new ImageView(this);
-                profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
-//                profilePic.setImageBitmap(user.bytesToBitmap(imageData));
-                profilePic.setImageBitmap(friend.bitmapImage);
-
-                // Initialise profile name
-                TextView profileName = new TextView(this);
-                profileName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                profileName.setText(friend.getEmail());
-                profileName.setGravity(Gravity.CENTER);
-
-                // Add views to their containers
-                imageContainer.addView(profilePic);
-                friendContainer.addView(imageContainer);
-                friendContainer.addView(profileName);
-                layout.addView(friendContainer);
-
-                friendContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO Put getConversation listener here. Open chat Id is determined by database
-                        openChatId = friend.id;
-                        drawChat();
+                    // Initialise profile picture
+                    ImageView profilePic = new ImageView(this);
+                    profilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    profilePic.setLayoutParams(new LinearLayout.LayoutParams(layoutSize, layoutSize));
+    //                profilePic.setImageBitmap(user.bytesToBitmap(imageData));
+                    File image = new File(getFilesDir(), getImageName(friend.conversationId));
+                    Log.d("Friends", "Conversation ID for Image = " + friend.conversationId + " With image name = " + getImageName(friend.conversationId));
+                    if (image.exists()) {
+                        Log.d("Friends", "Image Found");
+                        profilePic.setImageURI(Uri.fromFile(new File(getFilesDir(), getImageName(friend.conversationId))));
+                    } else {
+                        Log.d("Friends", "Image Not Found");
+                        profilePic.setImageURI(Uri.fromFile(new File(getFilesDir(), "profile.jpg")));
                     }
-                });
-//            }));
-        }
+                    profilePic.refreshDrawableState();
 
+                    // Initialise profile name
+                    TextView profileName = new TextView(this);
+                    profileName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    profileName.setText(friend.getEmail());
+                    profileName.setGravity(Gravity.CENTER);
+
+                    // Add views to their containers
+                    imageContainer.addView(profilePic);
+                    friendContainer.addView(imageContainer);
+                    friendContainer.addView(profileName);
+                    layout.addView(friendContainer);
+
+                    friendContainer.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO Put getConversation listener here. Open chat Id is determined by database
+                            openChatId = friend.conversationId;
+                            drawChat();
+                        }
+                    });
+            }
+
+        });
     }
     //endregion
 
