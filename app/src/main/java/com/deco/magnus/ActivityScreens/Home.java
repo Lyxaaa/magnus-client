@@ -282,7 +282,7 @@ public class Home extends AppCompatActivity {
                     if (result != null) {
                         dataListener.OnProfileDataReceive(result);
                         Log.d("Refresh Image", "Result: " + result);
-                        activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
+//                        activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
 
                         return true;
                     }
@@ -290,7 +290,7 @@ public class Home extends AppCompatActivity {
                 },
                 1000,
                 () -> activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, "Failed to fetch profile data", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(activity, "Failed to fetch profile data", Toast.LENGTH_SHORT).show();
                     dataListener.OnProfileDataReceive(null);
                 }));
         Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
@@ -299,7 +299,7 @@ public class Home extends AppCompatActivity {
                     if (result != null) {
                         imageListener.OnProfileImageReceive(result);
                         Log.d("Refresh Image", "Result: " + result.length);
-                        activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
+//                        activity.runOnUiThread(() -> Toast.makeText(activity, "Successfully fetched profile data", Toast.LENGTH_SHORT).show());
 
                         return true;
                     }
@@ -307,7 +307,7 @@ public class Home extends AppCompatActivity {
                 },
                 1000,
                 () -> activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, "Failed to fetch profile image", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(activity, "Failed to fetch profile image", Toast.LENGTH_SHORT).show();
                     imageListener.OnProfileImageReceive(null);
                 }));
         Client.getInstance().threadSafeSend(new RetrieveUserProfile(email, imageRequestId));

@@ -206,7 +206,9 @@ public class FriendsScreen extends AppCompatActivity {
                     public void onClick(View v) {
                         //TODO Put getConversation listener here. Open chat Id is determined by database
                         Log.d("Search", "Sending a friend request to " + friend.getEmail());
-                        sendFriendRequest(user.getEmail(), friend.getEmail(), listener -> {});
+                        sendFriendRequest(user.getEmail(), friend.getEmail(), listener -> runOnUiThread(() -> {
+                            Toast.makeText(activity, listener.result == MessageResult.Result.Success ? "Send Friend Request to " + friend.username : "Failed to send friend request", Toast.LENGTH_SHORT).show();
+                        }));
                     }
                 });
             }
