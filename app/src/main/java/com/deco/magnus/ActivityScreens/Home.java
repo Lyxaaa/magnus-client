@@ -69,24 +69,12 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
-        /*
-        user.updateFriends(friends -> {
-            if (friends.result == GetFriendsResult.Result.Success) {
-                GetFriendsResult friendsResult = friends;
-                //TODO can't see contents of friends lambda, even though code is the exact same
-//                user.unstableAddFriend(friends.);
-            }
-        });
-         */
 
         final FrameLayout gameBtn = findViewById(R.id.home_game_frame);
         final FrameLayout chatBtn = findViewById(R.id.home_chat_frame);
         final FrameLayout friendsBtn = findViewById(R.id.home_friends_frame);
         final CardView profileBtn = findViewById(R.id.profile_button);
 
-//        final Button gameBtn = findViewById(R.id.home_game_btn);
-//        final Button chatBtn = findViewById(R.id.home_chat_btn);
-//        final Button friendsBtn = findViewById(R.id.home_friends_btn);
         final TextView gameTxt = findViewById(R.id.home_game_txt);
         final TextView chatTxt = findViewById(R.id.home_chat_txt);
         final TextView friendsTxt = findViewById(R.id.home_friends_txt);
@@ -95,7 +83,7 @@ public class Home extends AppCompatActivity {
 
         refreshProfileImage();
 
-
+        //Changes the colour of the Game button to indicate being pressed
         gameBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -105,6 +93,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Changes the colour of the Chat button to indicate being pressed
         chatBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -114,6 +103,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Changes the colour of the Friends button to indicate being pressed
         friendsBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -123,6 +113,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Changes the colour of the Profile button to indicate being pressed
         profileBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -132,6 +123,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Sets the game button action, starting the GameScreen
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +131,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Sets the chat button action, starting the ChatScreen
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +139,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Sets the friends button action, starting the FriendsScreen
         friendsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +147,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        //Sets the profile image button action, allowing the User to access and change their profile
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,16 +165,28 @@ public class Home extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates a new view of the {@link GameScreen}
+     * @param view View object passed throughout different activities
+     */
     public void createGame(View view) {
         Intent gameScreen = new Intent(this, GameScreen.class);
         startActivity(gameScreen);
     }
 
+    /**
+     * Creates a new view of the {@link ChatScreen}
+     * @param view View object passed throughout different activities
+     */
     public void createChat(View view) {
         Intent chatScreen = new Intent(this, ChatScreen.class);
         startActivity(chatScreen);
     }
 
+    /**
+     * Creates a new view of the {@link FriendsScreen}
+     * @param view View object passed throughout different activities
+     */
     public void createFriends(View view) {
         Intent friendsScreen = new Intent(this, FriendsScreen.class);
         startActivity(friendsScreen);
@@ -193,8 +200,12 @@ public class Home extends AppCompatActivity {
         return "img_" + System.currentTimeMillis() + ".jpg";
     }
 
+    /**
+     * Starts a gallery process, allowing the user to select any image available on their device
+     * This image data is placed into a request accessible by the rest of the application.
+     * Primarily used to set/update the {@link User#bitmapImage}
+     */
     private void openImageIntent() {
-
         // Determine Uri of camera image to save.
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
@@ -246,6 +257,11 @@ public class Home extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the locally stored profile image to contain the {@link User#bitmapImage}
+     * @return false if the image could not be saved or the {@link User#bitmapImage} is null,
+     * returns true otherwise
+     */
     private boolean updateProfileImage() {
         try {
             FileOutputStream out = openFileOutput(PROFILE_IMAGE, MODE_PRIVATE);
@@ -258,6 +274,9 @@ public class Home extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Deletes the local file of a profile image
+     */
     private void deleteProfileImage() {
         File file = new File(getFilesDir(), PROFILE_IMAGE);
         if (file.isFile()) {
@@ -274,6 +293,16 @@ public class Home extends AppCompatActivity {
         void OnProfileImageReceive(byte[] profileImageResult);
     }
 
+    /**
+     * Fetches all profile data related to a {@link User}.
+     * @param activity The activity the profile data is being requested from, allowing Toasts to be
+     *                 displayed inside the correct activity.
+     * @param email The email of the {@link User} whose data we are requesting
+     * @param dataListener A {@link fetchProfileDataListener} waits for basic information about
+     *                     the {@link User}, including email, name and bio.
+     * @param imageListener A {@link fetchProfileImageListener} waits for a {@link Byte} Array
+     *                      containing the requested {@link User} profile image
+     */
     public static void fetchProfileData(Activity activity, String email, final fetchProfileDataListener dataListener, final fetchProfileImageListener imageListener) {
         int imageRequestId = (int) (Math.random() * Integer.MAX_VALUE);
         Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
@@ -313,6 +342,12 @@ public class Home extends AppCompatActivity {
         Client.getInstance().threadSafeSend(new RetrieveUserProfile(email, imageRequestId));
     }
 
+    /**
+     * Grabs the currently logged {@link User} profile image from the database and displays it on
+     * their profile icon.
+     * If nothing is received from the server, grabs the most recent profile image file found on
+     * the device.
+     */
     private void refreshProfileImage() {
         fetchProfileData(activity, GameState.getInstance().getEmail(), dataResult -> {}, profileResult -> runOnUiThread(() -> {
             if (profileResult != null) {

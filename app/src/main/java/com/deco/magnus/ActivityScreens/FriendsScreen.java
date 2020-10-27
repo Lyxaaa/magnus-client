@@ -92,49 +92,30 @@ public class FriendsScreen extends AppCompatActivity {
                         drawSearch();
                     });
                     searchResult.add(searchFriend);
-
-                    // get profile picture
-                    // save to disk
-                    // set Bitmap displayPicture to that image
-
-                   /* ImageView friendImage = box.findViewById(R.id.img_friend_box);
-
-                    Bitmap displayPicture = BitmapFactory.decodeFile(file.getAbsolutePath());
-
-                    Bitmap result = Bitmap.createBitmap(Home.DISPLAY_PICTURE_RESOLUTION, Home.DISPLAY_PICTURE_RESOLUTION, Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(result);
-                    Paint paint = new Paint();
-
-                    // this is to get the damned display picture in a button_photo
-                    paint.setAntiAlias(true);
-                    paint.setColor(Color.parseColor("#FFFFFF"));
-                    canvas.drawCircle(Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, paint);
-                    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-                    canvas.drawBitmap(displayPicture, 0, 0, paint);
-
-                    friendImage.setImageBitmap(result);*/
                 }
 
             }));
         });
     }
 
-    //TODO Change this to listen for all users when implemented
     public interface searchListener {
         void OnFriendsResult(RetrieveOtherUsersResult retrieveOtherUsersResult);
     }
 
     /**
-     * Sends User's name and password to database to verify login information
-     *
-     * @return Users ID if correct, 0 otherwise
+     * Requests a set of users from the database and waits for a {@link RetrieveOtherUsersResult}
+     * @param search The name to search the database with
+     * @param listener Waits for a {@link RetrieveOtherUsersResult} to display the result of a
+     *                 friend search. Holds basic user information, profile images must be retrieved
+     *                 later
      */
     public static void searchFriends(String search, final searchListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
                 Log.d("Message", "Made it into onReceive " + ((JsonMsg) data).type);
-                RetrieveOtherUsersResult result = TryCast(dataType, data, Type.RetrieveOtherUsersResult.getValue(), RetrieveOtherUsersResult.class);
+                RetrieveOtherUsersResult result = TryCast(dataType, data,
+                        Type.RetrieveOtherUsersResult.getValue(), RetrieveOtherUsersResult.class);
                 if (result != null) {
                     listener.OnFriendsResult(result);
                     Log.d("Friends Data", "Result: " + result);
@@ -143,17 +124,29 @@ public class FriendsScreen extends AppCompatActivity {
                 return false;
             }
         });
-        Client.getInstance().threadSafeSend(new RetrieveOtherUsers(loggedUser.getEmail(), search, 10, 0));
+        Client.getInstance().threadSafeSend(new RetrieveOtherUsers(
+                loggedUser.getEmail(), search, 10, 0));
     }
 
     public interface sendFriendRequestListener {
         void OnSendFriendRequestResult(MessageResult friendRequestResult);
     }
 
+    /**
+     * Sends a friend request from the currently signed in user to the requested user
+     * This doesn't immediately add the user as a friend, instead it sends them a notification
+     * indicating they have a pending friend request
+     * @param from The {@link User#getEmail()} of the User currently signed in
+     * @param to The {@link User#getEmail()} of the add friend button that was selected
+     * @param listener Waits for a MessageResult to confirm the output of sending a friend request
+     *                 If this is a {@link MessageResult.Result#Failure}, display a toast indicating
+     *                 this result
+     */
     public void sendFriendRequest(String from, String to, sendFriendRequestListener listener) {
         Client.getInstance().addOnReceiveListener((socketType, dataType, data) -> {
                 Log.d("Message", "Made it into onReceive " + ((JsonMsg) data).type);
-                MessageResult result = TryCast(dataType, data, Type.MessageResult.getValue(), MessageResult.class);
+                MessageResult result = TryCast(dataType, data, Type.MessageResult.getValue(),
+                        MessageResult.class);
                 if (result != null) {
                     listener.OnSendFriendRequestResult(result);
                     Log.d("Search", "Result: " + result.result);
@@ -163,13 +156,14 @@ public class FriendsScreen extends AppCompatActivity {
                 },
                 1000,
                 () -> activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, "Failed to send friend request", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Failed to send friend request",
+                            Toast.LENGTH_SHORT).show();
                     listener.OnSendFriendRequestResult(null);
                 }));
         Client.getInstance().threadSafeSend(new SendFriendRequest(from, to));
     }
 
-    //region Draws each friends image
+    //region Draws each matching friends image upon searching for friends with a certain name
     private void drawSearch() {
         runOnUiThread(() -> {
             LinearLayout friendsLayout = findViewById(R.id.search_friends_linear_layout_scroller);
@@ -182,14 +176,17 @@ public class FriendsScreen extends AppCompatActivity {
                 friendBio.setText(friend.bio);
                 ImageView profilePic = box.findViewById(R.id.img_friend_box);
 
-                Bitmap result = Bitmap.createBitmap(Home.DISPLAY_PICTURE_RESOLUTION, Home.DISPLAY_PICTURE_RESOLUTION, Bitmap.Config.ARGB_8888);
+                Bitmap result = Bitmap.createBitmap(Home.DISPLAY_PICTURE_RESOLUTION,
+                        Home.DISPLAY_PICTURE_RESOLUTION, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(result);
                 Paint paint = new Paint();
 
                 // this is to get the damned display picture in a button_photo
                 paint.setAntiAlias(true);
                 paint.setColor(Color.parseColor("#FFFFFF"));
-                canvas.drawCircle(Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, Home.DISPLAY_PICTURE_RESOLUTION / 2, paint);
+                canvas.drawCircle(Home.DISPLAY_PICTURE_RESOLUTION / 2,
+                        Home.DISPLAY_PICTURE_RESOLUTION / 2,
+                        Home.DISPLAY_PICTURE_RESOLUTION / 2, paint);
                 paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
                 if (friend.bitmapImage != null) {
                     canvas.drawBitmap(friend.bitmapImage, 0, 0, paint);
@@ -204,10 +201,12 @@ public class FriendsScreen extends AppCompatActivity {
                 profilePic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO Put getConversation listener here. Open chat Id is determined by database
-                        Log.d("Search", "Sending a friend request to " + friend.getEmail());
-                        sendFriendRequest(user.getEmail(), friend.getEmail(), listener -> runOnUiThread(() -> {
-                            Toast.makeText(activity, listener.result == MessageResult.Result.Success ? "Send Friend Request to " + friend.username : "Failed to send friend request", Toast.LENGTH_SHORT).show();
+                        Log.d("Search", "Sending friend request to " + friend.getEmail());
+                        sendFriendRequest(user.getEmail(), friend.getEmail(),
+                                listener -> runOnUiThread(() -> {
+                            Toast.makeText(activity, listener.result == MessageResult.Result.Success
+                                    ? "Send Friend Request to " + friend.username
+                                    : "Failed to send friend request", Toast.LENGTH_SHORT).show();
                         }));
                     }
                 });

@@ -35,7 +35,6 @@ public class User extends Message {
             super(errorMessage);
         }
     }
-    // String should be the ID of the receiving user (or maybe the conversation ID) (not the ID of this user)
     private Map<String, List<Chat>> chats = new ArrayMap<>();
     public Activity activity;
     private List<User> friends = new ArrayList<>();
@@ -151,18 +150,22 @@ public class User extends Message {
         return null;
     }
 
+    /**
+     * Converts an image to a {@link Bitmap} to let it be stored in memory
+     * @param imageName Name of the image, relative to the applications working directory
+     * @return a {@link Bitmap} containing the requested profile image
+     */
     public Bitmap imageToBitmap(String imageName) {
         return bytesToBitmap(imageToBytes(imageName));
     }
 
 
     /**
-     * FUNCTION DO NOT DO THE OPERATE OF PROPERLY YES
-     * @param imageName
-     * @return
+     * Converts an image to a {@link Byte} Array to let it be send to the server
+     * @param imageName Name of the image, relative to the applications working directory
+     * @return a {@link Byte} Array containing the requested profile image
      */
     public byte[] imageToBytes(String imageName) {
-//        final File imageFile = new File(activity.getResources().getDrawable(R.drawable.test));
         final File imageFile = new File("borked");
         Log.d("UserLogger", imageFile.getAbsolutePath());
         Bitmap bitmapImage = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
@@ -171,6 +174,11 @@ public class User extends Message {
         return blob.toByteArray();
     }
 
+    /**
+     * Converts this {@link User#bitmapImage} to a {@link Byte} Array, allowing it to be send to the
+     * server
+     * @return {@link Byte} Array containing the users profile image
+     */
     public byte[] bitmapToBytes() {
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
         bitmapImage.compress(Bitmap.CompressFormat.JPEG, 10, blob);
@@ -205,7 +213,14 @@ public class User extends Message {
         Client.getInstance().threadSafeSend(new Login(name, pword));
     }
 
-    public static void registerUser(String name, String pword, final loginResultListener listener) {
+    /**
+     * Makes a request with the database to register a new {@link User} account
+     * If a user with the given email already exists, this request is rejected
+     * @param name The email to create the requested user under
+     * @param password The password to give the newly created users account
+     * @param listener
+     */
+    public static void registerUser(String name, String password, final loginResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
             public boolean OnReceive(SocketType socketType, DataType dataType, Object data) {
@@ -219,13 +234,20 @@ public class User extends Message {
                 return false;
             }
         });
-        Client.getInstance().threadSafeSend(new RegisterUser(name, pword, name, "Hey I am new here"));
+        Client.getInstance().threadSafeSend(new RegisterUser(name, password, name, "Hey I am new here"));
     }
 
     public interface updateProfileImageListener {
         void OnUpdateProfileImageResult(MessageResult messageResult);
     }
 
+    /**
+     * Updates the database with a new profile image, send by the currently logged user
+     * A user can only change their own profile image, this function is restricted from any other
+     * profile
+     * @param listener Waits for a {@link MessageResult} to let the application indicate to the user
+     *                 whether the profile image was successfully updated by the server
+     */
     public void updateProfileImage(final updateProfileImageListener listener) {
         Client.getInstance().addOnReceiveListener(new Client.OnReceiveListener() {
             @Override
@@ -244,14 +266,18 @@ public class User extends Message {
         Client.getInstance().threadSafeSend(Type.ByteUpdateProfileImage.getValue(), bitmapToBytes());
     }
 
+    /**
+     * Gets the currently logged {@link User} email
+     * @return A String containing the currently logged {@link User} email
+     */
     public String getEmail() {
         return this.email;
     }
 
     /**
-     *
-     * @param id The ID of the user in the conversation that is NOT this user
-     * @param chat A List {@link Chat} Objects to add to the chats Map
+     * Adds an entire {@link Chat} List object to the Chat mapping
+     * @param id The conversation ID of the chat (retrieved from database)
+     * @param chat A {@link List}<{@link Chat}> Objects to add to the chats Map
      */
     public void addChat(String id, List<Chat> chat) {
         if (chat != null && !chat.isEmpty()) {
@@ -265,7 +291,9 @@ public class User extends Message {
 
 
     /**
-     *
+     * Adds a single message to the specified Chat
+     * This is independent of the database, so 2 methods must be called to add the message to both
+     * the user interface and the database history
      * @param id The ID of the desired conversation
      * @param message A {@link Chat} Object to add to the chats Map
      */
@@ -281,6 +309,11 @@ public class User extends Message {
         }
     }
 
+    /**
+     * Removes an entire chat given a conversation ID
+     * Should be used prior to retrieving a conversation, as we do not want to add duplicated data
+     * @param conversationId The ID of the conversation to remove from the {@link Chat} Map
+     */
     public void clearChat(String conversationId) {
         if (chats.containsKey(conversationId) && chats.get(conversationId) != null) {
             chats.put(conversationId, new ArrayList<>());
@@ -324,6 +357,11 @@ public class User extends Message {
         Client.getInstance().threadSafeSend(new RetrieveMessages(id, 0));
     }
 
+    /**
+     * Hashes the user email in a consistent manner
+     * @return An integer created through hashing the currently logged users email
+     * @deprecated
+     */
     public int emailHash() {
         int hash = 1;
         for (Character character : email.toCharArray()) {

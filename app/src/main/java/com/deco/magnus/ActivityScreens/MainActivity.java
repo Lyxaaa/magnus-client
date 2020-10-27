@@ -93,9 +93,8 @@ public class MainActivity extends AppCompatActivity {
         final RelativeLayout rootLayout = findViewById(R.id.root_layout);
         final FrameLayout registerBtn = findViewById(R.id.main_register_frame);
         final FrameLayout loginBtn = findViewById(R.id.main_login_frame);
-//        final Button registerBtn = findViewById(R.id.main_register_btn);
-//        final Button loginBtn = findViewById(R.id.main_login_btn);
 
+        //Changes the colour of the Login button to indicate being pressed
         loginBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -105,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Sets Login button action, allowing the User to begin a login request
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
                 submitLogin = loginWindow.getContentView().findViewById(R.id.submit_login_btn);
                 final TextView credentialInfo = loginWindow.getContentView().findViewById(R.id.login_view);
 
+                //Resets the colour of the email text field upon touch, which is originally changed
+                //to the Error colour upon entering an invalid email/password combination
                 email.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                //Sets Submit button action, allowing the User to send a login request
                 submitLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -177,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Changes the colour of the Register button to indicate being pressed
         registerBtn.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -186,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Sets Register button action, allowing the User to begin a login request
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
                 submitRegister = registerWindow.getContentView().findViewById(R.id.submit_register_btn);
                 final TextView credentialInfo = registerWindow.getContentView().findViewById(R.id.register_view);
 
+                //Resets the colour of the email text field upon touch, which is originally changed
+                //to the Error colour upon entering an invalid email/password combination
                 email.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -215,6 +222,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                //Resets the colour of the password text field upon touch, which is originally changed
+                //to the Error colour upon entering an invalid email/password combination
                 pword.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -225,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     }
                 });
-
+                //Sets Submit button action, allowing the User to send a register request
                 submitRegister.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -265,6 +274,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(MessageFragment.newInstance(), lastFragTag).commitAllowingStateLoss();
     }
 
+    /**
+     * Creates a new view of the {@link GameScreen}
+     * @param view View object passed throughout different activities
+     */
     public void createHome(View view) {
         Intent homeScreen = new Intent(this, Home.class);
         startActivity(homeScreen);

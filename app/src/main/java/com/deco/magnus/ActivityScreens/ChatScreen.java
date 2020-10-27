@@ -78,6 +78,7 @@ public class ChatScreen extends AppCompatActivity {
                 AtomicInteger j = new AtomicInteger(i);
                 User friend = new User(friendList.userId[i], friendList.name[i], friendList.email[i], "", null, activity);
                 fetchProfileData(activity, friend.getEmail(), data -> {}, image -> {
+                    //Adds each friends profile image to their respective User Object
                     String imageName = getImageName(friend.conversationId);
                     if (image != null) {
                         Log.d("Friends", "Image File Length = " + image.length);
@@ -139,6 +140,13 @@ public class ChatScreen extends AppCompatActivity {
         });
     }
 
+    /**
+     * Used to decide the name to give a profile image when saving it to the {@link User} device
+     * storage. Ensures consistent naming to prevent human error.
+     * @param conversationId The ID of the conversation which the related {@link User}'s profile
+     *                       image will be saved under
+     * @return A String indicating the name the profile image should be saved under
+     */
     public String getImageName(String conversationId) {
         return conversationId + ".jpg";
     }
@@ -147,6 +155,11 @@ public class ChatScreen extends AppCompatActivity {
         void OnSendMessageResult(SendMessageResult sendMessageResult);
     }
 
+    /**
+     * Safely sends a {@link Chat} message to the server
+     * @param message The contents of the message to send to the server
+     * @param listener
+     */
     private void sendMessage(String message, sendMessageResultListener listener) {
         Client.getInstance().addOnReceiveListener(new com.deco.magnus.Netbase.Client.OnReceiveListener() {
             @Override
