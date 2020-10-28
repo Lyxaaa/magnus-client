@@ -2,9 +2,12 @@ package com.deco.magnus.Games.Chess;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.deco.magnus.ActivityScreens.Chess;
 import com.deco.magnus.ProjectNet.Messages.BoardResult;
 import com.deco.magnus.R;
 
@@ -83,6 +87,10 @@ public class Board {
     int[] tlOffset = new int[2];
     int width;
     int height;
+    private boolean touchReady = false;
+    Point src = new Point();
+    Point dst = new Point();
+
     //endregion
     //region Definitions
     static public String[] LETTERS = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -179,6 +187,7 @@ public class Board {
         table.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+
                 if (motionEvent.getPointerId(motionEvent.getActionIndex()) != 0) return true;
                 int motion = motionEvent.getActionMasked();
 
@@ -193,9 +202,17 @@ public class Board {
 
                 if (motion == MotionEvent.ACTION_DOWN || motion == MotionEvent.ACTION_POINTER_DOWN) {
                     System.out.println("Down on " + getNameOfSquare(x, y));
+                    src.set(x, y);
                 }
                 if (motion == MotionEvent.ACTION_UP || motion == MotionEvent.ACTION_POINTER_UP) {
                     System.out.println("Up on " + getNameOfSquare(x, y));
+                    Log.d("Chess", "State Length: " + state.length + " x:" + x + " y:" + y);
+                    if (state != null && state.length >= (x * y) - 1) {
+                        dst.set(x, y);
+                        movePiece(src, dst);
+                        src = new Point();
+                        dst = new Point();
+                    }
                 }
                 return true;
             }
@@ -257,7 +274,7 @@ public class Board {
     }
 
     public void setStateFromNetworkMessage(BoardResult result) {
-        String[] squares = result.board.split(", ");
+        String[] squares = result.board.split(",");
         ChessPiece[] board = new ChessPiece[state.length];
         for(int i = 0; i < state.length; i++) {
             board[i] = ChessPiece.fromInt(Integer.parseInt(squares[i]));
@@ -269,7 +286,7 @@ public class Board {
         synchronized (lock){
             StringBuilder sb = new StringBuilder();
             for(int i = 0; i < state.length; i ++) {
-                sb.append(state[i].toString()).append(", ");
+                sb.append(state[i].toString()).append(",");
             }
             return sb.substring(0, sb.length() - 2);
         }
@@ -285,8 +302,19 @@ public class Board {
 
     //moves piece from location to destination
     public void movePiece(Point src, Point dst) {
-        squares[dst.x][dst.y].setImageDrawable(squares[src.x][src.y].getDrawable());
-        squares[src.x][src.y].setImageResource(0);
+        Log.d("Chess", "Moving Piece");
+        if (src.x == dst.x && src.y == dst.y) {
+            return;
+        }
+//        Resources img = squares[4][0].getResources();
+//        state[4] = ChessPiece.BlackBishop; //squares[4][0].getResources().getDraw);
+        ChessPiece old = state[src.x + (8 * src.y)];
+        state[dst.x + (8 * dst.y)] = old;
+        state[src.x + (8 * src.y)] = ChessPiece.None;
+//        state[((src.x + 1) * (8 - src.y)) - 1] = ChessPiece.None;
+//        squares[dst.x][7 - dst.y].setImageDrawable(squares[src.x][7 - src.y].getDrawable());
+//        squares[src.x][src.y].setImageResource(0);
+        reRender();
     }
 
     // gets if a square should be black or white

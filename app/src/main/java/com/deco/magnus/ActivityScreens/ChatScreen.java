@@ -203,6 +203,7 @@ public class ChatScreen extends AppCompatActivity {
     //make sure to put drawChat inside getConversation listener to ensure operation
     //region Draws the currently accessed chat region
     private void drawChat() {
+        Log.d("Chat", "Drawing chat for ID " + openChatId);
         user.getChatFromServer(openChatId, chat -> runOnUiThread(() -> {
 //        if (user.getFriends().size() > 0 && user.getChat(openChatId) == null) {
 //            testDrawChat();

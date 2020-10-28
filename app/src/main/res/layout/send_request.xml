@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker80"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_dark"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="80dp"
+        android:paddingTop="40dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="40dp">
+
+        <TextView
+            android:id="@+id/request_pop_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waiting for opponent..."
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
+
+            <Button
+                android:id="@+id/request_pop_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="40dp"
+                android:background="@drawable/round_red"
+                android:minHeight="15dp"
+                android:text="Decline" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/request_pop_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="40dp"
+                android:background="@drawable/round_green"
+                android:minHeight="15dp"
+                android:text="Accept" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

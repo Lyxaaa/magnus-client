@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,6 +64,8 @@ public class Chess extends AppCompatActivity {
         root.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             if (board == null) {
                 TableLayout tableLayout = findViewById(R.id.chess_board);
+                final TextView name = findViewById(R.id.txt_opponent);
+                name.setText(GameState.getInstance().getEmail());
                 View rt = tableLayout.getRootView();
                 ViewGroup.LayoutParams params = tableLayout.getLayoutParams();
                 int rootHeight = Math.min(rt.getHeight(), root.getHeight());

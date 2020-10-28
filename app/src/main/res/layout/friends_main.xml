@@ -2,11 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/friends_main">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/requests_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/actionTrayMargin">
+
+            <FrameLayout
+                android:id="@+id/requests_border"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/top_left_border"
+                android:backgroundTint="@color/lighter">
+
+                <FrameLayout
+                    android:id="@+id/requests_frame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/top_left"
+                    android:backgroundTint="@color/dark"
+                    android:clickable="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:id="@+id/requests_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/requests_image"
+                            android:layout_width="@dimen/chatActionImage"
+                            android:layout_height="@dimen/chatActionImage"
+                            android:background="@drawable/search"
+                            android:backgroundTint="@color/white"
+                            android:visibility="visible">
+
+                        </ImageView>
+                    </LinearLayout>
+                </FrameLayout>
+            </FrameLayout>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/search_friend_edit_text"
@@ -15,13 +57,47 @@
             android:layout_weight="1"
             android:hint="@string/search_friend" />
 
-        <ImageView
-            android:id="@+id/search_friends_asset_clickable"
-            android:layout_width="@dimen/searchFriend"
-            android:layout_height="@dimen/searchFriend"
-            android:layout_weight="0"
-            android:background="@drawable/search"
-            android:clickable="true" />
+        <LinearLayout
+            android:id="@+id/search_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/actionTrayMargin">
+
+            <FrameLayout
+                android:id="@+id/search_border"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/top_right_border"
+                android:backgroundTint="@color/lighter">
+
+                <FrameLayout
+                    android:id="@+id/search_frame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/top_right"
+                    android:backgroundTint="@color/dark"
+                    android:clickable="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:id="@+id/search_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/search_image"
+                            android:layout_width="@dimen/chatActionImage"
+                            android:layout_height="@dimen/chatActionImage"
+                            android:background="@drawable/search"
+                            android:backgroundTint="@color/white"
+                            android:visibility="visible">
+
+                        </ImageView>
+                    </LinearLayout>
+                </FrameLayout>
+            </FrameLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
