@@ -11,8 +11,8 @@ Android Studio 3.5 Initial Public Release (https://developer.android.com/studio/
 ## Usage - Required Components
  
 Magnus - Mobile Application  
-Magnus - Server  
-MySQL Database (Found in Magnus - Server)  
+Magnus - Server (https://gitlab.com/segfault3801/magnusserver)  
+MySQL Database (https://gitlab.com/segfault3801/magnusserver/-/blob/master/Database%20Injection)  
 SmartPhone at Android 21.0 (Lollipop) or above with ADB enabled or an Intel-based machine with virtualisation enabled  
 
 1. Start `Apache` and `MySQL` modules in XAMPP
