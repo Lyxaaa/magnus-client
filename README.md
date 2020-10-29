@@ -2,16 +2,14 @@
 
 Magnus is a Java Application developed for android and is one of a minimum of three required components. For operation, Magnus - Server must also be running alongside an up-to-date Database to allow application to verify actions.
 
-## Installation
-
-Required Programs:  
+## Installation - Required Software
+ 
 XAMPP with MySQL  
 Microsoft Visual Studio 2017 -> 2019  
 Android Studio 3.5 Initial Public Release (https://developer.android.com/studio/archive \[August 20, 2019])  
 
-## Usage
-
-Required Components:  
+## Usage - Required Components
+ 
 Magnus - Mobile Application  
 Magnus - Server  
 MySQL Database (Found in Magnus - Server)  
