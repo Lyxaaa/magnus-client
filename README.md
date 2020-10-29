@@ -4,18 +4,18 @@ Magnus is a Java Application developed for android and is one of a minimum of th
 
 ## Installation
 
-Required Programs:
-XAMPP with MySQL
-Microsoft Visual Studio 2017 -> 2019
-Android Studio 3.5 Initial Public Release (https://developer.android.com/studio/archive \[August 20, 2019])
+Required Programs: \n
+XAMPP with MySQL \n
+Microsoft Visual Studio 2017 -> 2019 \n
+Android Studio 3.5 Initial Public Release (https://developer.android.com/studio/archive \[August 20, 2019]) \n
 
 ## Usage
 
-Required Components:
-Magnus - Mobile Application
-Magnus - Server
-MySQL Database (Found in Magnus - Server)
-SmartPhone at Android 21.0 (Lollipop) or above with ADB enabled or an Intel-based machine with virtualisation enabled
+Required Components: \n
+Magnus - Mobile Application \n
+Magnus - Server \n
+MySQL Database (Found in Magnus - Server) \n
+SmartPhone at Android 21.0 (Lollipop) or above with ADB enabled or an Intel-based machine with virtualisation enabled \n
 
 1. Start `Apache` and `MySQL` modules in XAMPP
 2. Run Program.cs in MagnusServer/Magnus
@@ -24,6 +24,6 @@ SmartPhone at Android 21.0 (Lollipop) or above with ADB enabled or an Intel-base
 
 ## Authors
 
-@Subzerofusion
-@Lyxaa
-@markbirdy92
+@Subzerofusion \n
+@Lyxaa \n
+@markbirdy92 \n
