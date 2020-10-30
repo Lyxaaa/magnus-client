@@ -2,6 +2,7 @@ package com.deco.magnus.ActivityScreens;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.deco.magnus.Games.Chess.Board;
 import com.deco.magnus.Games.Chess.GameState;
+import com.deco.magnus.Netbase.UDPSocket;
 import com.deco.magnus.ProjectNet.Client;
 import com.deco.magnus.ProjectNet.Messages.BoardResult;
 import com.deco.magnus.ProjectNet.Messages.EndMatch;
@@ -31,16 +33,29 @@ public class Chess extends AppCompatActivity {
     boolean myTurn = false;
     boolean firstTurn = true;
     Button endTurn;
+    UDPSocket chessBoard;
 
     com.deco.magnus.Netbase.Client.OnReceiveListener listener = (socketType, dataType, data) -> {
         BoardResult br = TryCast(dataType, data, Type.BoardResult.getValue(), BoardResult.class);
         if (br != null) {
-            board.setStateFromNetworkMessage(br);
-            if (!firstTurn)
-                myTurn = true;
-            else
-                firstTurn = false;
-            updateEndTurnButtonStyle(endTurn);
+            Log.d("Board", "First Turn = " + firstTurn);
+            activity.runOnUiThread(() -> {
+                board.setStateFromNetworkMessage(br);
+                if (firstTurn) {
+                    firstTurn = false;
+                } else {
+                    myTurn = !myTurn;
+                }
+                Log.d("Board", "My Turn = " + myTurn);
+
+//            myTurn = !myTurn;
+////            if (!firstTurn)
+////                myTurn = true;
+////            else
+////                firstTurn = false;
+                updateEndTurnButtonStyle(endTurn);
+                board.setStateFromNetworkMessage(br);
+            });
             return false;
         }
 
@@ -55,6 +70,10 @@ public class Chess extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        new Thread(() -> {
+//            chessBoard = new UDPSocket("192.168.1.23", 42069);
+//            chessBoard.begin();
+//        }).start();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chess_game);
         View root = findViewById(R.id.root_chess);
@@ -74,10 +93,14 @@ public class Chess extends AppCompatActivity {
                 params.height = rootHeight;
                 tableLayout.setLayoutParams(params);
                 board = new Board(activity, tableLayout, rootHeight / 75);
-
+                Log.d("Board", "Match ID = " + GameState.getInstance().getMatchId());
                 Client.getInstance().threadSafeSend(new GetBoardState(GameState.getInstance().getMatchId()));
             }
         });
+
+        if (GameState.getInstance().isWhite()) {
+            myTurn = true;
+        }
 
         SlideToActView sldConcede = findViewById(R.id.slider_concede);
         sldConcede.setOnSlideCompleteListener(slideToActView -> {
@@ -86,13 +109,16 @@ public class Chess extends AppCompatActivity {
 
         endTurn = findViewById(R.id.btn_next_turn);
         endTurn.setOnClickListener(view -> {
-            myTurn = false;
             updateEndTurnButtonStyle(endTurn);
             Client.getInstance().threadSafeSend(
                     new UpdateBoard(
                             GameState.getInstance().getMatchId(),
                             board.getStateForSending(),
                             GameState.getInstance().isWhite()));
+            if (GameState.getInstance().isWhite()) {
+                Log.d("Board", "Bytes: " + board.getStateForSending().getBytes());
+//                new Thread(() -> chessBoard.send(board.getStateForSending().getBytes())).start();
+            }
         });
         updateEndTurnButtonStyle(endTurn);
     }

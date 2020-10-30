@@ -208,9 +208,11 @@ public class UDPSocket extends Socket {
         offset = 0;
         System.arraycopy(HEADER, 0, message, offset, HEADER.length);
         offset += HEADER.length;
-        System.arraycopy(byteBuffer.putInt(dataSize).order(ByteOrder.BIG_ENDIAN).array(), 0, message, offset, INTSIZE);
+        System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(dataSize).array(), 0, message, offset, INTSIZE);
         offset += INTSIZE;
-        System.arraycopy(byteBuffer.putInt(crc).order(ByteOrder.BIG_ENDIAN).array(), 0, message, offset, INTSIZE);
+        System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(crc).array(), 0, message, offset, INTSIZE);
+        offset += INTSIZE;
+        System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(dataSize).array(), 0, message, offset, HEADER.length);
 
         DatagramPacket packet = new DatagramPacket(message, 0, message.length, remoteEndPoint);
         try {

@@ -30,7 +30,7 @@ public class GameState {
     private String email;
 
     public boolean isReady() {
-        return matchFound != null && matchStart != null && email != null;
+        return matchFound != null /*&& matchStart != null*/ && email != null;
     }
 
     public String getEmail () {
@@ -44,11 +44,11 @@ public class GameState {
     }
 
     public String getMatchId() {
-        return isReady() ? null : matchFound.matchId;
+        return isReady() ? matchFound.matchId : null;
     }
 
     public boolean isWhite() {
-        return isReady() ? null : matchStart.playeriswhite;
+        return isReady() ? matchStart.playeriswhite : null;
     }
 
     public void setMatchFound(MatchFound found) {

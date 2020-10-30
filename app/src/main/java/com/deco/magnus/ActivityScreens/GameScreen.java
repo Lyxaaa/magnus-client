@@ -120,16 +120,16 @@ public class GameScreen extends AppCompatActivity {
                                 btnQ.setText("FIND MATCH");
                                 btnQ.setBackground(getResources().getDrawable(R.drawable.round_green));
                             });
-                            new Timer().schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    runOnUiThread(() -> {
-                                        acceptMatch.dismiss();
-                                        Intent chessScreen = new Intent(activity, Chess.class);
-                                        startActivity(chessScreen);
-                                    });
-                                }
-                            }, 2000);
+//                            new Timer().schedule(new TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    runOnUiThread(() -> {
+//                                        acceptMatch.dismiss();
+//                                        Intent chessScreen = new Intent(activity, Chess.class);
+//                                        startActivity(chessScreen);
+//                                    });
+//                                }
+//                            }, 2000);
                             return true;
                         case Pending:
                             return false;

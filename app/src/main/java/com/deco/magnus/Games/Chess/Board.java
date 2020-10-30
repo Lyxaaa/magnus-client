@@ -288,7 +288,9 @@ public class Board {
             for(int i = 0; i < state.length; i ++) {
                 sb.append(state[i].toString()).append(",");
             }
-            return sb.substring(0, sb.length() - 2);
+            sb.setLength(sb.length() - 1);
+            Log.d("Board", "String Buffer: {" + sb + "} of length " + sb.length());
+            return sb.toString();
         }
     }
 
